@@ -1,0 +1,18 @@
+generated: '2026-07-18'
+method: derived
+source: openapi/coordinate-openapi.yml
+summary:
+  types:
+  - apiKey
+  api_key_in:
+  - header
+schemes:
+- name: BearerHeader
+  type: apiKey
+  in: header
+  parameter: Bearer
+  description: 'API key sent in a custom `Bearer:` header (note: this is a header named "Bearer",
+    not the standard `Authorization: Bearer` scheme). Create keys in the Coordinate UI under
+    Settings > Integrations > API Keys. The key scopes all requests to its owning vendor.'
+  sources:
+  - openapi/coordinate-openapi.yml
