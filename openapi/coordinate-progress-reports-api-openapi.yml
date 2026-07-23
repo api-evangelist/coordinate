@@ -1,0 +1,162 @@
+openapi: 3.1.0
+info:
+  title: Coordinate REST Comments Progress Reports API
+  version: v1
+  description: 'The Coordinate REST API lets you add, update, and retrieve the entities that make up Coordinate''s client project-execution platform: projects, project pages, tasks, task groups, stakeholders, goals, progress reports, discussion entries (comments), and organizations. All requests are scoped to the vendor that owns the API key; `vendor_id` is derived from the key and cannot be overridden. A companion webhook API lets external systems subscribe to create/update events. This description is captured by the API Evangelist enrichment pipeline from Coordinate''s published agent-oriented API reference.'
+  contact:
+    name: Coordinate Support
+    email: support@coordinatehq.com
+    url: https://www.coordinatehq.com/library/integrating-with-coordinate
+  termsOfService: https://coordinatehq.com/legal/terms-and-conditions
+  x-api-reference: https://app.coordinatehq.com/static/API_Documentation.html
+servers:
+- url: https://app.coordinatehq.com/api/v1
+  description: Production
+security:
+- BearerHeader: []
+tags:
+- name: Progress Reports
+  description: Read-only progress reports on a project.
+paths:
+  /projects/{project_id}/progress_report:
+    parameters:
+    - $ref: '#/components/parameters/ProjectId'
+    get:
+      operationId: listProgressReports
+      summary: List progress reports
+      tags:
+      - Progress Reports
+      parameters:
+      - $ref: '#/components/parameters/LastModifiedDt'
+      - $ref: '#/components/parameters/Sort'
+      responses:
+        '200':
+          description: Array of progress reports
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProgressReport'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /projects/{project_id}/progress_report/{progress_report_id}:
+    parameters:
+    - $ref: '#/components/parameters/ProjectId'
+    - $ref: '#/components/parameters/ProgressReportId'
+    get:
+      operationId: getProgressReport
+      summary: Get one progress report
+      tags:
+      - Progress Reports
+      responses:
+        '200':
+          description: The progress report
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProgressReport'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  parameters:
+    LastModifiedDt:
+      name: last_modified_dt
+      in: query
+      required: false
+      description: ISO 8601. Return only items modified at or after this timestamp. URL-encode `+` as `%2B`.
+      schema:
+        type: string
+    Sort:
+      name: sort
+      in: query
+      required: false
+      description: Sort by last_modified_dt.
+      schema:
+        type: string
+        enum:
+        - asc
+        - desc
+        default: asc
+    ProjectId:
+      name: project_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    ProgressReportId:
+      name: progress_report_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+  responses:
+    Unauthorized:
+      description: Missing or invalid API key
+    NotFound:
+      description: Resource not found (often a plain-text body such as "Project Not Found")
+  schemas:
+    EntityBase:
+      type: object
+      properties:
+        entity_type:
+          type: string
+        entity_url:
+          type: string
+        last_modified_dt:
+          type: string
+        vendor_id:
+          type: string
+          format: uuid
+        external_object_id:
+          type:
+          - string
+          - 'null'
+    ProgressReport:
+      allOf:
+      - $ref: '#/components/schemas/EntityBase'
+      - type: object
+        properties:
+          progress_report_id:
+            type: string
+            format: uuid
+          progress_report_date:
+            type: string
+          progress_report_description:
+            type:
+            - string
+            - 'null'
+          progress_report_next_steps:
+            type:
+            - string
+            - 'null'
+          progress_report_project_status:
+            type:
+            - string
+            - 'null'
+          progress_report_reporter_email:
+            type:
+            - string
+            - 'null'
+          progress_report_reporter_full_name:
+            type:
+            - string
+            - 'null'
+          progress_report_user_id:
+            type:
+            - string
+            - 'null'
+            format: uuid
+          project_id:
+            type: string
+            format: uuid
+  securitySchemes:
+    BearerHeader:
+      type: apiKey
+      in: header
+      name: Bearer
+      description: 'API key sent in a custom `Bearer:` header (note: this is a header named "Bearer", not the standard `Authorization: Bearer` scheme). Create keys in the Coordinate UI under Settings > Integrations > API Keys. The key scopes all requests to its owning vendor.'

@@ -1,0 +1,69 @@
+openapi: 3.1.0
+info:
+  title: Coordinate REST Comments Storage API
+  version: v1
+  description: 'The Coordinate REST API lets you add, update, and retrieve the entities that make up Coordinate''s client project-execution platform: projects, project pages, tasks, task groups, stakeholders, goals, progress reports, discussion entries (comments), and organizations. All requests are scoped to the vendor that owns the API key; `vendor_id` is derived from the key and cannot be overridden. A companion webhook API lets external systems subscribe to create/update events. This description is captured by the API Evangelist enrichment pipeline from Coordinate''s published agent-oriented API reference.'
+  contact:
+    name: Coordinate Support
+    email: support@coordinatehq.com
+    url: https://www.coordinatehq.com/library/integrating-with-coordinate
+  termsOfService: https://coordinatehq.com/legal/terms-and-conditions
+  x-api-reference: https://app.coordinatehq.com/static/API_Documentation.html
+servers:
+- url: https://app.coordinatehq.com/api/v1
+  description: Production
+security:
+- BearerHeader: []
+tags:
+- name: Storage
+  description: Per-vendor JSON scratch storage.
+paths:
+  /json_storage:
+    get:
+      operationId: getJsonStorage
+      summary: Retrieve the per-vendor JSON scratch blob
+      description: Returns {} if never set.
+      tags:
+      - Storage
+      responses:
+        '200':
+          description: The stored JSON blob
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: setJsonStorage
+      summary: Overwrite the per-vendor JSON scratch blob
+      description: Body is arbitrary JSON. 300KB limit. Overwrites the previous value.
+      tags:
+      - Storage
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '200':
+          description: Stored
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '413':
+          $ref: '#/components/responses/PayloadTooLarge'
+components:
+  responses:
+    PayloadTooLarge:
+      description: File upload exceeded 100MB (or JSON storage exceeded 300KB)
+    Unauthorized:
+      description: Missing or invalid API key
+  securitySchemes:
+    BearerHeader:
+      type: apiKey
+      in: header
+      name: Bearer
+      description: 'API key sent in a custom `Bearer:` header (note: this is a header named "Bearer", not the standard `Authorization: Bearer` scheme). Create keys in the Coordinate UI under Settings > Integrations > API Keys. The key scopes all requests to its owning vendor.'

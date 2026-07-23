@@ -1,0 +1,100 @@
+openapi: 3.1.0
+info:
+  title: Coordinate REST Comments Entity API
+  version: v1
+  description: 'The Coordinate REST API lets you add, update, and retrieve the entities that make up Coordinate''s client project-execution platform: projects, project pages, tasks, task groups, stakeholders, goals, progress reports, discussion entries (comments), and organizations. All requests are scoped to the vendor that owns the API key; `vendor_id` is derived from the key and cannot be overridden. A companion webhook API lets external systems subscribe to create/update events. This description is captured by the API Evangelist enrichment pipeline from Coordinate''s published agent-oriented API reference.'
+  contact:
+    name: Coordinate Support
+    email: support@coordinatehq.com
+    url: https://www.coordinatehq.com/library/integrating-with-coordinate
+  termsOfService: https://coordinatehq.com/legal/terms-and-conditions
+  x-api-reference: https://app.coordinatehq.com/static/API_Documentation.html
+servers:
+- url: https://app.coordinatehq.com/api/v1
+  description: Production
+security:
+- BearerHeader: []
+tags:
+- name: Entity
+  description: Cross-entity bulk export firehose.
+paths:
+  /entity:
+    get:
+      operationId: listEntities
+      summary: Cross-entity export firehose
+      description: Returns all entities of all types in the vendor account, optionally filtered by date range and type. Use for bulk sync / data warehouse extracts. Supports pagination.
+      tags:
+      - Entity
+      parameters:
+      - name: start_dt
+        in: query
+        description: ISO 8601. Only entities modified at or after this dt (alias last_modified_dt).
+        schema:
+          type: string
+      - name: end_dt
+        in: query
+        description: ISO 8601. Only entities modified at or before this dt.
+        schema:
+          type: string
+      - name: entity
+        in: query
+        description: Filter to one type.
+        schema:
+          type: string
+          enum:
+          - Task
+          - Goal
+          - Project
+          - Stakeholder
+          - Org
+      - $ref: '#/components/parameters/Sort'
+      - name: paginate
+        in: query
+        schema:
+          type: boolean
+          default: false
+      - name: page
+        in: query
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+      - name: page_size
+        in: query
+        schema:
+          type: integer
+          default: 100
+      responses:
+        '200':
+          description: Array of entities (empty array indicates no more pages)
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  additionalProperties: true
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  parameters:
+    Sort:
+      name: sort
+      in: query
+      required: false
+      description: Sort by last_modified_dt.
+      schema:
+        type: string
+        enum:
+        - asc
+        - desc
+        default: asc
+  responses:
+    Unauthorized:
+      description: Missing or invalid API key
+  securitySchemes:
+    BearerHeader:
+      type: apiKey
+      in: header
+      name: Bearer
+      description: 'API key sent in a custom `Bearer:` header (note: this is a header named "Bearer", not the standard `Authorization: Bearer` scheme). Create keys in the Coordinate UI under Settings > Integrations > API Keys. The key scopes all requests to its owning vendor.'

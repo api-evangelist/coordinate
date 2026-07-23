@@ -1,0 +1,226 @@
+openapi: 3.1.0
+info:
+  title: Coordinate REST Comments API
+  version: v1
+  description: 'The Coordinate REST API lets you add, update, and retrieve the entities that make up Coordinate''s client project-execution platform: projects, project pages, tasks, task groups, stakeholders, goals, progress reports, discussion entries (comments), and organizations. All requests are scoped to the vendor that owns the API key; `vendor_id` is derived from the key and cannot be overridden. A companion webhook API lets external systems subscribe to create/update events. This description is captured by the API Evangelist enrichment pipeline from Coordinate''s published agent-oriented API reference.'
+  contact:
+    name: Coordinate Support
+    email: support@coordinatehq.com
+    url: https://www.coordinatehq.com/library/integrating-with-coordinate
+  termsOfService: https://coordinatehq.com/legal/terms-and-conditions
+  x-api-reference: https://app.coordinatehq.com/static/API_Documentation.html
+servers:
+- url: https://app.coordinatehq.com/api/v1
+  description: Production
+security:
+- BearerHeader: []
+tags:
+- name: Comments
+  description: Discussion entries on projects, tasks, and goals.
+paths:
+  /projects/{project_id}/discussion_entry:
+    parameters:
+    - $ref: '#/components/parameters/ProjectId'
+    get:
+      operationId: listProjectDiscussionEntries
+      summary: List project-level comments
+      tags:
+      - Comments
+      parameters:
+      - $ref: '#/components/parameters/LastModifiedDt'
+      - $ref: '#/components/parameters/Sort'
+      responses:
+        '200':
+          description: Array of discussion entries
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DiscussionEntry'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /projects/{project_id}/task/{task_id}/discussion_entry:
+    parameters:
+    - $ref: '#/components/parameters/ProjectId'
+    - $ref: '#/components/parameters/TaskId'
+    get:
+      operationId: listTaskDiscussionEntries
+      summary: List task comments
+      tags:
+      - Comments
+      parameters:
+      - $ref: '#/components/parameters/LastModifiedDt'
+      - $ref: '#/components/parameters/Sort'
+      responses:
+        '200':
+          description: Array of discussion entries
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DiscussionEntry'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: createTaskDiscussionEntry
+      summary: Add a comment to a task
+      description: Returns 200 "DiscussionEntry Created". Unknown sender email returns 404.
+      tags:
+      - Comments
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCommentRequest'
+      responses:
+        '200':
+          description: Comment created
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /projects/{project_id}/goal/{goal_id}/discussion_entry:
+    parameters:
+    - $ref: '#/components/parameters/ProjectId'
+    - $ref: '#/components/parameters/GoalId'
+    get:
+      operationId: listGoalDiscussionEntries
+      summary: List goal comments
+      tags:
+      - Comments
+      parameters:
+      - $ref: '#/components/parameters/LastModifiedDt'
+      - $ref: '#/components/parameters/Sort'
+      responses:
+        '200':
+          description: Array of discussion entries
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DiscussionEntry'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /projects/{project_id}/comments:
+    parameters:
+    - $ref: '#/components/parameters/ProjectId'
+    get:
+      operationId: listProjectComments
+      summary: List all comments on a project
+      description: All comments across the project, its tasks, and its goals.
+      tags:
+      - Comments
+      parameters:
+      - $ref: '#/components/parameters/LastModifiedDt'
+      - $ref: '#/components/parameters/Sort'
+      responses:
+        '200':
+          description: Array of discussion entries
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DiscussionEntry'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  parameters:
+    LastModifiedDt:
+      name: last_modified_dt
+      in: query
+      required: false
+      description: ISO 8601. Return only items modified at or after this timestamp. URL-encode `+` as `%2B`.
+      schema:
+        type: string
+    Sort:
+      name: sort
+      in: query
+      required: false
+      description: Sort by last_modified_dt.
+      schema:
+        type: string
+        enum:
+        - asc
+        - desc
+        default: asc
+    TaskId:
+      name: task_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    GoalId:
+      name: goal_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    ProjectId:
+      name: project_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+  schemas:
+    DiscussionEntry:
+      type: object
+      properties:
+        entity_type:
+          type: string
+          example: DiscussionEntry
+        discussion_author_name:
+          type: string
+        discussion_comment:
+          type: string
+          description: HTML
+        discussion_timestamp_dt:
+          type: string
+        discussion_entry_internal:
+          type: boolean
+        target_entity_id:
+          type: string
+          format: uuid
+        target_entity_type:
+          type: string
+        target_entity_title:
+          type: string
+        project_id:
+          type: string
+          format: uuid
+        project_name:
+          type: string
+        entity_url:
+          type: string
+        last_modified_dt:
+          type: string
+    CreateCommentRequest:
+      type: object
+      required:
+      - sender_email_address
+      - comment
+      properties:
+        sender_email_address:
+          type: string
+          description: REQUIRED. Must be a user or stakeholder on the project.
+        comment:
+          type: string
+          description: REQUIRED. HTML allowed.
+  responses:
+    Unauthorized:
+      description: Missing or invalid API key
+    NotFound:
+      description: Resource not found (often a plain-text body such as "Project Not Found")
+  securitySchemes:
+    BearerHeader:
+      type: apiKey
+      in: header
+      name: Bearer
+      description: 'API key sent in a custom `Bearer:` header (note: this is a header named "Bearer", not the standard `Authorization: Bearer` scheme). Create keys in the Coordinate UI under Settings > Integrations > API Keys. The key scopes all requests to its owning vendor.'

@@ -1,0 +1,422 @@
+openapi: 3.1.0
+info:
+  title: Coordinate REST Comments Tasks API
+  version: v1
+  description: 'The Coordinate REST API lets you add, update, and retrieve the entities that make up Coordinate''s client project-execution platform: projects, project pages, tasks, task groups, stakeholders, goals, progress reports, discussion entries (comments), and organizations. All requests are scoped to the vendor that owns the API key; `vendor_id` is derived from the key and cannot be overridden. A companion webhook API lets external systems subscribe to create/update events. This description is captured by the API Evangelist enrichment pipeline from Coordinate''s published agent-oriented API reference.'
+  contact:
+    name: Coordinate Support
+    email: support@coordinatehq.com
+    url: https://www.coordinatehq.com/library/integrating-with-coordinate
+  termsOfService: https://coordinatehq.com/legal/terms-and-conditions
+  x-api-reference: https://app.coordinatehq.com/static/API_Documentation.html
+servers:
+- url: https://app.coordinatehq.com/api/v1
+  description: Production
+security:
+- BearerHeader: []
+tags:
+- name: Tasks
+  description: Tasks within a project.
+paths:
+  /projects/{project_id}/task:
+    parameters:
+    - $ref: '#/components/parameters/ProjectId'
+    get:
+      operationId: listTasks
+      summary: List tasks in a project
+      tags:
+      - Tasks
+      parameters:
+      - $ref: '#/components/parameters/LastModifiedDt'
+      - $ref: '#/components/parameters/Sort'
+      responses:
+        '200':
+          description: Array of tasks
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Task'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: createTask
+      summary: Create a task
+      tags:
+      - Tasks
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTaskRequest'
+      responses:
+        '200':
+          description: The created task
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /projects/{project_id}/task/{task_id}:
+    parameters:
+    - $ref: '#/components/parameters/ProjectId'
+    - $ref: '#/components/parameters/TaskId'
+    get:
+      operationId: getTask
+      summary: Get one task
+      tags:
+      - Tasks
+      responses:
+        '200':
+          description: The task
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    post:
+      operationId: updateTask
+      summary: Update a task
+      tags:
+      - Tasks
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTaskRequest'
+      responses:
+        '200':
+          description: The updated task
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /task/external_object_id/{external_object_id}:
+    parameters:
+    - $ref: '#/components/parameters/ExternalObjectId'
+    get:
+      operationId: getTasksByExternalId
+      summary: Lookup tasks by external object id
+      description: Returns a list of matching tasks.
+      tags:
+      - Tasks
+      responses:
+        '200':
+          description: Array of matching tasks
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Task'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /projects/{project_id}/task/{task_id}/files/attach:
+    parameters:
+    - $ref: '#/components/parameters/ProjectId'
+    - $ref: '#/components/parameters/TaskId'
+    post:
+      operationId: attachTaskFiles
+      summary: Attach files to a task
+      description: multipart/form-data with one or more `File` parts. 100MB hard limit per request.
+      tags:
+      - Tasks
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/FileAttachRequest'
+      responses:
+        '200':
+          description: Files attached
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '413':
+          $ref: '#/components/responses/PayloadTooLarge'
+  /projects/{project_id}/task/{task_id}/file/{file_uid}:
+    parameters:
+    - $ref: '#/components/parameters/ProjectId'
+    - $ref: '#/components/parameters/TaskId'
+    - $ref: '#/components/parameters/FileUid'
+    get:
+      operationId: downloadTaskFile
+      summary: Download a task file
+      tags:
+      - Tasks
+      responses:
+        '302':
+          $ref: '#/components/responses/FileRedirect'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/FilesDisabled'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  schemas:
+    UpdateTaskRequest:
+      type: object
+      description: Any subset of task_* keys. task_assignment_json on update is a plain email string.
+      additionalProperties: true
+    Task:
+      allOf:
+      - $ref: '#/components/schemas/EntityBase'
+      - type: object
+        properties:
+          task_id:
+            type: string
+            format: uuid
+          project_id:
+            type: string
+            format: uuid
+          project_name:
+            type: string
+          task_title:
+            type: string
+          task_description:
+            type:
+            - string
+            - 'null'
+          task_due_date:
+            type:
+            - string
+            - 'null'
+          task_status_current:
+            type:
+            - string
+            - 'null'
+            enum:
+            - not_complete
+            - information
+            - in_progress
+            - dependency_wait
+            - blocked
+            - complete
+            - null
+          task_status_current_dt:
+            type:
+            - string
+            - 'null'
+          task_completed_dt:
+            type:
+            - string
+            - 'null'
+          task_completed_by_email:
+            type:
+            - string
+            - 'null'
+          task_completed_by_name:
+            type:
+            - string
+            - 'null'
+          group_id:
+            type:
+            - string
+            - 'null'
+          task_group_title:
+            type:
+            - string
+            - 'null'
+          task_assignee_stakeholder_id:
+            type:
+            - string
+            - 'null'
+          task_assignee_stakeholder_email_address:
+            type:
+            - string
+            - 'null'
+          task_assignee_stakeholder_full_name:
+            type:
+            - string
+            - 'null'
+          task_internal:
+            type: boolean
+          task_tags:
+            type: array
+            items:
+              type: string
+          time_tracking:
+            type: array
+            items:
+              type: object
+              additionalProperties: true
+          form_data:
+            type: object
+            additionalProperties: true
+          files:
+            type: array
+            items:
+              $ref: '#/components/schemas/FileRef'
+    EntityBase:
+      type: object
+      properties:
+        entity_type:
+          type: string
+        entity_url:
+          type: string
+        last_modified_dt:
+          type: string
+        vendor_id:
+          type: string
+          format: uuid
+        external_object_id:
+          type:
+          - string
+          - 'null'
+    FileAttachRequest:
+      type: object
+      properties:
+        File:
+          type: array
+          items:
+            type: string
+            format: binary
+          description: One or more file parts named exactly "File".
+    FileRef:
+      type: object
+      properties:
+        file_uid:
+          type: string
+        file_name:
+          type: string
+        file_size:
+          type: integer
+        file_content_type:
+          type: string
+        file_dt:
+          type: string
+        download_url:
+          type: string
+          description: Permanent API route; hit with Bearer header, follow the 302.
+    Error:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: string
+    CreateTaskRequest:
+      type: object
+      required:
+      - task_title
+      properties:
+        task_title:
+          type: string
+        task_description:
+          type: string
+          description: HTML
+        task_due_date:
+          type: string
+          description: YYYY-MM-DD
+        task_status_current:
+          type: string
+          enum:
+          - not_complete
+          - information
+          - in_progress
+          - dependency_wait
+          - blocked
+          - complete
+        task_internal:
+          type: boolean
+          default: false
+        task_tags:
+          type: array
+          items:
+            type: string
+        external_object_id:
+          type: string
+        group_title:
+          type: string
+          description: If it matches an existing group title
+          the task is placed in that group.: null
+        insert_top_of_group:
+          type: boolean
+          default: false
+        task_assignment_json:
+          type: string
+          description: Email of an existing user/stakeholder on the project.
+  parameters:
+    Sort:
+      name: sort
+      in: query
+      required: false
+      description: Sort by last_modified_dt.
+      schema:
+        type: string
+        enum:
+        - asc
+        - desc
+        default: asc
+    ProjectId:
+      name: project_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    LastModifiedDt:
+      name: last_modified_dt
+      in: query
+      required: false
+      description: ISO 8601. Return only items modified at or after this timestamp. URL-encode `+` as `%2B`.
+      schema:
+        type: string
+    ExternalObjectId:
+      name: external_object_id
+      in: path
+      required: true
+      schema:
+        type: string
+    TaskId:
+      name: task_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    FileUid:
+      name: file_uid
+      in: path
+      required: true
+      description: File id. URL-encode a `#` as `%23`.
+      schema:
+        type: string
+  responses:
+    NotFound:
+      description: Resource not found (often a plain-text body such as "Project Not Found")
+    PayloadTooLarge:
+      description: File upload exceeded 100MB (or JSON storage exceeded 300KB)
+    FileRedirect:
+      description: 302 redirect to a fresh 5-minute S3 presigned URL (in the Location header)
+    Unauthorized:
+      description: Missing or invalid API key
+    ValidationError:
+      description: Validation failure
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    FilesDisabled:
+      description: Files are disabled for this vendor
+  securitySchemes:
+    BearerHeader:
+      type: apiKey
+      in: header
+      name: Bearer
+      description: 'API key sent in a custom `Bearer:` header (note: this is a header named "Bearer", not the standard `Authorization: Bearer` scheme). Create keys in the Coordinate UI under Settings > Integrations > API Keys. The key scopes all requests to its owning vendor.'

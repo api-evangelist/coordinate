@@ -1,0 +1,410 @@
+openapi: 3.1.0
+info:
+  title: Coordinate REST Comments Organizations API
+  version: v1
+  description: 'The Coordinate REST API lets you add, update, and retrieve the entities that make up Coordinate''s client project-execution platform: projects, project pages, tasks, task groups, stakeholders, goals, progress reports, discussion entries (comments), and organizations. All requests are scoped to the vendor that owns the API key; `vendor_id` is derived from the key and cannot be overridden. A companion webhook API lets external systems subscribe to create/update events. This description is captured by the API Evangelist enrichment pipeline from Coordinate''s published agent-oriented API reference.'
+  contact:
+    name: Coordinate Support
+    email: support@coordinatehq.com
+    url: https://www.coordinatehq.com/library/integrating-with-coordinate
+  termsOfService: https://coordinatehq.com/legal/terms-and-conditions
+  x-api-reference: https://app.coordinatehq.com/static/API_Documentation.html
+servers:
+- url: https://app.coordinatehq.com/api/v1
+  description: Production
+security:
+- BearerHeader: []
+tags:
+- name: Organizations
+  description: Customer organizations linking projects and stakeholders.
+paths:
+  /organizations:
+    get:
+      operationId: listOrganizations
+      summary: List organizations
+      tags:
+      - Organizations
+      responses:
+        '200':
+          description: Array of organizations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Organization'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: createOrganization
+      summary: Create an organization
+      tags:
+      - Organizations
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateOrganizationRequest'
+      responses:
+        '200':
+          description: The created organization
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /organizations/{org_id}:
+    parameters:
+    - $ref: '#/components/parameters/OrgId'
+    get:
+      operationId: getOrganization
+      summary: Get one organization
+      tags:
+      - Organizations
+      responses:
+        '200':
+          description: The organization
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /organizations/{org_id}/stakeholders:
+    parameters:
+    - $ref: '#/components/parameters/OrgId'
+    get:
+      operationId: listOrganizationStakeholders
+      summary: List stakeholders linked to an organization
+      tags:
+      - Organizations
+      responses:
+        '200':
+          description: Array of stakeholders
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Stakeholder'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: addOrganizationStakeholder
+      summary: Add a stakeholder to an organization
+      description: Propagates the stakeholder to all projects linked to the org.
+      tags:
+      - Organizations
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddOrgStakeholderRequest'
+      responses:
+        '200':
+          description: Stakeholder added
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /organizations/{org_id}/stakeholders/{stakeholder_id}/remove:
+    parameters:
+    - $ref: '#/components/parameters/OrgId'
+    - $ref: '#/components/parameters/StakeholderId'
+    post:
+      operationId: removeOrganizationStakeholder
+      summary: Remove a stakeholder from an organization
+      tags:
+      - Organizations
+      responses:
+        '200':
+          description: Success acknowledgement
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /organizations/{org_id}/projects:
+    parameters:
+    - $ref: '#/components/parameters/OrgId'
+    get:
+      operationId: listOrganizationProjects
+      summary: List projects linked to an organization
+      tags:
+      - Organizations
+      responses:
+        '200':
+          description: Array of projects
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Project'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: linkOrganizationProject
+      summary: Link an existing project to an organization
+      tags:
+      - Organizations
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LinkProjectRequest'
+      responses:
+        '200':
+          description: Project linked
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /organizations/{org_id}/projects/{project_id}/remove:
+    parameters:
+    - $ref: '#/components/parameters/OrgId'
+    - $ref: '#/components/parameters/ProjectId'
+    post:
+      operationId: unlinkOrganizationProject
+      summary: Unlink a project from an organization
+      tags:
+      - Organizations
+      responses:
+        '200':
+          description: Success acknowledgement
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  schemas:
+    CreateOrganizationRequest:
+      type: object
+      required:
+      - organization_name
+      properties:
+        organization_name:
+          type: string
+        external_object_id:
+          type: string
+    FileRef:
+      type: object
+      properties:
+        file_uid:
+          type: string
+        file_name:
+          type: string
+        file_size:
+          type: integer
+        file_content_type:
+          type: string
+        file_dt:
+          type: string
+        download_url:
+          type: string
+          description: Permanent API route; hit with Bearer header, follow the 302.
+    Error:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: string
+    LinkProjectRequest:
+      type: object
+      required:
+      - project_id
+      properties:
+        project_id:
+          type: string
+          format: uuid
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+    Project:
+      allOf:
+      - $ref: '#/components/schemas/EntityBase'
+      - type: object
+        properties:
+          project_id:
+            type: string
+            format: uuid
+          project_name:
+            type: string
+          project_description:
+            type:
+            - string
+            - 'null'
+          project_status:
+            type:
+            - string
+            - 'null'
+          project_estimated_start_date:
+            type:
+            - string
+            - 'null'
+          project_estimated_end_date:
+            type:
+            - string
+            - 'null'
+          project_estimated_effort:
+            type:
+            - string
+            - 'null'
+          project_manager_email:
+            type:
+            - string
+            - 'null'
+          project_manager_full_name:
+            type:
+            - string
+            - 'null'
+          project_tags:
+            type: array
+            items:
+              type: string
+          project_active:
+            type: boolean
+          customers:
+            type: array
+            items:
+              type: object
+              additionalProperties: true
+          custom_fields:
+            type: object
+            additionalProperties: true
+          project_storage_json:
+            type: object
+            additionalProperties: true
+          files:
+            type: array
+            items:
+              $ref: '#/components/schemas/FileRef'
+    AddOrgStakeholderRequest:
+      type: object
+      required:
+      - stakeholder_email_address
+      properties:
+        stakeholder_email_address:
+          type: string
+        stakeholder_full_name:
+          type: string
+        stakeholder_title:
+          type: string
+        stakeholder_phone:
+          type: string
+    Organization:
+      allOf:
+      - $ref: '#/components/schemas/EntityBase'
+      - type: object
+        properties:
+          organization_id:
+            type: string
+            format: uuid
+          organization_name:
+            type: string
+          organization_description:
+            type:
+            - string
+            - 'null'
+    EntityBase:
+      type: object
+      properties:
+        entity_type:
+          type: string
+        entity_url:
+          type: string
+        last_modified_dt:
+          type: string
+        vendor_id:
+          type: string
+          format: uuid
+        external_object_id:
+          type:
+          - string
+          - 'null'
+    Stakeholder:
+      allOf:
+      - $ref: '#/components/schemas/EntityBase'
+      - type: object
+        properties:
+          stakeholder_id:
+            type: string
+            format: uuid
+          stakeholder_email_address:
+            type: string
+          stakeholder_full_name:
+            type:
+            - string
+            - 'null'
+          stakeholder_title:
+            type:
+            - string
+            - 'null'
+          stakeholder_phone:
+            type:
+            - string
+            - 'null'
+          stakeholder_project_id:
+            type:
+            - string
+            - 'null'
+            format: uuid
+          stakeholder_related_org_id:
+            type:
+            - string
+            - 'null'
+          stakeholder_roles:
+            type: array
+            items:
+              type: string
+  parameters:
+    StakeholderId:
+      name: stakeholder_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    OrgId:
+      name: org_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    ProjectId:
+      name: project_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+  responses:
+    ValidationError:
+      description: Validation failure
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Missing or invalid API key
+    NotFound:
+      description: Resource not found (often a plain-text body such as "Project Not Found")
+  securitySchemes:
+    BearerHeader:
+      type: apiKey
+      in: header
+      name: Bearer
+      description: 'API key sent in a custom `Bearer:` header (note: this is a header named "Bearer", not the standard `Authorization: Bearer` scheme). Create keys in the Coordinate UI under Settings > Integrations > API Keys. The key scopes all requests to its owning vendor.'

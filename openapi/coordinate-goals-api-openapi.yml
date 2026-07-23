@@ -1,0 +1,284 @@
+openapi: 3.1.0
+info:
+  title: Coordinate REST Comments Goals API
+  version: v1
+  description: 'The Coordinate REST API lets you add, update, and retrieve the entities that make up Coordinate''s client project-execution platform: projects, project pages, tasks, task groups, stakeholders, goals, progress reports, discussion entries (comments), and organizations. All requests are scoped to the vendor that owns the API key; `vendor_id` is derived from the key and cannot be overridden. A companion webhook API lets external systems subscribe to create/update events. This description is captured by the API Evangelist enrichment pipeline from Coordinate''s published agent-oriented API reference.'
+  contact:
+    name: Coordinate Support
+    email: support@coordinatehq.com
+    url: https://www.coordinatehq.com/library/integrating-with-coordinate
+  termsOfService: https://coordinatehq.com/legal/terms-and-conditions
+  x-api-reference: https://app.coordinatehq.com/static/API_Documentation.html
+servers:
+- url: https://app.coordinatehq.com/api/v1
+  description: Production
+security:
+- BearerHeader: []
+tags:
+- name: Goals
+  description: Project goals / milestones with target dates.
+paths:
+  /projects/{project_id}/goal:
+    parameters:
+    - $ref: '#/components/parameters/ProjectId'
+    get:
+      operationId: listGoals
+      summary: List goals
+      tags:
+      - Goals
+      parameters:
+      - $ref: '#/components/parameters/LastModifiedDt'
+      - $ref: '#/components/parameters/Sort'
+      responses:
+        '200':
+          description: Array of goals
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Goal'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: createGoal
+      summary: Create a goal
+      tags:
+      - Goals
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateGoalRequest'
+      responses:
+        '200':
+          description: The created goal
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Goal'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /projects/{project_id}/goal/{goal_id}:
+    parameters:
+    - $ref: '#/components/parameters/ProjectId'
+    - $ref: '#/components/parameters/GoalId'
+    get:
+      operationId: getGoal
+      summary: Get one goal
+      tags:
+      - Goals
+      responses:
+        '200':
+          description: The goal
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Goal'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    post:
+      operationId: updateGoal
+      summary: Update a goal
+      tags:
+      - Goals
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateGoalRequest'
+      responses:
+        '200':
+          description: The updated goal
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Goal'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /projects/{project_id}/goal/{goal_id}/file/{file_uid}:
+    parameters:
+    - $ref: '#/components/parameters/ProjectId'
+    - $ref: '#/components/parameters/GoalId'
+    - $ref: '#/components/parameters/FileUid'
+    get:
+      operationId: downloadGoalFile
+      summary: Download a goal file
+      tags:
+      - Goals
+      responses:
+        '302':
+          $ref: '#/components/responses/FileRedirect'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/FilesDisabled'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  schemas:
+    FileRef:
+      type: object
+      properties:
+        file_uid:
+          type: string
+        file_name:
+          type: string
+        file_size:
+          type: integer
+        file_content_type:
+          type: string
+        file_dt:
+          type: string
+        download_url:
+          type: string
+          description: Permanent API route; hit with Bearer header, follow the 302.
+    Error:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: string
+    Goal:
+      allOf:
+      - $ref: '#/components/schemas/EntityBase'
+      - type: object
+        properties:
+          goal_id:
+            type: string
+            format: uuid
+          goal_title:
+            type: string
+          goal_description:
+            type:
+            - string
+            - 'null'
+          goal_target_date:
+            type:
+            - string
+            - 'null'
+          goal_completed_dt:
+            type:
+            - string
+            - 'null'
+          goal_completed_by_email:
+            type:
+            - string
+            - 'null'
+          goal_completed_by_name:
+            type:
+            - string
+            - 'null'
+          goal_sponsor_name:
+            type:
+            - string
+            - 'null'
+          project_id:
+            type: string
+            format: uuid
+          project_name:
+            type: string
+          files:
+            type: array
+            items:
+              $ref: '#/components/schemas/FileRef'
+    EntityBase:
+      type: object
+      properties:
+        entity_type:
+          type: string
+        entity_url:
+          type: string
+        last_modified_dt:
+          type: string
+        vendor_id:
+          type: string
+          format: uuid
+        external_object_id:
+          type:
+          - string
+          - 'null'
+    CreateGoalRequest:
+      type: object
+      required:
+      - goal_title
+      properties:
+        goal_title:
+          type: string
+        goal_description:
+          type: string
+        goal_target_date:
+          type: string
+        goal_sponsor_name:
+          type: string
+        external_object_id:
+          type: string
+  parameters:
+    FileUid:
+      name: file_uid
+      in: path
+      required: true
+      description: File id. URL-encode a `#` as `%23`.
+      schema:
+        type: string
+    GoalId:
+      name: goal_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    Sort:
+      name: sort
+      in: query
+      required: false
+      description: Sort by last_modified_dt.
+      schema:
+        type: string
+        enum:
+        - asc
+        - desc
+        default: asc
+    ProjectId:
+      name: project_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    LastModifiedDt:
+      name: last_modified_dt
+      in: query
+      required: false
+      description: ISO 8601. Return only items modified at or after this timestamp. URL-encode `+` as `%2B`.
+      schema:
+        type: string
+  responses:
+    ValidationError:
+      description: Validation failure
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    FileRedirect:
+      description: 302 redirect to a fresh 5-minute S3 presigned URL (in the Location header)
+    Unauthorized:
+      description: Missing or invalid API key
+    FilesDisabled:
+      description: Files are disabled for this vendor
+    NotFound:
+      description: Resource not found (often a plain-text body such as "Project Not Found")
+  securitySchemes:
+    BearerHeader:
+      type: apiKey
+      in: header
+      name: Bearer
+      description: 'API key sent in a custom `Bearer:` header (note: this is a header named "Bearer", not the standard `Authorization: Bearer` scheme). Create keys in the Coordinate UI under Settings > Integrations > API Keys. The key scopes all requests to its owning vendor.'

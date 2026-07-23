@@ -1,0 +1,457 @@
+openapi: 3.1.0
+info:
+  title: Coordinate REST Comments Projects API
+  version: v1
+  description: 'The Coordinate REST API lets you add, update, and retrieve the entities that make up Coordinate''s client project-execution platform: projects, project pages, tasks, task groups, stakeholders, goals, progress reports, discussion entries (comments), and organizations. All requests are scoped to the vendor that owns the API key; `vendor_id` is derived from the key and cannot be overridden. A companion webhook API lets external systems subscribe to create/update events. This description is captured by the API Evangelist enrichment pipeline from Coordinate''s published agent-oriented API reference.'
+  contact:
+    name: Coordinate Support
+    email: support@coordinatehq.com
+    url: https://www.coordinatehq.com/library/integrating-with-coordinate
+  termsOfService: https://coordinatehq.com/legal/terms-and-conditions
+  x-api-reference: https://app.coordinatehq.com/static/API_Documentation.html
+servers:
+- url: https://app.coordinatehq.com/api/v1
+  description: Production
+security:
+- BearerHeader: []
+tags:
+- name: Projects
+  description: Client projects (internally "Customer").
+paths:
+  /projects:
+    get:
+      operationId: listProjects
+      summary: List all projects
+      description: List all projects in the vendor account. Supports last_modified_dt filtering and sort.
+      tags:
+      - Projects
+      parameters:
+      - $ref: '#/components/parameters/LastModifiedDt'
+      - $ref: '#/components/parameters/Sort'
+      responses:
+        '200':
+          description: Array of project objects
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Project'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/ServerError'
+    post:
+      operationId: createProject
+      summary: Create a project
+      tags:
+      - Projects
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateProjectRequest'
+      responses:
+        '200':
+          description: The created project
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /projects/{project_id}:
+    parameters:
+    - $ref: '#/components/parameters/ProjectId'
+    get:
+      operationId: getProject
+      summary: Get one project
+      tags:
+      - Projects
+      responses:
+        '200':
+          description: The project
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    post:
+      operationId: updateProject
+      summary: Update a project
+      description: Send any subset of project_* keys. Read-only fields are silently dropped. manager_email_address re-binds the project manager.
+      tags:
+      - Projects
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateProjectRequest'
+      responses:
+        '200':
+          description: The updated project
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /projects/external_object_id/{external_object_id}:
+    parameters:
+    - $ref: '#/components/parameters/ExternalObjectId'
+    get:
+      operationId: getProjectsByExternalId
+      summary: Lookup projects by external object id
+      description: Returns a list — more than one project may share an external_object_id.
+      tags:
+      - Projects
+      responses:
+        '200':
+          description: Array of matching projects
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Project'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /projects/{project_id}/apply_playbook:
+    parameters:
+    - $ref: '#/components/parameters/ProjectId'
+    post:
+      operationId: applyPlaybook
+      summary: Apply a playbook (template) to a project
+      tags:
+      - Projects
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApplyPlaybookRequest'
+      responses:
+        '200':
+          description: Success acknowledgement
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /projects/{project_id}/files/attach:
+    parameters:
+    - $ref: '#/components/parameters/ProjectId'
+    post:
+      operationId: attachProjectFiles
+      summary: Attach files to a project
+      description: multipart/form-data with one or more `File` parts (case-sensitive). 100MB hard limit per request.
+      tags:
+      - Projects
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/FileAttachRequest'
+      responses:
+        '200':
+          description: Files attached
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '413':
+          $ref: '#/components/responses/PayloadTooLarge'
+  /projects/{project_id}/file/{file_uid}:
+    parameters:
+    - $ref: '#/components/parameters/ProjectId'
+    - $ref: '#/components/parameters/FileUid'
+    get:
+      operationId: downloadProjectFile
+      summary: Download a project file
+      description: Returns a 302 redirect to a fresh 5-minute S3 presigned URL. Follow immediately; do not cache the target.
+      tags:
+      - Projects
+      responses:
+        '302':
+          $ref: '#/components/responses/FileRedirect'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/FilesDisabled'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  parameters:
+    Sort:
+      name: sort
+      in: query
+      required: false
+      description: Sort by last_modified_dt.
+      schema:
+        type: string
+        enum:
+        - asc
+        - desc
+        default: asc
+    ProjectId:
+      name: project_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    LastModifiedDt:
+      name: last_modified_dt
+      in: query
+      required: false
+      description: ISO 8601. Return only items modified at or after this timestamp. URL-encode `+` as `%2B`.
+      schema:
+        type: string
+    ExternalObjectId:
+      name: external_object_id
+      in: path
+      required: true
+      schema:
+        type: string
+    FileUid:
+      name: file_uid
+      in: path
+      required: true
+      description: File id. URL-encode a `#` as `%23`.
+      schema:
+        type: string
+  schemas:
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+    Project:
+      allOf:
+      - $ref: '#/components/schemas/EntityBase'
+      - type: object
+        properties:
+          project_id:
+            type: string
+            format: uuid
+          project_name:
+            type: string
+          project_description:
+            type:
+            - string
+            - 'null'
+          project_status:
+            type:
+            - string
+            - 'null'
+          project_estimated_start_date:
+            type:
+            - string
+            - 'null'
+          project_estimated_end_date:
+            type:
+            - string
+            - 'null'
+          project_estimated_effort:
+            type:
+            - string
+            - 'null'
+          project_manager_email:
+            type:
+            - string
+            - 'null'
+          project_manager_full_name:
+            type:
+            - string
+            - 'null'
+          project_tags:
+            type: array
+            items:
+              type: string
+          project_active:
+            type: boolean
+          customers:
+            type: array
+            items:
+              type: object
+              additionalProperties: true
+          custom_fields:
+            type: object
+            additionalProperties: true
+          project_storage_json:
+            type: object
+            additionalProperties: true
+          files:
+            type: array
+            items:
+              $ref: '#/components/schemas/FileRef'
+    EntityBase:
+      type: object
+      properties:
+        entity_type:
+          type: string
+        entity_url:
+          type: string
+        last_modified_dt:
+          type: string
+        vendor_id:
+          type: string
+          format: uuid
+        external_object_id:
+          type:
+          - string
+          - 'null'
+    UpdateProjectRequest:
+      type: object
+      description: Any subset of project_* keys. manager_email_address re-binds the manager.
+      additionalProperties: true
+    FileAttachRequest:
+      type: object
+      properties:
+        File:
+          type: array
+          items:
+            type: string
+            format: binary
+          description: One or more file parts named exactly "File".
+    FileRef:
+      type: object
+      properties:
+        file_uid:
+          type: string
+        file_name:
+          type: string
+        file_size:
+          type: integer
+        file_content_type:
+          type: string
+        file_dt:
+          type: string
+        download_url:
+          type: string
+          description: Permanent API route; hit with Bearer header, follow the 302.
+    Error:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: string
+    ApplyPlaybookRequest:
+      type: object
+      required:
+      - playbook_name
+      properties:
+        playbook_name:
+          type: string
+        playbook_date:
+          type: string
+        playbook_date_title:
+          type: string
+        stakeholder_id:
+          type: string
+          format: uuid
+        stakeholder_task_assignment_list:
+          type: array
+          items:
+            type: string
+    CreateProjectRequest:
+      type: object
+      required:
+      - manager_email_address
+      - project_name
+      properties:
+        manager_email_address:
+          type: string
+          description: REQUIRED. Existing user in your vendor.
+        project_name:
+          type: string
+        external_object_id:
+          type: string
+        organization_id:
+          type: string
+          format: uuid
+        playbook_name:
+          type: string
+        playbook_date:
+          type: string
+        playbook_date_title:
+          type: string
+        stakeholder_email:
+          type: string
+        stakeholder_invite_message:
+          type: string
+        stakeholder_task_assignment_list:
+          type: array
+          items:
+            type: string
+        suppress_invite_email:
+          type: boolean
+          default: false
+        send_manager_assignment_email:
+          type: boolean
+          default: false
+        custom_fields:
+          type: object
+          additionalProperties: true
+        project_storage_json:
+          type: object
+          additionalProperties: true
+        project_description:
+          type: string
+        project_status:
+          type: string
+        project_tags:
+          type: array
+          items:
+            type: string
+  responses:
+    NotFound:
+      description: Resource not found (often a plain-text body such as "Project Not Found")
+    ServerError:
+      description: Server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    PayloadTooLarge:
+      description: File upload exceeded 100MB (or JSON storage exceeded 300KB)
+    FileRedirect:
+      description: 302 redirect to a fresh 5-minute S3 presigned URL (in the Location header)
+    Unauthorized:
+      description: Missing or invalid API key
+    ValidationError:
+      description: Validation failure
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    FilesDisabled:
+      description: Files are disabled for this vendor
+  securitySchemes:
+    BearerHeader:
+      type: apiKey
+      in: header
+      name: Bearer
+      description: 'API key sent in a custom `Bearer:` header (note: this is a header named "Bearer", not the standard `Authorization: Bearer` scheme). Create keys in the Coordinate UI under Settings > Integrations > API Keys. The key scopes all requests to its owning vendor.'

@@ -1,0 +1,128 @@
+openapi: 3.1.0
+info:
+  title: Coordinate REST Comments Project Pages API
+  version: v1
+  description: 'The Coordinate REST API lets you add, update, and retrieve the entities that make up Coordinate''s client project-execution platform: projects, project pages, tasks, task groups, stakeholders, goals, progress reports, discussion entries (comments), and organizations. All requests are scoped to the vendor that owns the API key; `vendor_id` is derived from the key and cannot be overridden. A companion webhook API lets external systems subscribe to create/update events. This description is captured by the API Evangelist enrichment pipeline from Coordinate''s published agent-oriented API reference.'
+  contact:
+    name: Coordinate Support
+    email: support@coordinatehq.com
+    url: https://www.coordinatehq.com/library/integrating-with-coordinate
+  termsOfService: https://coordinatehq.com/legal/terms-and-conditions
+  x-api-reference: https://app.coordinatehq.com/static/API_Documentation.html
+servers:
+- url: https://app.coordinatehq.com/api/v1
+  description: Production
+security:
+- BearerHeader: []
+tags:
+- name: Project Pages
+  description: Rich-text pages attached to a project.
+paths:
+  /projects/{project_id}/pages:
+    parameters:
+    - $ref: '#/components/parameters/ProjectId'
+    get:
+      operationId: listProjectPages
+      summary: List project page names
+      tags:
+      - Project Pages
+      responses:
+        '200':
+          description: Array of pages
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Page'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /projects/{project_id}/pages/{page_name}:
+    parameters:
+    - $ref: '#/components/parameters/ProjectId'
+    - $ref: '#/components/parameters/PageName'
+    get:
+      operationId: getProjectPage
+      summary: Get a single project page
+      tags:
+      - Project Pages
+      responses:
+        '200':
+          description: The page
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Page'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    post:
+      operationId: upsertProjectPage
+      summary: Create or overwrite a project page
+      tags:
+      - Project Pages
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpsertPageRequest'
+      responses:
+        '200':
+          description: The saved page
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Page'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  parameters:
+    PageName:
+      name: page_name
+      in: path
+      required: true
+      description: URL-encode spaces (e.g. Page%20Name).
+      schema:
+        type: string
+    ProjectId:
+      name: project_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+  schemas:
+    UpsertPageRequest:
+      type: object
+      required:
+      - page_content
+      properties:
+        page_content:
+          type: string
+          description: REQUIRED. HTML allowed.
+        page_private:
+          type: boolean
+          default: false
+    Page:
+      type: object
+      properties:
+        page_name:
+          type: string
+        page_private:
+          type: boolean
+        page_content:
+          type: string
+          description: HTML
+  responses:
+    Unauthorized:
+      description: Missing or invalid API key
+    NotFound:
+      description: Resource not found (often a plain-text body such as "Project Not Found")
+  securitySchemes:
+    BearerHeader:
+      type: apiKey
+      in: header
+      name: Bearer
+      description: 'API key sent in a custom `Bearer:` header (note: this is a header named "Bearer", not the standard `Authorization: Bearer` scheme). Create keys in the Coordinate UI under Settings > Integrations > API Keys. The key scopes all requests to its owning vendor.'
