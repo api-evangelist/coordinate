@@ -1,0 +1,33 @@
+generated: '2026-07-18'
+method: derived
+source: openapi/coordinate-openapi.yml
+note: >-
+  Cross-cutting standards conformance derived from the Coordinate OpenAPI and
+  published API reference. No published compliance certifications were found, so
+  no Compliance pointer is emitted.
+standards:
+  - id: openapi-3.1
+    conforms: true
+    evidence: Repo carries an OpenAPI 3.1.0 description captured from the published API reference.
+  - id: oauth2
+    conforms: false
+    evidence: Auth is a single API-key header (no oauth2 securityScheme).
+  - id: oidc
+    conforms: false
+  - id: rfc9457-problem-details
+    conforms: false
+    evidence: Errors use a custom {success,error} envelope / plain text, not application/problem+json.
+  - id: rfc8594-sunset-header
+    conforms: false
+    evidence: No Sunset/Deprecation header support documented.
+  - id: pagination
+    conforms: true
+    evidence: Page-number pagination (paginate/page/page_size) on the /entity firehose.
+  - id: idempotency
+    conforms: false
+    evidence: No idempotency-key mechanism documented.
+  - id: webhooks
+    conforms: true
+    evidence: Documented webhook subscription API with create/update event catalog.
+  - id: json-api
+    conforms: false

@@ -1,0 +1,1434 @@
+openapi: 3.1.0
+info:
+  title: Coordinate REST API
+  version: v1
+  description: >-
+    The Coordinate REST API lets you add, update, and retrieve the entities that
+    make up Coordinate's client project-execution platform: projects, project
+    pages, tasks, task groups, stakeholders, goals, progress reports, discussion
+    entries (comments), and organizations. All requests are scoped to the vendor
+    that owns the API key; `vendor_id` is derived from the key and cannot be
+    overridden. A companion webhook API lets external systems subscribe to
+    create/update events. This description is captured by the API Evangelist
+    enrichment pipeline from Coordinate's published agent-oriented API reference.
+  contact:
+    name: Coordinate Support
+    email: support@coordinatehq.com
+    url: https://www.coordinatehq.com/library/integrating-with-coordinate
+  termsOfService: https://coordinatehq.com/legal/terms-and-conditions
+  x-api-reference: https://app.coordinatehq.com/static/API_Documentation.html
+servers:
+  - url: https://app.coordinatehq.com/api/v1
+    description: Production
+tags:
+  - name: Projects
+    description: Client projects (internally "Customer").
+  - name: Project Pages
+    description: Rich-text pages attached to a project.
+  - name: Tasks
+    description: Tasks within a project.
+  - name: Groups
+    description: Task groups (internally "Milestone").
+  - name: Stakeholders
+    description: Client-side collaborators on a project.
+  - name: Goals
+    description: Project goals / milestones with target dates.
+  - name: Progress Reports
+    description: Read-only progress reports on a project.
+  - name: Comments
+    description: Discussion entries on projects, tasks, and goals.
+  - name: Organizations
+    description: Customer organizations linking projects and stakeholders.
+  - name: Entity
+    description: Cross-entity bulk export firehose.
+  - name: Users
+    description: Vendor users.
+  - name: Storage
+    description: Per-vendor JSON scratch storage.
+  - name: Webhooks
+    description: Webhook subscription management.
+security:
+  - BearerHeader: []
+paths:
+  /projects:
+    get:
+      operationId: listProjects
+      summary: List all projects
+      description: List all projects in the vendor account. Supports last_modified_dt filtering and sort.
+      tags: [Projects]
+      parameters:
+        - $ref: '#/components/parameters/LastModifiedDt'
+        - $ref: '#/components/parameters/Sort'
+      responses:
+        '200':
+          description: Array of project objects
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Project' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '500': { $ref: '#/components/responses/ServerError' }
+    post:
+      operationId: createProject
+      summary: Create a project
+      tags: [Projects]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CreateProjectRequest' }
+      responses:
+        '200':
+          description: The created project
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Project' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '500': { $ref: '#/components/responses/ServerError' }
+  /projects/{project_id}:
+    parameters:
+      - $ref: '#/components/parameters/ProjectId'
+    get:
+      operationId: getProject
+      summary: Get one project
+      tags: [Projects]
+      responses:
+        '200':
+          description: The project
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Project' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    post:
+      operationId: updateProject
+      summary: Update a project
+      description: Send any subset of project_* keys. Read-only fields are silently dropped. manager_email_address re-binds the project manager.
+      tags: [Projects]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/UpdateProjectRequest' }
+      responses:
+        '200':
+          description: The updated project
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Project' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+  /projects/external_object_id/{external_object_id}:
+    parameters:
+      - $ref: '#/components/parameters/ExternalObjectId'
+    get:
+      operationId: getProjectsByExternalId
+      summary: Lookup projects by external object id
+      description: Returns a list — more than one project may share an external_object_id.
+      tags: [Projects]
+      responses:
+        '200':
+          description: Array of matching projects
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Project' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+  /projects/{project_id}/apply_playbook:
+    parameters:
+      - $ref: '#/components/parameters/ProjectId'
+    post:
+      operationId: applyPlaybook
+      summary: Apply a playbook (template) to a project
+      tags: [Projects]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ApplyPlaybookRequest' }
+      responses:
+        '200':
+          description: Success acknowledgement
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/SuccessResponse' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+  /projects/{project_id}/files/attach:
+    parameters:
+      - $ref: '#/components/parameters/ProjectId'
+    post:
+      operationId: attachProjectFiles
+      summary: Attach files to a project
+      description: multipart/form-data with one or more `File` parts (case-sensitive). 100MB hard limit per request.
+      tags: [Projects]
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema: { $ref: '#/components/schemas/FileAttachRequest' }
+      responses:
+        '200':
+          description: Files attached
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '413': { $ref: '#/components/responses/PayloadTooLarge' }
+  /projects/{project_id}/file/{file_uid}:
+    parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/FileUid'
+    get:
+      operationId: downloadProjectFile
+      summary: Download a project file
+      description: Returns a 302 redirect to a fresh 5-minute S3 presigned URL. Follow immediately; do not cache the target.
+      tags: [Projects]
+      responses:
+        '302': { $ref: '#/components/responses/FileRedirect' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/FilesDisabled' }
+        '404': { $ref: '#/components/responses/NotFound' }
+  /projects/{project_id}/pages:
+    parameters:
+      - $ref: '#/components/parameters/ProjectId'
+    get:
+      operationId: listProjectPages
+      summary: List project page names
+      tags: [Project Pages]
+      responses:
+        '200':
+          description: Array of pages
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Page' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+  /projects/{project_id}/pages/{page_name}:
+    parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/PageName'
+    get:
+      operationId: getProjectPage
+      summary: Get a single project page
+      tags: [Project Pages]
+      responses:
+        '200':
+          description: The page
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Page' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    post:
+      operationId: upsertProjectPage
+      summary: Create or overwrite a project page
+      tags: [Project Pages]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/UpsertPageRequest' }
+      responses:
+        '200':
+          description: The saved page
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Page' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+  /projects/{project_id}/task:
+    parameters:
+      - $ref: '#/components/parameters/ProjectId'
+    get:
+      operationId: listTasks
+      summary: List tasks in a project
+      tags: [Tasks]
+      parameters:
+        - $ref: '#/components/parameters/LastModifiedDt'
+        - $ref: '#/components/parameters/Sort'
+      responses:
+        '200':
+          description: Array of tasks
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Task' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+    post:
+      operationId: createTask
+      summary: Create a task
+      tags: [Tasks]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CreateTaskRequest' }
+      responses:
+        '200':
+          description: The created task
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Task' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+  /projects/{project_id}/task/{task_id}:
+    parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/TaskId'
+    get:
+      operationId: getTask
+      summary: Get one task
+      tags: [Tasks]
+      responses:
+        '200':
+          description: The task
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Task' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    post:
+      operationId: updateTask
+      summary: Update a task
+      tags: [Tasks]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/UpdateTaskRequest' }
+      responses:
+        '200':
+          description: The updated task
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Task' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+  /task/external_object_id/{external_object_id}:
+    parameters:
+      - $ref: '#/components/parameters/ExternalObjectId'
+    get:
+      operationId: getTasksByExternalId
+      summary: Lookup tasks by external object id
+      description: Returns a list of matching tasks.
+      tags: [Tasks]
+      responses:
+        '200':
+          description: Array of matching tasks
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Task' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+  /projects/{project_id}/task/{task_id}/files/attach:
+    parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/TaskId'
+    post:
+      operationId: attachTaskFiles
+      summary: Attach files to a task
+      description: multipart/form-data with one or more `File` parts. 100MB hard limit per request.
+      tags: [Tasks]
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema: { $ref: '#/components/schemas/FileAttachRequest' }
+      responses:
+        '200':
+          description: Files attached
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '413': { $ref: '#/components/responses/PayloadTooLarge' }
+  /projects/{project_id}/task/{task_id}/file/{file_uid}:
+    parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/TaskId'
+      - $ref: '#/components/parameters/FileUid'
+    get:
+      operationId: downloadTaskFile
+      summary: Download a task file
+      tags: [Tasks]
+      responses:
+        '302': { $ref: '#/components/responses/FileRedirect' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/FilesDisabled' }
+        '404': { $ref: '#/components/responses/NotFound' }
+  /projects/{project_id}/group:
+    parameters:
+      - $ref: '#/components/parameters/ProjectId'
+    get:
+      operationId: listGroups
+      summary: List task groups
+      tags: [Groups]
+      parameters:
+        - $ref: '#/components/parameters/LastModifiedDt'
+        - $ref: '#/components/parameters/Sort'
+      responses:
+        '200':
+          description: Array of groups
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Group' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+    post:
+      operationId: createGroup
+      summary: Create a task group
+      tags: [Groups]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CreateGroupRequest' }
+      responses:
+        '200':
+          description: The created group
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Group' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+  /projects/{project_id}/group/{group_id}:
+    parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/GroupId'
+    get:
+      operationId: getGroup
+      summary: Get one task group
+      tags: [Groups]
+      responses:
+        '200':
+          description: The group
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Group' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    post:
+      operationId: updateGroup
+      summary: Update a task group
+      tags: [Groups]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CreateGroupRequest' }
+      responses:
+        '200':
+          description: The updated group
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Group' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+  /projects/{project_id}/stakeholder:
+    parameters:
+      - $ref: '#/components/parameters/ProjectId'
+    get:
+      operationId: listStakeholders
+      summary: List stakeholders on a project
+      tags: [Stakeholders]
+      parameters:
+        - $ref: '#/components/parameters/LastModifiedDt'
+        - $ref: '#/components/parameters/Sort'
+      responses:
+        '200':
+          description: Array of stakeholders
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Stakeholder' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+    post:
+      operationId: inviteStakeholder
+      summary: Invite a stakeholder to a project
+      description: >-
+        May return a Stakeholder object OR the string "User added to project"
+        when the email belongs to an existing user. Returns 400 if the email is
+        already a stakeholder on the project.
+      tags: [Stakeholders]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/InviteStakeholderRequest' }
+      responses:
+        '200':
+          description: The stakeholder, or a "User added to project" acknowledgement
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/Stakeholder'
+                  - type: string
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+  /projects/{project_id}/stakeholder/{stakeholder_id}:
+    parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/StakeholderId'
+    get:
+      operationId: getStakeholder
+      summary: Get one stakeholder
+      tags: [Stakeholders]
+      responses:
+        '200':
+          description: The stakeholder
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Stakeholder' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+  /projects/{project_id}/goal:
+    parameters:
+      - $ref: '#/components/parameters/ProjectId'
+    get:
+      operationId: listGoals
+      summary: List goals
+      tags: [Goals]
+      parameters:
+        - $ref: '#/components/parameters/LastModifiedDt'
+        - $ref: '#/components/parameters/Sort'
+      responses:
+        '200':
+          description: Array of goals
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Goal' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+    post:
+      operationId: createGoal
+      summary: Create a goal
+      tags: [Goals]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CreateGoalRequest' }
+      responses:
+        '200':
+          description: The created goal
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Goal' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+  /projects/{project_id}/goal/{goal_id}:
+    parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/GoalId'
+    get:
+      operationId: getGoal
+      summary: Get one goal
+      tags: [Goals]
+      responses:
+        '200':
+          description: The goal
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Goal' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    post:
+      operationId: updateGoal
+      summary: Update a goal
+      tags: [Goals]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CreateGoalRequest' }
+      responses:
+        '200':
+          description: The updated goal
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Goal' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+  /projects/{project_id}/goal/{goal_id}/file/{file_uid}:
+    parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/GoalId'
+      - $ref: '#/components/parameters/FileUid'
+    get:
+      operationId: downloadGoalFile
+      summary: Download a goal file
+      tags: [Goals]
+      responses:
+        '302': { $ref: '#/components/responses/FileRedirect' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/FilesDisabled' }
+        '404': { $ref: '#/components/responses/NotFound' }
+  /projects/{project_id}/progress_report:
+    parameters:
+      - $ref: '#/components/parameters/ProjectId'
+    get:
+      operationId: listProgressReports
+      summary: List progress reports
+      tags: [Progress Reports]
+      parameters:
+        - $ref: '#/components/parameters/LastModifiedDt'
+        - $ref: '#/components/parameters/Sort'
+      responses:
+        '200':
+          description: Array of progress reports
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/ProgressReport' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+  /projects/{project_id}/progress_report/{progress_report_id}:
+    parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/ProgressReportId'
+    get:
+      operationId: getProgressReport
+      summary: Get one progress report
+      tags: [Progress Reports]
+      responses:
+        '200':
+          description: The progress report
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ProgressReport' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+  /projects/{project_id}/discussion_entry:
+    parameters:
+      - $ref: '#/components/parameters/ProjectId'
+    get:
+      operationId: listProjectDiscussionEntries
+      summary: List project-level comments
+      tags: [Comments]
+      parameters:
+        - $ref: '#/components/parameters/LastModifiedDt'
+        - $ref: '#/components/parameters/Sort'
+      responses:
+        '200':
+          description: Array of discussion entries
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/DiscussionEntry' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+  /projects/{project_id}/task/{task_id}/discussion_entry:
+    parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/TaskId'
+    get:
+      operationId: listTaskDiscussionEntries
+      summary: List task comments
+      tags: [Comments]
+      parameters:
+        - $ref: '#/components/parameters/LastModifiedDt'
+        - $ref: '#/components/parameters/Sort'
+      responses:
+        '200':
+          description: Array of discussion entries
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/DiscussionEntry' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+    post:
+      operationId: createTaskDiscussionEntry
+      summary: Add a comment to a task
+      description: Returns 200 "DiscussionEntry Created". Unknown sender email returns 404.
+      tags: [Comments]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CreateCommentRequest' }
+      responses:
+        '200':
+          description: Comment created
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+  /projects/{project_id}/goal/{goal_id}/discussion_entry:
+    parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/GoalId'
+    get:
+      operationId: listGoalDiscussionEntries
+      summary: List goal comments
+      tags: [Comments]
+      parameters:
+        - $ref: '#/components/parameters/LastModifiedDt'
+        - $ref: '#/components/parameters/Sort'
+      responses:
+        '200':
+          description: Array of discussion entries
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/DiscussionEntry' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+  /projects/{project_id}/comments:
+    parameters:
+      - $ref: '#/components/parameters/ProjectId'
+    get:
+      operationId: listProjectComments
+      summary: List all comments on a project
+      description: All comments across the project, its tasks, and its goals.
+      tags: [Comments]
+      parameters:
+        - $ref: '#/components/parameters/LastModifiedDt'
+        - $ref: '#/components/parameters/Sort'
+      responses:
+        '200':
+          description: Array of discussion entries
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/DiscussionEntry' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+  /organizations:
+    get:
+      operationId: listOrganizations
+      summary: List organizations
+      tags: [Organizations]
+      responses:
+        '200':
+          description: Array of organizations
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Organization' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+    post:
+      operationId: createOrganization
+      summary: Create an organization
+      tags: [Organizations]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CreateOrganizationRequest' }
+      responses:
+        '200':
+          description: The created organization
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Organization' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+  /organizations/{org_id}:
+    parameters:
+      - $ref: '#/components/parameters/OrgId'
+    get:
+      operationId: getOrganization
+      summary: Get one organization
+      tags: [Organizations]
+      responses:
+        '200':
+          description: The organization
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Organization' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+  /organizations/{org_id}/stakeholders:
+    parameters:
+      - $ref: '#/components/parameters/OrgId'
+    get:
+      operationId: listOrganizationStakeholders
+      summary: List stakeholders linked to an organization
+      tags: [Organizations]
+      responses:
+        '200':
+          description: Array of stakeholders
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Stakeholder' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+    post:
+      operationId: addOrganizationStakeholder
+      summary: Add a stakeholder to an organization
+      description: Propagates the stakeholder to all projects linked to the org.
+      tags: [Organizations]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/AddOrgStakeholderRequest' }
+      responses:
+        '200':
+          description: Stakeholder added
+        '401': { $ref: '#/components/responses/Unauthorized' }
+  /organizations/{org_id}/stakeholders/{stakeholder_id}/remove:
+    parameters:
+      - $ref: '#/components/parameters/OrgId'
+      - $ref: '#/components/parameters/StakeholderId'
+    post:
+      operationId: removeOrganizationStakeholder
+      summary: Remove a stakeholder from an organization
+      tags: [Organizations]
+      responses:
+        '200':
+          description: Success acknowledgement
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/SuccessResponse' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+  /organizations/{org_id}/projects:
+    parameters:
+      - $ref: '#/components/parameters/OrgId'
+    get:
+      operationId: listOrganizationProjects
+      summary: List projects linked to an organization
+      tags: [Organizations]
+      responses:
+        '200':
+          description: Array of projects
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Project' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+    post:
+      operationId: linkOrganizationProject
+      summary: Link an existing project to an organization
+      tags: [Organizations]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/LinkProjectRequest' }
+      responses:
+        '200':
+          description: Project linked
+        '401': { $ref: '#/components/responses/Unauthorized' }
+  /organizations/{org_id}/projects/{project_id}/remove:
+    parameters:
+      - $ref: '#/components/parameters/OrgId'
+      - $ref: '#/components/parameters/ProjectId'
+    post:
+      operationId: unlinkOrganizationProject
+      summary: Unlink a project from an organization
+      tags: [Organizations]
+      responses:
+        '200':
+          description: Success acknowledgement
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/SuccessResponse' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+  /entity:
+    get:
+      operationId: listEntities
+      summary: Cross-entity export firehose
+      description: >-
+        Returns all entities of all types in the vendor account, optionally
+        filtered by date range and type. Use for bulk sync / data warehouse
+        extracts. Supports pagination.
+      tags: [Entity]
+      parameters:
+        - name: start_dt
+          in: query
+          description: ISO 8601. Only entities modified at or after this dt (alias last_modified_dt).
+          schema: { type: string }
+        - name: end_dt
+          in: query
+          description: ISO 8601. Only entities modified at or before this dt.
+          schema: { type: string }
+        - name: entity
+          in: query
+          description: Filter to one type.
+          schema:
+            type: string
+            enum: [Task, Goal, Project, Stakeholder, Org]
+        - $ref: '#/components/parameters/Sort'
+        - name: paginate
+          in: query
+          schema: { type: boolean, default: false }
+        - name: page
+          in: query
+          schema: { type: integer, minimum: 1, default: 1 }
+        - name: page_size
+          in: query
+          schema: { type: integer, default: 100 }
+      responses:
+        '200':
+          description: Array of entities (empty array indicates no more pages)
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { type: object, additionalProperties: true }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+  /list_users:
+    get:
+      operationId: listUsers
+      summary: List vendor users
+      description: Returns all users in the vendor. Use to discover valid manager_email_address values.
+      tags: [Users]
+      responses:
+        '200':
+          description: Array of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/User' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+  /json_storage:
+    get:
+      operationId: getJsonStorage
+      summary: Retrieve the per-vendor JSON scratch blob
+      description: Returns {} if never set.
+      tags: [Storage]
+      responses:
+        '200':
+          description: The stored JSON blob
+          content:
+            application/json:
+              schema: { type: object, additionalProperties: true }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+    post:
+      operationId: setJsonStorage
+      summary: Overwrite the per-vendor JSON scratch blob
+      description: Body is arbitrary JSON. 300KB limit. Overwrites the previous value.
+      tags: [Storage]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object, additionalProperties: true }
+      responses:
+        '200':
+          description: Stored
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '413': { $ref: '#/components/responses/PayloadTooLarge' }
+  /webhook_subscribe:
+    post:
+      operationId: subscribeWebhook
+      summary: Create a webhook subscription
+      description: Registers an HTTPS endpoint to receive create/update events.
+      tags: [Webhooks]
+      parameters:
+        - name: hookUrl
+          in: query
+          required: true
+          description: HTTPS URL that will receive event POSTs.
+          schema: { type: string, format: uri }
+        - name: endpoint_nickname
+          in: query
+          required: false
+          schema: { type: string }
+      responses:
+        '200':
+          description: Subscription created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id: { type: string, description: Endpoint id for later unsubscribe }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+  /webhook_subscribe/{endpoint_id}:
+    parameters:
+      - name: endpoint_id
+        in: path
+        required: true
+        schema: { type: string }
+    delete:
+      operationId: unsubscribeWebhook
+      summary: Remove a webhook subscription
+      tags: [Webhooks]
+      responses:
+        '200':
+          description: Subscription removed
+        '401': { $ref: '#/components/responses/Unauthorized' }
+components:
+  securitySchemes:
+    BearerHeader:
+      type: apiKey
+      in: header
+      name: Bearer
+      description: >-
+        API key sent in a custom `Bearer:` header (note: this is a header named
+        "Bearer", not the standard `Authorization: Bearer` scheme). Create keys
+        in the Coordinate UI under Settings > Integrations > API Keys. The key
+        scopes all requests to its owning vendor.
+  parameters:
+    ProjectId:
+      name: project_id
+      in: path
+      required: true
+      schema: { type: string, format: uuid }
+    TaskId:
+      name: task_id
+      in: path
+      required: true
+      schema: { type: string, format: uuid }
+    GroupId:
+      name: group_id
+      in: path
+      required: true
+      schema: { type: string, format: uuid }
+    GoalId:
+      name: goal_id
+      in: path
+      required: true
+      schema: { type: string, format: uuid }
+    StakeholderId:
+      name: stakeholder_id
+      in: path
+      required: true
+      schema: { type: string, format: uuid }
+    ProgressReportId:
+      name: progress_report_id
+      in: path
+      required: true
+      schema: { type: string, format: uuid }
+    OrgId:
+      name: org_id
+      in: path
+      required: true
+      schema: { type: string, format: uuid }
+    FileUid:
+      name: file_uid
+      in: path
+      required: true
+      description: File id. URL-encode a `#` as `%23`.
+      schema: { type: string }
+    PageName:
+      name: page_name
+      in: path
+      required: true
+      description: URL-encode spaces (e.g. Page%20Name).
+      schema: { type: string }
+    ExternalObjectId:
+      name: external_object_id
+      in: path
+      required: true
+      schema: { type: string }
+    LastModifiedDt:
+      name: last_modified_dt
+      in: query
+      required: false
+      description: ISO 8601. Return only items modified at or after this timestamp. URL-encode `+` as `%2B`.
+      schema: { type: string }
+    Sort:
+      name: sort
+      in: query
+      required: false
+      description: Sort by last_modified_dt.
+      schema:
+        type: string
+        enum: [asc, desc]
+        default: asc
+  responses:
+    Unauthorized:
+      description: Missing or invalid API key
+    NotFound:
+      description: Resource not found (often a plain-text body such as "Project Not Found")
+    ValidationError:
+      description: Validation failure
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    PayloadTooLarge:
+      description: File upload exceeded 100MB (or JSON storage exceeded 300KB)
+    ServerError:
+      description: Server error
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    FileRedirect:
+      description: 302 redirect to a fresh 5-minute S3 presigned URL (in the Location header)
+    FilesDisabled:
+      description: Files are disabled for this vendor
+  schemas:
+    Error:
+      type: object
+      properties:
+        success: { type: boolean, example: false }
+        error: { type: string }
+    SuccessResponse:
+      type: object
+      properties:
+        success: { type: boolean, example: true }
+    EntityBase:
+      type: object
+      properties:
+        entity_type: { type: string }
+        entity_url: { type: string }
+        last_modified_dt: { type: string }
+        vendor_id: { type: string, format: uuid }
+        external_object_id: { type: [string, 'null'] }
+    FileRef:
+      type: object
+      properties:
+        file_uid: { type: string }
+        file_name: { type: string }
+        file_size: { type: integer }
+        file_content_type: { type: string }
+        file_dt: { type: string }
+        download_url:
+          type: string
+          description: Permanent API route; hit with Bearer header, follow the 302.
+    Project:
+      allOf:
+        - $ref: '#/components/schemas/EntityBase'
+        - type: object
+          properties:
+            project_id: { type: string, format: uuid }
+            project_name: { type: string }
+            project_description: { type: [string, 'null'] }
+            project_status: { type: [string, 'null'] }
+            project_estimated_start_date: { type: [string, 'null'] }
+            project_estimated_end_date: { type: [string, 'null'] }
+            project_estimated_effort: { type: [string, 'null'] }
+            project_manager_email: { type: [string, 'null'] }
+            project_manager_full_name: { type: [string, 'null'] }
+            project_tags: { type: array, items: { type: string } }
+            project_active: { type: boolean }
+            customers: { type: array, items: { type: object, additionalProperties: true } }
+            custom_fields: { type: object, additionalProperties: true }
+            project_storage_json: { type: object, additionalProperties: true }
+            files: { type: array, items: { $ref: '#/components/schemas/FileRef' } }
+    CreateProjectRequest:
+      type: object
+      required: [manager_email_address, project_name]
+      properties:
+        manager_email_address: { type: string, description: REQUIRED. Existing user in your vendor. }
+        project_name: { type: string }
+        external_object_id: { type: string }
+        organization_id: { type: string, format: uuid }
+        playbook_name: { type: string }
+        playbook_date: { type: string }
+        playbook_date_title: { type: string }
+        stakeholder_email: { type: string }
+        stakeholder_invite_message: { type: string }
+        stakeholder_task_assignment_list: { type: array, items: { type: string } }
+        suppress_invite_email: { type: boolean, default: false }
+        send_manager_assignment_email: { type: boolean, default: false }
+        custom_fields: { type: object, additionalProperties: true }
+        project_storage_json: { type: object, additionalProperties: true }
+        project_description: { type: string }
+        project_status: { type: string }
+        project_tags: { type: array, items: { type: string } }
+    UpdateProjectRequest:
+      type: object
+      description: Any subset of project_* keys. manager_email_address re-binds the manager.
+      additionalProperties: true
+    ApplyPlaybookRequest:
+      type: object
+      required: [playbook_name]
+      properties:
+        playbook_name: { type: string }
+        playbook_date: { type: string }
+        playbook_date_title: { type: string }
+        stakeholder_id: { type: string, format: uuid }
+        stakeholder_task_assignment_list: { type: array, items: { type: string } }
+    FileAttachRequest:
+      type: object
+      properties:
+        File:
+          type: array
+          items: { type: string, format: binary }
+          description: One or more file parts named exactly "File".
+    Page:
+      type: object
+      properties:
+        page_name: { type: string }
+        page_private: { type: boolean }
+        page_content: { type: string, description: HTML }
+    UpsertPageRequest:
+      type: object
+      required: [page_content]
+      properties:
+        page_content: { type: string, description: REQUIRED. HTML allowed. }
+        page_private: { type: boolean, default: false }
+    Task:
+      allOf:
+        - $ref: '#/components/schemas/EntityBase'
+        - type: object
+          properties:
+            task_id: { type: string, format: uuid }
+            project_id: { type: string, format: uuid }
+            project_name: { type: string }
+            task_title: { type: string }
+            task_description: { type: [string, 'null'] }
+            task_due_date: { type: [string, 'null'] }
+            task_status_current:
+              type: [string, 'null']
+              enum: [not_complete, information, in_progress, dependency_wait, blocked, complete, null]
+            task_status_current_dt: { type: [string, 'null'] }
+            task_completed_dt: { type: [string, 'null'] }
+            task_completed_by_email: { type: [string, 'null'] }
+            task_completed_by_name: { type: [string, 'null'] }
+            group_id: { type: [string, 'null'] }
+            task_group_title: { type: [string, 'null'] }
+            task_assignee_stakeholder_id: { type: [string, 'null'] }
+            task_assignee_stakeholder_email_address: { type: [string, 'null'] }
+            task_assignee_stakeholder_full_name: { type: [string, 'null'] }
+            task_internal: { type: boolean }
+            task_tags: { type: array, items: { type: string } }
+            time_tracking: { type: array, items: { type: object, additionalProperties: true } }
+            form_data: { type: object, additionalProperties: true }
+            files: { type: array, items: { $ref: '#/components/schemas/FileRef' } }
+    CreateTaskRequest:
+      type: object
+      required: [task_title]
+      properties:
+        task_title: { type: string }
+        task_description: { type: string, description: HTML }
+        task_due_date: { type: string, description: YYYY-MM-DD }
+        task_status_current:
+          type: string
+          enum: [not_complete, information, in_progress, dependency_wait, blocked, complete]
+        task_internal: { type: boolean, default: false }
+        task_tags: { type: array, items: { type: string } }
+        external_object_id: { type: string }
+        group_title: { type: string, description: If it matches an existing group title, the task is placed in that group. }
+        insert_top_of_group: { type: boolean, default: false }
+        task_assignment_json: { type: string, description: Email of an existing user/stakeholder on the project. }
+    UpdateTaskRequest:
+      type: object
+      description: Any subset of task_* keys. task_assignment_json on update is a plain email string.
+      additionalProperties: true
+    Group:
+      allOf:
+        - $ref: '#/components/schemas/EntityBase'
+        - type: object
+          properties:
+            group_id: { type: string, format: uuid }
+            group_title: { type: string }
+            group_target_date: { type: [string, 'null'] }
+            group_completed_dt: { type: [string, 'null'] }
+            project_id: { type: string, format: uuid }
+            project_name: { type: string }
+    CreateGroupRequest:
+      type: object
+      required: [group_title]
+      properties:
+        group_title: { type: string }
+        group_target_date: { type: string }
+        group_completed_dt: { type: string }
+    Stakeholder:
+      allOf:
+        - $ref: '#/components/schemas/EntityBase'
+        - type: object
+          properties:
+            stakeholder_id: { type: string, format: uuid }
+            stakeholder_email_address: { type: string }
+            stakeholder_full_name: { type: [string, 'null'] }
+            stakeholder_title: { type: [string, 'null'] }
+            stakeholder_phone: { type: [string, 'null'] }
+            stakeholder_project_id: { type: [string, 'null'], format: uuid }
+            stakeholder_related_org_id: { type: [string, 'null'] }
+            stakeholder_roles: { type: array, items: { type: string } }
+    InviteStakeholderRequest:
+      type: object
+      required: [stakeholder_email_address]
+      properties:
+        stakeholder_email_address: { type: string, description: REQUIRED. Lowercased and trimmed server-side. }
+        stakeholder_full_name: { type: string }
+        stakeholder_title: { type: string }
+        stakeholder_phone: { type: string }
+        stakeholder_invite_message: { type: string }
+        stakeholder_role: { type: string, description: Must match a role defined on the vendor. }
+        full_plan_access: { type: boolean, default: true }
+        suppress_invite_email: { type: boolean, default: false }
+        send_role_assignment_emails: { type: boolean, default: true }
+        external_object_id: { type: string }
+    Goal:
+      allOf:
+        - $ref: '#/components/schemas/EntityBase'
+        - type: object
+          properties:
+            goal_id: { type: string, format: uuid }
+            goal_title: { type: string }
+            goal_description: { type: [string, 'null'] }
+            goal_target_date: { type: [string, 'null'] }
+            goal_completed_dt: { type: [string, 'null'] }
+            goal_completed_by_email: { type: [string, 'null'] }
+            goal_completed_by_name: { type: [string, 'null'] }
+            goal_sponsor_name: { type: [string, 'null'] }
+            project_id: { type: string, format: uuid }
+            project_name: { type: string }
+            files: { type: array, items: { $ref: '#/components/schemas/FileRef' } }
+    CreateGoalRequest:
+      type: object
+      required: [goal_title]
+      properties:
+        goal_title: { type: string }
+        goal_description: { type: string }
+        goal_target_date: { type: string }
+        goal_sponsor_name: { type: string }
+        external_object_id: { type: string }
+    ProgressReport:
+      allOf:
+        - $ref: '#/components/schemas/EntityBase'
+        - type: object
+          properties:
+            progress_report_id: { type: string, format: uuid }
+            progress_report_date: { type: string }
+            progress_report_description: { type: [string, 'null'] }
+            progress_report_next_steps: { type: [string, 'null'] }
+            progress_report_project_status: { type: [string, 'null'] }
+            progress_report_reporter_email: { type: [string, 'null'] }
+            progress_report_reporter_full_name: { type: [string, 'null'] }
+            progress_report_user_id: { type: [string, 'null'], format: uuid }
+            project_id: { type: string, format: uuid }
+    DiscussionEntry:
+      type: object
+      properties:
+        entity_type: { type: string, example: DiscussionEntry }
+        discussion_author_name: { type: string }
+        discussion_comment: { type: string, description: HTML }
+        discussion_timestamp_dt: { type: string }
+        discussion_entry_internal: { type: boolean }
+        target_entity_id: { type: string, format: uuid }
+        target_entity_type: { type: string }
+        target_entity_title: { type: string }
+        project_id: { type: string, format: uuid }
+        project_name: { type: string }
+        entity_url: { type: string }
+        last_modified_dt: { type: string }
+    CreateCommentRequest:
+      type: object
+      required: [sender_email_address, comment]
+      properties:
+        sender_email_address: { type: string, description: REQUIRED. Must be a user or stakeholder on the project. }
+        comment: { type: string, description: REQUIRED. HTML allowed. }
+    Organization:
+      allOf:
+        - $ref: '#/components/schemas/EntityBase'
+        - type: object
+          properties:
+            organization_id: { type: string, format: uuid }
+            organization_name: { type: string }
+            organization_description: { type: [string, 'null'] }
+    CreateOrganizationRequest:
+      type: object
+      required: [organization_name]
+      properties:
+        organization_name: { type: string }
+        external_object_id: { type: string }
+    AddOrgStakeholderRequest:
+      type: object
+      required: [stakeholder_email_address]
+      properties:
+        stakeholder_email_address: { type: string }
+        stakeholder_full_name: { type: string }
+        stakeholder_title: { type: string }
+        stakeholder_phone: { type: string }
+    LinkProjectRequest:
+      type: object
+      required: [project_id]
+      properties:
+        project_id: { type: string, format: uuid }
+    User:
+      type: object
+      properties:
+        user_id: { type: string, format: uuid }
+        email: { type: string }
+        full_name: { type: string }
+      additionalProperties: true
+    WebhookEvent:
+      type: object
+      description: >-
+        Standard webhook payload. For entity_type "Customer" the entity is a
+        customer organization linked to a project, not a project.
+      properties:
+        entity:
+          type: object
+          additionalProperties: true
+          description: Current property values of the entity.
+        entity_type:
+          type: string
+          enum: [Project, Task, Group, Goal, Customer, DiscussionEntry]
+        entity_action:
+          type: string
+          enum: [create, update]
+        entity_previous_values:
+          type: object
+          additionalProperties: true
+          description: (update only) values before the change.
+        entity_updated_values:
+          type: object
+          additionalProperties: { type: boolean }
+          description: '(update only) per-field boolean flags indicating which fields changed.'
+webhooks:
+  projectEvent:
+    post:
+      operationId: onProjectEvent
+      summary: Project created or updated
+      requestBody:
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/WebhookEvent' }
+      responses:
+        '200': { description: Acknowledged }
+  taskEvent:
+    post:
+      operationId: onTaskEvent
+      summary: Task created or updated
+      requestBody:
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/WebhookEvent' }
+      responses:
+        '200': { description: Acknowledged }
+  groupEvent:
+    post:
+      operationId: onGroupEvent
+      summary: Task group created or updated
+      requestBody:
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/WebhookEvent' }
+      responses:
+        '200': { description: Acknowledged }
+  goalEvent:
+    post:
+      operationId: onGoalEvent
+      summary: Goal created or updated
+      requestBody:
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/WebhookEvent' }
+      responses:
+        '200': { description: Acknowledged }
+  customerEvent:
+    post:
+      operationId: onCustomerEvent
+      summary: Customer organization created or updated
+      requestBody:
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/WebhookEvent' }
+      responses:
+        '200': { description: Acknowledged }
+  commentEvent:
+    post:
+      operationId: onCommentEvent
+      summary: Comment added (DiscussionEntry create only)
+      requestBody:
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/WebhookEvent' }
+      responses:
+        '200': { description: Acknowledged }

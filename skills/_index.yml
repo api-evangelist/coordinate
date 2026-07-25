@@ -1,0 +1,12 @@
+generated: '2026-07-18'
+method: generated
+source: openapi/coordinate-openapi.yml
+skills:
+  - file: coordinate-onboard-client-project.md
+    name: Onboard a client project
+    api: openapi/coordinate-openapi.yml
+    operations: [listUsers, createProject, applyPlaybook, inviteStakeholder, listTasks]
+  - file: coordinate-sync-and-track.md
+    name: Sync activity and track task progress
+    api: openapi/coordinate-openapi.yml
+    operations: [listEntities, subscribeWebhook, updateTask, createTaskDiscussionEntry, getJsonStorage, setJsonStorage]

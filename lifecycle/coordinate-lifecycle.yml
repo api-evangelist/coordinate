@@ -1,0 +1,30 @@
+generated: '2026-07-18'
+method: searched
+source: https://app.coordinatehq.com/static/API_Documentation.md
+api: openapi/coordinate-openapi.yml
+versioning:
+  scheme: uri-path
+  current: v1
+  docs: https://app.coordinatehq.com/static/API_Documentation.html
+  note: >-
+    Modern REST endpoints are served under /api/v1. Legacy verb-style paths
+    (create_project, list_projects, project/project_id/<id>/update) remain for
+    backwards compatibility but are documented as "don't use" for new code.
+deprecation:
+  policy_url: null
+  sunset_header: false
+  note: >-
+    No formal published deprecation policy or RFC 8594 Sunset/Deprecation header
+    support found. Legacy verb-style URL forms are described as superseded by the
+    modern REST paths but are not formally sunset.
+legacy_operations:
+  - description: 'POST /api/v1/create_project (superseded by POST /api/v1/projects)'
+  - description: 'POST /api/v1/project/project_id/<id>/update (superseded by POST /api/v1/projects/<id>)'
+  - description: 'GET /api/v1/list_projects (superseded by GET /api/v1/projects)'
+sla:
+  url: null
+  uptime_target: null
+status_page: null
+note: >-
+  No public status page (status.coordinatehq.com did not resolve) and no
+  published SLA/uptime commitment were found as of the enrichment date.

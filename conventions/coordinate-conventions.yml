@@ -1,0 +1,86 @@
+generated: '2026-07-18'
+method: searched
+source: https://app.coordinatehq.com/static/API_Documentation.md
+api: openapi/coordinate-openapi.yml
+summary: >-
+  Cross-cutting request/response semantics for the Coordinate REST API, captured
+  from the published agent-oriented API reference and derived from the OpenAPI.
+authentication:
+  style: api-key
+  header: 'Bearer'
+  note: >-
+    Custom header named "Bearer" (Bearer: <key>) — not the standard
+    Authorization: Bearer scheme. Key scopes all requests to its vendor;
+    vendor_id is implicit and cannot be overridden.
+  ref: authentication/coordinate-authentication.yml
+idempotency:
+  supported: false
+  note: >-
+    No idempotency-key mechanism is documented. Writes use POST for both create
+    and update; external_object_id can be used as a client-side foreign key for
+    dedupe/reconciliation but is not an idempotency key.
+pagination:
+  style: page-number
+  scope: '/entity firehose and select list endpoints'
+  params:
+    - name: paginate
+      description: Set true to enable pagination (default false returns up to 100).
+    - name: page
+      description: 1-indexed page number.
+    - name: page_size
+      description: Results per page, default 100.
+    - name: sort
+      description: asc (default) or desc, by last_modified_dt.
+  response: >-
+    Bare JSON array. An empty array indicates no more results/pages. When
+    paginate=true the response is always sorted ascending by last_modified_dt to
+    guarantee stable page boundaries.
+filtering:
+  params:
+    - name: last_modified_dt
+      description: ISO 8601; return items modified at or after this timestamp.
+    - name: start_dt / end_dt
+      description: Date-range filters on the /entity firehose.
+    - name: entity
+      description: Restrict /entity to one type (Task, Goal, Project, Stakeholder, Org).
+  note: URL-encode `+` in timestamps as %2B; the server also applies a ' ' -> '+' fixup.
+external_ids:
+  field: external_object_id
+  note: >-
+    Optional client-owned foreign key settable on creates/updates and queryable
+    via /projects/external_object_id/{id} and /task/external_object_id/{id}.
+    Lookups return a list — do not assume a singleton.
+metadata:
+  json_storage:
+    endpoint: /json_storage
+    note: Single per-vendor JSON scratch blob (300KB limit) for integration bookkeeping.
+  project_storage_json:
+    note: Per-project arbitrary-JSON bucket for integration bookkeeping.
+  custom_fields:
+    note: Must be predefined on the vendor; types Checkbox/String/Dollars. Undefined field -> 404.
+versioning:
+  scheme: uri-path
+  current: v1
+  note: >-
+    Modern REST paths under /api/v1; legacy verb-style paths (create_project,
+    list_projects, project/.../update) coexist for backwards compatibility.
+  ref: lifecycle/coordinate-lifecycle.yml
+error_envelope:
+  shape: '{"success": false, "error": "<message>"}'
+  note: >-
+    Only failures use the success/error envelope. Most successful responses
+    return the entity JSON directly; a few return {"success": true}. 404 is often
+    a plain-text body (e.g. "Project Not Found"). Not RFC 9457.
+  ref: errors/coordinate-problem-types.yml
+rate_limits:
+  documented: false
+  note: No published rate-limit policy or rate-limit response headers documented.
+files:
+  upload_field: 'File'
+  note: >-
+    multipart/form-data, field name exactly "File" (case-sensitive), 100MB per
+    request (413 if exceeded). download_url is a permanent API route returning a
+    302 to a fresh 5-minute S3 presigned URL — follow immediately, never cache
+    the target. URL-encode '#' in file_uid as %23.
+webhooks:
+  ref: asyncapi/coordinate-webhooks.yml

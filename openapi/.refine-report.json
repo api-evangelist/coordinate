@@ -1,0 +1,38 @@
+{
+  "provider": "coordinate",
+  "sources": [
+    "coordinate-comments-api-openapi.yml",
+    "coordinate-entity-api-openapi.yml",
+    "coordinate-goals-api-openapi.yml",
+    "coordinate-groups-api-openapi.yml",
+    "coordinate-organizations-api-openapi.yml",
+    "coordinate-progress-reports-api-openapi.yml",
+    "coordinate-project-pages-api-openapi.yml",
+    "coordinate-projects-api-openapi.yml",
+    "coordinate-stakeholders-api-openapi.yml",
+    "coordinate-storage-api-openapi.yml",
+    "coordinate-tasks-api-openapi.yml",
+    "coordinate-users-api-openapi.yml",
+    "coordinate-webhooks-api-openapi.yml"
+  ],
+  "outputs": [
+    "coordinate-comments-api-openapi.yml",
+    "coordinate-entity-api-openapi.yml",
+    "coordinate-goals-api-openapi.yml",
+    "coordinate-groups-api-openapi.yml",
+    "coordinate-organizations-api-openapi.yml",
+    "coordinate-progress-reports-api-openapi.yml",
+    "coordinate-project-pages-api-openapi.yml",
+    "coordinate-projects-api-openapi.yml",
+    "coordinate-stakeholders-api-openapi.yml",
+    "coordinate-storage-api-openapi.yml",
+    "coordinate-tasks-api-openapi.yml",
+    "coordinate-users-api-openapi.yml",
+    "coordinate-webhooks-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}

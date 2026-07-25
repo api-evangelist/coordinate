@@ -1,8 +1,30 @@
 aid: coordinate
 name: Coordinate
-description: 'Coordinate is a company surfaced as a portfolio company of initialized-capital and added
-  to the API Evangelist network as a stub for enrichment. Sector: enterprise-saas. This profile is a lead
-  awaiting the enrichment pipeline.'
+description: >-
+  Coordinate (CoordinateHQ) is a client project-execution platform and branded
+  client portal for client-facing businesses — agencies, professional services,
+  and B2B onboarding teams. It turns repeatable workflows into automated,
+  interactive projects with tasks, task groups, goals, progress reports, forms,
+  eSignatures, time tracking, and in-project chat, while giving each client a
+  simple password-free portal. Coordinate exposes a REST API (base
+  https://app.coordinatehq.com/api/v1) for creating and syncing projects, tasks,
+  groups, stakeholders, goals, comments, and organizations, an /entity export
+  firehose for bulk sync, and a webhook API for real-time create/update events,
+  alongside bi-directional Zapier integrations. This profile was enriched by the
+  API Evangelist pipeline from Coordinate's published API reference.
+accessModel:
+  pricing: unknown
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Self-serve signup
+  confidence: medium
+  source:
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://cdn.prod.website-files.com/639cbe2ae16424db11366965/68c4925a9be35099761c7e7a_coordinatehq-opengraph-sept-2025.jpg
 url: https://raw.githubusercontent.com/api-evangelist/coordinate/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
@@ -12,11 +34,200 @@ x-tier: stub
 x-tier-reason: portfolio-lead
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-18'
 tags:
 - Company
 - Enterprise Saas
-apis: []
+- Project Management
+- Client Portal
+- Client Onboarding
+- Professional Services
+- Workflow Automation
+- Collaboration
+- Webhooks
+apis:
+- aid: coordinate:coordinate-comments-api
+  name: Coordinate Comments API
+  description: Discussion entries on projects, tasks, and goals.
+  humanURL: https://app.coordinatehq.com/static/API_Documentation.html
+  baseURL: https://app.coordinatehq.com/api/v1
+  tags:
+  - Comments
+  properties:
+  - type: OpenAPI
+    url: openapi/coordinate-comments-api-openapi.yml
+  - type: APIReference
+    url: https://app.coordinatehq.com/static/API_Documentation.html
+  - type: Webhooks
+    url: asyncapi/coordinate-webhooks.yml
+- aid: coordinate:coordinate-entity-api
+  name: Coordinate Entity API
+  description: Cross-entity bulk export firehose.
+  humanURL: https://app.coordinatehq.com/static/API_Documentation.html
+  baseURL: https://app.coordinatehq.com/api/v1
+  tags:
+  - Entity
+  properties:
+  - type: OpenAPI
+    url: openapi/coordinate-entity-api-openapi.yml
+  - type: APIReference
+    url: https://app.coordinatehq.com/static/API_Documentation.html
+  - type: Webhooks
+    url: asyncapi/coordinate-webhooks.yml
+- aid: coordinate:coordinate-goals-api
+  name: Coordinate Goals API
+  description: Project goals / milestones with target dates.
+  humanURL: https://app.coordinatehq.com/static/API_Documentation.html
+  baseURL: https://app.coordinatehq.com/api/v1
+  tags:
+  - Goals
+  properties:
+  - type: OpenAPI
+    url: openapi/coordinate-goals-api-openapi.yml
+  - type: APIReference
+    url: https://app.coordinatehq.com/static/API_Documentation.html
+  - type: Webhooks
+    url: asyncapi/coordinate-webhooks.yml
+- aid: coordinate:coordinate-groups-api
+  name: Coordinate Groups API
+  description: Task groups (internally "Milestone").
+  humanURL: https://app.coordinatehq.com/static/API_Documentation.html
+  baseURL: https://app.coordinatehq.com/api/v1
+  tags:
+  - Groups
+  properties:
+  - type: OpenAPI
+    url: openapi/coordinate-groups-api-openapi.yml
+  - type: APIReference
+    url: https://app.coordinatehq.com/static/API_Documentation.html
+  - type: Webhooks
+    url: asyncapi/coordinate-webhooks.yml
+- aid: coordinate:coordinate-organizations-api
+  name: Coordinate Organizations API
+  description: Customer organizations linking projects and stakeholders.
+  humanURL: https://app.coordinatehq.com/static/API_Documentation.html
+  baseURL: https://app.coordinatehq.com/api/v1
+  tags:
+  - Organizations
+  properties:
+  - type: OpenAPI
+    url: openapi/coordinate-organizations-api-openapi.yml
+  - type: APIReference
+    url: https://app.coordinatehq.com/static/API_Documentation.html
+  - type: Webhooks
+    url: asyncapi/coordinate-webhooks.yml
+- aid: coordinate:coordinate-progress-reports-api
+  name: Coordinate Progress Reports API
+  description: Read-only progress reports on a project.
+  humanURL: https://app.coordinatehq.com/static/API_Documentation.html
+  baseURL: https://app.coordinatehq.com/api/v1
+  tags:
+  - Progress Reports
+  properties:
+  - type: OpenAPI
+    url: openapi/coordinate-progress-reports-api-openapi.yml
+  - type: APIReference
+    url: https://app.coordinatehq.com/static/API_Documentation.html
+  - type: Webhooks
+    url: asyncapi/coordinate-webhooks.yml
+- aid: coordinate:coordinate-project-pages-api
+  name: Coordinate Project Pages API
+  description: Rich-text pages attached to a project.
+  humanURL: https://app.coordinatehq.com/static/API_Documentation.html
+  baseURL: https://app.coordinatehq.com/api/v1
+  tags:
+  - Project Pages
+  properties:
+  - type: OpenAPI
+    url: openapi/coordinate-project-pages-api-openapi.yml
+  - type: APIReference
+    url: https://app.coordinatehq.com/static/API_Documentation.html
+  - type: Webhooks
+    url: asyncapi/coordinate-webhooks.yml
+- aid: coordinate:coordinate-projects-api
+  name: Coordinate Projects API
+  description: Client projects (internally "Customer").
+  humanURL: https://app.coordinatehq.com/static/API_Documentation.html
+  baseURL: https://app.coordinatehq.com/api/v1
+  tags:
+  - Projects
+  properties:
+  - type: OpenAPI
+    url: openapi/coordinate-projects-api-openapi.yml
+  - type: APIReference
+    url: https://app.coordinatehq.com/static/API_Documentation.html
+  - type: Webhooks
+    url: asyncapi/coordinate-webhooks.yml
+- aid: coordinate:coordinate-stakeholders-api
+  name: Coordinate Stakeholders API
+  description: Client-side collaborators on a project.
+  humanURL: https://app.coordinatehq.com/static/API_Documentation.html
+  baseURL: https://app.coordinatehq.com/api/v1
+  tags:
+  - Stakeholders
+  properties:
+  - type: OpenAPI
+    url: openapi/coordinate-stakeholders-api-openapi.yml
+  - type: APIReference
+    url: https://app.coordinatehq.com/static/API_Documentation.html
+  - type: Webhooks
+    url: asyncapi/coordinate-webhooks.yml
+- aid: coordinate:coordinate-storage-api
+  name: Coordinate Storage API
+  description: Per-vendor JSON scratch storage.
+  humanURL: https://app.coordinatehq.com/static/API_Documentation.html
+  baseURL: https://app.coordinatehq.com/api/v1
+  tags:
+  - Storage
+  properties:
+  - type: OpenAPI
+    url: openapi/coordinate-storage-api-openapi.yml
+  - type: APIReference
+    url: https://app.coordinatehq.com/static/API_Documentation.html
+  - type: Webhooks
+    url: asyncapi/coordinate-webhooks.yml
+- aid: coordinate:coordinate-tasks-api
+  name: Coordinate Tasks API
+  description: Tasks within a project.
+  humanURL: https://app.coordinatehq.com/static/API_Documentation.html
+  baseURL: https://app.coordinatehq.com/api/v1
+  tags:
+  - Tasks
+  properties:
+  - type: OpenAPI
+    url: openapi/coordinate-tasks-api-openapi.yml
+  - type: APIReference
+    url: https://app.coordinatehq.com/static/API_Documentation.html
+  - type: Webhooks
+    url: asyncapi/coordinate-webhooks.yml
+- aid: coordinate:coordinate-users-api
+  name: Coordinate Users API
+  description: Vendor users.
+  humanURL: https://app.coordinatehq.com/static/API_Documentation.html
+  baseURL: https://app.coordinatehq.com/api/v1
+  tags:
+  - Users
+  properties:
+  - type: OpenAPI
+    url: openapi/coordinate-users-api-openapi.yml
+  - type: APIReference
+    url: https://app.coordinatehq.com/static/API_Documentation.html
+  - type: Webhooks
+    url: asyncapi/coordinate-webhooks.yml
+- aid: coordinate:coordinate-webhooks-api
+  name: Coordinate Webhooks API
+  description: Webhook subscription management.
+  humanURL: https://app.coordinatehq.com/static/API_Documentation.html
+  baseURL: https://app.coordinatehq.com/api/v1
+  tags:
+  - Webhooks
+  properties:
+  - type: OpenAPI
+    url: openapi/coordinate-webhooks-api-openapi.yml
+  - type: APIReference
+    url: https://app.coordinatehq.com/static/API_Documentation.html
+  - type: Webhooks
+    url: asyncapi/coordinate-webhooks.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
@@ -25,3 +236,56 @@ maintainers:
 common:
 - type: Website
   url: https://coordinatehq.com/
+- type: DeveloperPortal
+  url: https://app.coordinatehq.com/static/API_Documentation.html
+- type: Documentation
+  url: https://www.coordinatehq.com/library/integrating-with-coordinate
+- type: APIReference
+  url: https://app.coordinatehq.com/static/API_Documentation.html
+- type: Support
+  url: https://coordinatehqhelp.zendesk.com/hc/en-us
+- type: Blog
+  url: https://www.coordinatehq.com/library
+- type: Pricing
+  url: https://coordinatehq.com/pricing
+- type: SignUp
+  url: https://app.coordinatehq.com/signup
+- type: Login
+  url: https://app.coordinatehq.com/login
+- type: TermsOfService
+  url: https://coordinatehq.com/legal/terms-and-conditions
+- type: PrivacyPolicy
+  url: https://coordinatehq.com/legal/privacy-policy
+- type: OpenAPI
+  url: openapi/coordinate-openapi.yml
+- type: Authentication
+  url: authentication/coordinate-authentication.yml
+- type: Conventions
+  url: conventions/coordinate-conventions.yml
+- type: ErrorCatalog
+  url: errors/coordinate-problem-types.yml
+- type: Lifecycle
+  url: lifecycle/coordinate-lifecycle.yml
+- type: DataModel
+  url: data-model/coordinate-data-model.yml
+- type: Conformance
+  url: conformance/coordinate-conformance.yml
+- type: Webhooks
+  url: asyncapi/coordinate-webhooks.yml
+- type: MCPServer
+  url: mcp/coordinate-mcp.yml
+- type: LLMsTxt
+  url: llms/coordinate-llms.txt
+- type: Overlay
+  url: overlays/coordinate-openapi-overlay.yaml
+- type: WellKnown
+  url: well-known/coordinate-well-known.yml
+- type: DomainSecurity
+  url: security/coordinate-domain-security.yml
+- type: AgentSkill
+  url: skills/_index.yml
+x-enrichment:
+  date: '2026-07-19'
+  status: backfilled
+  pass: local-v1
+  note: backfilled from .gitignore signal + verified work evidence

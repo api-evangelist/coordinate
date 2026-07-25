@@ -1,0 +1,30 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Coordinate REST API
+  version: 1.0.0
+extends: openapi/coordinate-openapi.yml
+actions:
+  - target: $.info
+    update:
+      x-apievangelist-enriched: '2026-07-18'
+      x-apievangelist-source: https://app.coordinatehq.com/static/API_Documentation.html
+      x-artifacts:
+        authentication: authentication/coordinate-authentication.yml
+        conventions: conventions/coordinate-conventions.yml
+        errors: errors/coordinate-problem-types.yml
+        lifecycle: lifecycle/coordinate-lifecycle.yml
+        data-model: data-model/coordinate-data-model.yml
+        webhooks: asyncapi/coordinate-webhooks.yml
+        mcp: mcp/coordinate-mcp.yml
+  - target: $.info
+    update:
+      x-conventions:
+        pagination: page-number (paginate/page/page_size) on /entity
+        idempotency: not-supported
+        external-id: external_object_id (lookups return lists)
+        error-envelope: '{"success": false, "error": "<message>"}'
+  - target: $.components.securitySchemes.BearerHeader
+    update:
+      x-note: >-
+        Custom header named "Bearer" — not the standard Authorization: Bearer
+        scheme. Client libraries must set a literal "Bearer" header.

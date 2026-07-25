@@ -1,0 +1,56 @@
+generated: '2026-07-18'
+method: searched
+source: https://app.coordinatehq.com/static/API_Documentation.md
+spec_type: Webhooks
+note: >-
+  Coordinate documents a webhook subscription API but publishes no AsyncAPI
+  document, so this captures the webhook event catalog as a Webhooks surface
+  (no AsyncAPI spec fabricated). Events are POSTed to a subscriber HTTPS URL.
+subscription:
+  subscribe: 'POST /api/v1/webhook_subscribe?hookUrl=<https_url>&endpoint_nickname=<optional>'
+  unsubscribe: 'DELETE /api/v1/webhook_subscribe/<endpoint_id>'
+  subscribe_response: '{"id": "<endpoint_id>"}'
+  transport: https-post
+payload_shape:
+  entity: Current property values of the entity.
+  entity_type: '"Project" | "Task" | "Group" | "Goal" | "Customer" | "DiscussionEntry"'
+  entity_action: '"create" | "update"'
+  entity_previous_values: (update only) values before the change.
+  entity_updated_values: (update only) per-field boolean flags for changed properties.
+note_customer: >-
+  In webhook payloads, entity_type "Customer" refers to a customer organization
+  linked to a project, not a project itself (legacy naming).
+events:
+  - name: Project Created
+    entity_type: Project
+    entity_action: create
+  - name: Project Updated
+    entity_type: Project
+    entity_action: update
+  - name: Task Created
+    entity_type: Task
+    entity_action: create
+  - name: Task Updated
+    entity_type: Task
+    entity_action: update
+  - name: Task Group Created
+    entity_type: Group
+    entity_action: create
+  - name: Task Group Updated
+    entity_type: Group
+    entity_action: update
+  - name: Goal Created
+    entity_type: Goal
+    entity_action: create
+  - name: Goal Updated
+    entity_type: Goal
+    entity_action: update
+  - name: Customer Created
+    entity_type: Customer
+    entity_action: create
+  - name: Customer Updated
+    entity_type: Customer
+    entity_action: update
+  - name: Comment Added
+    entity_type: DiscussionEntry
+    entity_action: create

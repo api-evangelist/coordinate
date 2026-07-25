@@ -1,0 +1,28 @@
+generated: '2026-07-18'
+method: searched
+host: https://app.coordinatehq.com
+note: >-
+  Probed the /.well-known/ discovery surface on both the app/API host
+  (app.coordinatehq.com) and the marketing apex (coordinatehq.com). The app host
+  returns 403 for /.well-known/* and /llms.txt (edge/WAF blocks non-browser
+  clients); the apex returns 404. No discovery documents were served. Recorded
+  as honest negative results.
+documents:
+  - path: /.well-known/security.txt
+    host: https://app.coordinatehq.com
+    status: 403
+  - path: /.well-known/security.txt
+    host: https://coordinatehq.com
+    status: 404
+  - path: /.well-known/openid-configuration
+    host: https://app.coordinatehq.com
+    status: 403
+  - path: /.well-known/oauth-authorization-server
+    host: https://app.coordinatehq.com
+    status: 403
+  - path: /.well-known/api-catalog
+    host: https://app.coordinatehq.com
+    status: 403
+  - path: /.well-known/ai-plugin.json
+    host: https://app.coordinatehq.com
+    status: 403

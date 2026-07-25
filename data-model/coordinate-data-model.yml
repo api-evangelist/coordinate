@@ -1,0 +1,105 @@
+generated: '2026-07-18'
+method: derived
+source: openapi/coordinate-openapi.yml
+note: >-
+  Entity-relationship graph derived from the Coordinate OpenAPI schemas and id
+  fields. Project is the aggregate root (internally "Customer"); most entities
+  belong to a Project. Organization is a separate customer-org entity that links
+  Projects and Stakeholders.
+entities:
+  - name: Project
+    id: project_id
+    also_known_as: Customer (internal)
+    fields: [project_name, project_status, project_manager_email, external_object_id, custom_fields, project_storage_json]
+  - name: Page
+    id: page_name
+    fields: [page_content, page_private]
+  - name: Task
+    id: task_id
+    fields: [task_title, task_status_current, task_due_date, external_object_id]
+  - name: Group
+    id: group_id
+    also_known_as: Milestone (internal)
+    fields: [group_title, group_target_date]
+  - name: Stakeholder
+    id: stakeholder_id
+    fields: [stakeholder_email_address, stakeholder_roles, stakeholder_related_org_id]
+  - name: Goal
+    id: goal_id
+    fields: [goal_title, goal_target_date, goal_sponsor_name]
+  - name: ProgressReport
+    id: progress_report_id
+    fields: [progress_report_date, progress_report_project_status]
+  - name: DiscussionEntry
+    id: null
+    fields: [discussion_comment, target_entity_id, target_entity_type]
+  - name: Organization
+    id: organization_id
+    fields: [organization_name, organization_description]
+  - name: User
+    id: user_id
+    fields: [email, full_name]
+  - name: File
+    id: file_uid
+    fields: [file_name, file_content_type, download_url]
+relationships:
+  - from: Project
+    to: Page
+    kind: has_many
+    via: project_id
+  - from: Project
+    to: Task
+    kind: has_many
+    via: project_id
+  - from: Project
+    to: Group
+    kind: has_many
+    via: project_id
+  - from: Project
+    to: Stakeholder
+    kind: has_many
+    via: stakeholder_project_id
+  - from: Project
+    to: Goal
+    kind: has_many
+    via: project_id
+  - from: Project
+    to: ProgressReport
+    kind: has_many
+    via: project_id
+  - from: Project
+    to: File
+    kind: has_many
+    via: files[]
+  - from: Task
+    to: Group
+    kind: belongs_to
+    via: group_id
+  - from: Task
+    to: File
+    kind: has_many
+    via: files[]
+  - from: Goal
+    to: File
+    kind: has_many
+    via: files[]
+  - from: DiscussionEntry
+    to: Task
+    kind: belongs_to
+    via: target_entity_id (target_entity_type=Task)
+  - from: DiscussionEntry
+    to: Goal
+    kind: belongs_to
+    via: target_entity_id (target_entity_type=Goal)
+  - from: Organization
+    to: Project
+    kind: has_many
+    via: organization_id
+  - from: Organization
+    to: Stakeholder
+    kind: has_many
+    via: stakeholder_related_org_id
+  - from: Task
+    to: Stakeholder
+    kind: has_one
+    via: task_assignee_stakeholder_id

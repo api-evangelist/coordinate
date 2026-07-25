@@ -1,0 +1,27 @@
+# Coordinate
+
+> Coordinate (CoordinateHQ) is a client project-execution platform and branded client portal for client-facing businesses. Its REST API adds, updates, and retrieves projects, project pages, tasks, task groups, stakeholders, goals, progress reports, comments, and organizations, and a webhook API streams create/update events. All requests are scoped by an API key to a single vendor.
+
+## API
+- [Coordinate REST API reference (HTML)](https://app.coordinatehq.com/static/API_Documentation.html): Authoritative endpoint reference.
+- [Coordinate REST API reference (Markdown)](https://app.coordinatehq.com/static/API_Documentation.md): Agent-oriented Markdown version of the reference.
+- Base URL: https://app.coordinatehq.com/api/v1
+- Authentication: API key in a custom `Bearer:` header (Settings > Integrations > API Keys).
+
+## Specs
+- [OpenAPI 3.1](openapi/coordinate-openapi.yml): ~50 operations across projects, tasks, groups, stakeholders, goals, progress reports, comments, organizations, plus the /entity export firehose and JSON storage.
+- [Webhook catalog](asyncapi/coordinate-webhooks.yml): Project/Task/Group/Goal/Customer create+update and Comment-added events.
+
+## Artifacts
+- [Authentication](authentication/coordinate-authentication.yml): API-key (Bearer header) profile.
+- [Conventions](conventions/coordinate-conventions.yml): pagination, filtering, external ids, error envelope, files.
+- [Error catalog](errors/coordinate-problem-types.yml): 400/401/403/404/413/500 semantics.
+- [Lifecycle](lifecycle/coordinate-lifecycle.yml): v1 URI-path versioning; legacy verb-style paths.
+- [Data model](data-model/coordinate-data-model.yml): entity-relationship graph.
+- [Conformance](conformance/coordinate-conformance.yml): cross-cutting standards.
+- [MCP tools (candidate)](mcp/coordinate-mcp.yml): derived MCP tool list.
+
+## Docs
+- [Integrating with Coordinate](https://www.coordinatehq.com/library/integrating-with-coordinate): API + webhook + Zapier integration guide.
+- [Knowledge base](https://coordinatehqhelp.zendesk.com/hc/en-us): Help center.
+- [Pricing](https://coordinatehq.com/pricing): Plans (API access on enterprise plans).
