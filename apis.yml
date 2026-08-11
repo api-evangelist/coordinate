@@ -257,7 +257,7 @@ common:
 - type: PrivacyPolicy
   url: https://coordinatehq.com/legal/privacy-policy
 - type: OpenAPI
-  url: openapi/coordinate-openapi.yml
+  url: openapi/_original/coordinate-openapi.yml
 - type: Authentication
   url: authentication/coordinate-authentication.yml
 - type: Conventions
