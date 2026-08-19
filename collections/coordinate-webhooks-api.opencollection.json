@@ -1,0 +1,68 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Coordinate REST Comments Webhooks API",
+    "version": "v1"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Bearer",
+      "value": "{{Bearer}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Webhooks",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create a webhook subscription",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.coordinatehq.com/api/v1/webhook_subscribe",
+            "params": [
+              {
+                "name": "hookUrl",
+                "value": "",
+                "type": "query",
+                "description": "HTTPS URL that will receive event POSTs."
+              },
+              {
+                "name": "endpoint_nickname",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Registers an HTTPS endpoint to receive create/update events."
+        },
+        {
+          "info": {
+            "name": "Remove a webhook subscription",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://app.coordinatehq.com/api/v1/webhook_subscribe/:endpoint_id",
+            "params": [
+              {
+                "name": "endpoint_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Remove a webhook subscription"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

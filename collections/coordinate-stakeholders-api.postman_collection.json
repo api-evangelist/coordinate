@@ -1,0 +1,686 @@
+{
+  "item": [
+    {
+      "id": "adda54df-b06a-413a-8d5a-d9dd49cc06c2",
+      "name": "Stakeholders",
+      "description": {
+        "content": "Client-side collaborators on a project.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "adc70348-a40a-47ba-9eb8-3e3d07eb53bc",
+          "name": "List stakeholders on a project",
+          "request": {
+            "name": "List stakeholders on a project",
+            "description": {},
+            "url": {
+              "path": [
+                "projects",
+                ":project_id",
+                "stakeholder"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "last_modified_dt",
+                  "value": "<string>",
+                  "description": "ISO 8601. Return only items modified at or after this timestamp. URL-encode `+` as `%2B`."
+                },
+                {
+                  "disabled": false,
+                  "key": "sort",
+                  "value": "asc",
+                  "description": "Sort by last_modified_dt."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "project_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "d778fa95-1632-47e0-8286-40eb1d7b5317",
+              "name": "Array of stakeholders",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "projects",
+                    ":project_id",
+                    "stakeholder"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "last_modified_dt",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "asc"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Bearer",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"entity_type\": \"string\",\n    \"entity_url\": \"string\",\n    \"last_modified_dt\": \"string\",\n    \"vendor_id\": \"0fa339b0-f3d0-842b-99a4-143e2a0bbba9\",\n    \"external_object_id\": \"string\",\n    \"stakeholder_id\": \"3874340c-42e7-c7f7-6650-dc8011f782d9\",\n    \"stakeholder_email_address\": \"string\",\n    \"stakeholder_full_name\": \"string\",\n    \"stakeholder_title\": \"string\",\n    \"stakeholder_phone\": \"string\",\n    \"stakeholder_project_id\": \"a2cdde43-fde8-211a-6c32-e6474fb72eac\",\n    \"stakeholder_related_org_id\": \"string\",\n    \"stakeholder_roles\": [\n      \"string\",\n      \"string\"\n    ]\n  },\n  {\n    \"entity_type\": \"string\",\n    \"entity_url\": \"string\",\n    \"last_modified_dt\": \"string\",\n    \"vendor_id\": \"a0228e0a-fc6c-e861-3bf2-679ab4c3c45c\",\n    \"external_object_id\": \"string\",\n    \"stakeholder_id\": \"d9b66dcc-efb1-4e3e-1532-3c2398af1901\",\n    \"stakeholder_email_address\": \"string\",\n    \"stakeholder_full_name\": \"string\",\n    \"stakeholder_title\": \"string\",\n    \"stakeholder_phone\": \"string\",\n    \"stakeholder_project_id\": \"144f46f4-1dec-cdc7-3681-a3c28dbef3e7\",\n    \"stakeholder_related_org_id\": \"string\",\n    \"stakeholder_roles\": [\n      \"string\",\n      \"string\"\n    ]\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ca9eec6b-7f57-4af9-a1cf-9553c984bf88",
+              "name": "Missing or invalid API key",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "projects",
+                    ":project_id",
+                    "stakeholder"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "last_modified_dt",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "asc"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Bearer",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "143ba742-59ec-47ae-961e-713198555fb9",
+          "name": "Invite a stakeholder to a project",
+          "request": {
+            "name": "Invite a stakeholder to a project",
+            "description": {
+              "content": "May return a Stakeholder object OR the string \"User added to project\" when the email belongs to an existing user. Returns 400 if the email is already a stakeholder on the project.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "projects",
+                ":project_id",
+                "stakeholder"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "project_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"stakeholder_email_address\": \"<string>\",\n  \"stakeholder_full_name\": \"<string>\",\n  \"stakeholder_title\": \"<string>\",\n  \"stakeholder_phone\": \"<string>\",\n  \"stakeholder_invite_message\": \"<string>\",\n  \"stakeholder_role\": \"<string>\",\n  \"full_plan_access\": true,\n  \"suppress_invite_email\": false,\n  \"send_role_assignment_emails\": true,\n  \"external_object_id\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "d12dfe65-0e8b-4cef-a38c-3779e5453f03",
+              "name": "The stakeholder, or a \"User added to project\" acknowledgement",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "projects",
+                    ":project_id",
+                    "stakeholder"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Bearer",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"stakeholder_email_address\": \"<string>\",\n  \"stakeholder_full_name\": \"<string>\",\n  \"stakeholder_title\": \"<string>\",\n  \"stakeholder_phone\": \"<string>\",\n  \"stakeholder_invite_message\": \"<string>\",\n  \"stakeholder_role\": \"<string>\",\n  \"full_plan_access\": true,\n  \"suppress_invite_email\": false,\n  \"send_role_assignment_emails\": true,\n  \"external_object_id\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"entity_type\": \"string\",\n  \"entity_url\": \"string\",\n  \"last_modified_dt\": \"string\",\n  \"vendor_id\": \"9baab553-29cf-514d-569c-0660759cf762\",\n  \"external_object_id\": \"string\",\n  \"stakeholder_id\": \"4e46ce81-7132-54ed-4e4c-dd40d06fe325\",\n  \"stakeholder_email_address\": \"string\",\n  \"stakeholder_full_name\": \"string\",\n  \"stakeholder_title\": \"string\",\n  \"stakeholder_phone\": \"string\",\n  \"stakeholder_project_id\": \"c9e8e868-18d4-4b3d-a0db-da5180ef720e\",\n  \"stakeholder_related_org_id\": \"string\",\n  \"stakeholder_roles\": [\n    \"string\",\n    \"string\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "574248e9-095f-4244-a6be-a5d1f0fa31f4",
+              "name": "Validation failure",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "projects",
+                    ":project_id",
+                    "stakeholder"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Bearer",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"stakeholder_email_address\": \"<string>\",\n  \"stakeholder_full_name\": \"<string>\",\n  \"stakeholder_title\": \"<string>\",\n  \"stakeholder_phone\": \"<string>\",\n  \"stakeholder_invite_message\": \"<string>\",\n  \"stakeholder_role\": \"<string>\",\n  \"full_plan_access\": true,\n  \"suppress_invite_email\": false,\n  \"send_role_assignment_emails\": true,\n  \"external_object_id\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"error\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "573c2fea-f31d-4ac8-ad73-e95f6e65d746",
+              "name": "Missing or invalid API key",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "projects",
+                    ":project_id",
+                    "stakeholder"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Bearer",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"stakeholder_email_address\": \"<string>\",\n  \"stakeholder_full_name\": \"<string>\",\n  \"stakeholder_title\": \"<string>\",\n  \"stakeholder_phone\": \"<string>\",\n  \"stakeholder_invite_message\": \"<string>\",\n  \"stakeholder_role\": \"<string>\",\n  \"full_plan_access\": true,\n  \"suppress_invite_email\": false,\n  \"send_role_assignment_emails\": true,\n  \"external_object_id\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "06e80ad5-cf48-4c52-a947-78038b5ac92e",
+          "name": "Get one stakeholder",
+          "request": {
+            "name": "Get one stakeholder",
+            "description": {},
+            "url": {
+              "path": [
+                "projects",
+                ":project_id",
+                "stakeholder",
+                ":stakeholder_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "project_id",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "stakeholder_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "a18dc499-8d38-4352-92fa-dba10ff0a40b",
+              "name": "The stakeholder",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "projects",
+                    ":project_id",
+                    "stakeholder",
+                    ":stakeholder_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "stakeholder_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Bearer",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"entity_type\": \"string\",\n  \"entity_url\": \"string\",\n  \"last_modified_dt\": \"string\",\n  \"vendor_id\": \"9baab553-29cf-514d-569c-0660759cf762\",\n  \"external_object_id\": \"string\",\n  \"stakeholder_id\": \"4e46ce81-7132-54ed-4e4c-dd40d06fe325\",\n  \"stakeholder_email_address\": \"string\",\n  \"stakeholder_full_name\": \"string\",\n  \"stakeholder_title\": \"string\",\n  \"stakeholder_phone\": \"string\",\n  \"stakeholder_project_id\": \"c9e8e868-18d4-4b3d-a0db-da5180ef720e\",\n  \"stakeholder_related_org_id\": \"string\",\n  \"stakeholder_roles\": [\n    \"string\",\n    \"string\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "09158e9f-1c8d-4681-b222-ee1d51c51830",
+              "name": "Missing or invalid API key",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "projects",
+                    ":project_id",
+                    "stakeholder",
+                    ":stakeholder_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "stakeholder_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Bearer",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "84a607f0-2d0b-4e11-9fc0-524cf193ec9b",
+              "name": "Resource not found (often a plain-text body such as \"Project Not Found\")",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "projects",
+                    ":project_id",
+                    "stakeholder",
+                    ":stakeholder_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "stakeholder_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Bearer",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://app.coordinatehq.com/api/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "Bearer"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "ce2fa105-aecc-46db-b1c2-b6d40f0754ed",
+    "name": "Coordinate REST Comments Stakeholders API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Coordinate REST API lets you add, update, and retrieve the entities that make up Coordinate's client project-execution platform: projects, project pages, tasks, task groups, stakeholders, goals, progress reports, discussion entries (comments), and organizations. All requests are scoped to the vendor that owns the API key; `vendor_id` is derived from the key and cannot be overridden. A companion webhook API lets external systems subscribe to create/update events. This description is captured by the API Evangelist enrichment pipeline from Coordinate's published agent-oriented API reference.\n\nContact Support:\n Name: Coordinate Support\n Email: support@coordinatehq.com",
+      "type": "text/plain"
+    }
+  }
+}

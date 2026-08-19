@@ -1,0 +1,78 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Coordinate REST Comments Entity API",
+    "version": "v1"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Bearer",
+      "value": "{{Bearer}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Entity",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Cross-entity export firehose",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.coordinatehq.com/api/v1/entity",
+            "params": [
+              {
+                "name": "start_dt",
+                "value": "",
+                "type": "query",
+                "description": "ISO 8601. Only entities modified at or after this dt (alias last_modified_dt)."
+              },
+              {
+                "name": "end_dt",
+                "value": "",
+                "type": "query",
+                "description": "ISO 8601. Only entities modified at or before this dt."
+              },
+              {
+                "name": "entity",
+                "value": "",
+                "type": "query",
+                "description": "Filter to one type."
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sort by last_modified_dt."
+              },
+              {
+                "name": "paginate",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Returns all entities of all types in the vendor account, optionally filtered by date range and type. Use for bulk sync / data warehouse extracts. Supports pagination."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,449 @@
+{
+  "item": [
+    {
+      "id": "945a2348-dd97-4012-b550-7a10d66b5e7c",
+      "name": "Progress Reports",
+      "description": {
+        "content": "Read-only progress reports on a project.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "dc95c6e8-1c5e-463e-8fff-8e230549e59d",
+          "name": "List progress reports",
+          "request": {
+            "name": "List progress reports",
+            "description": {},
+            "url": {
+              "path": [
+                "projects",
+                ":project_id",
+                "progress_report"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "last_modified_dt",
+                  "value": "<string>",
+                  "description": "ISO 8601. Return only items modified at or after this timestamp. URL-encode `+` as `%2B`."
+                },
+                {
+                  "disabled": false,
+                  "key": "sort",
+                  "value": "asc",
+                  "description": "Sort by last_modified_dt."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "project_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "c39ce513-c6da-4bf4-af51-84e29bd18e19",
+              "name": "Array of progress reports",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "projects",
+                    ":project_id",
+                    "progress_report"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "last_modified_dt",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "asc"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Bearer",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"entity_type\": \"string\",\n    \"entity_url\": \"string\",\n    \"last_modified_dt\": \"string\",\n    \"vendor_id\": \"cfc93074-8aa5-e097-0791-49d73c7892d2\",\n    \"external_object_id\": \"string\",\n    \"progress_report_id\": \"1f9b8870-704f-6129-a75a-d6fd35562812\",\n    \"progress_report_date\": \"string\",\n    \"progress_report_description\": \"string\",\n    \"progress_report_next_steps\": \"string\",\n    \"progress_report_project_status\": \"string\",\n    \"progress_report_reporter_email\": \"string\",\n    \"progress_report_reporter_full_name\": \"string\",\n    \"progress_report_user_id\": \"f5cefc87-a7b0-a78e-e1e7-e4adb387a223\",\n    \"project_id\": \"fdabb44b-578c-0fd0-a5b7-f695fabb39e6\"\n  },\n  {\n    \"entity_type\": \"string\",\n    \"entity_url\": \"string\",\n    \"last_modified_dt\": \"string\",\n    \"vendor_id\": \"093461b6-8d34-f3e1-eaef-3723979840c8\",\n    \"external_object_id\": \"string\",\n    \"progress_report_id\": \"ca7f018a-8ce8-ba01-700f-9a9779147aea\",\n    \"progress_report_date\": \"string\",\n    \"progress_report_description\": \"string\",\n    \"progress_report_next_steps\": \"string\",\n    \"progress_report_project_status\": \"string\",\n    \"progress_report_reporter_email\": \"string\",\n    \"progress_report_reporter_full_name\": \"string\",\n    \"progress_report_user_id\": \"c9836c63-5c68-6a9f-8fe6-cdd801829f72\",\n    \"project_id\": \"c295345f-1380-1212-fb61-538d9ba848c1\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "23dfd4e6-d6b7-4620-a8ef-b381c6de4c1a",
+              "name": "Missing or invalid API key",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "projects",
+                    ":project_id",
+                    "progress_report"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "last_modified_dt",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "asc"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Bearer",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "df049597-87fb-4bb8-9f18-095aed568192",
+          "name": "Get one progress report",
+          "request": {
+            "name": "Get one progress report",
+            "description": {},
+            "url": {
+              "path": [
+                "projects",
+                ":project_id",
+                "progress_report",
+                ":progress_report_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "project_id",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "progress_report_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "43dca641-3f82-49d9-af57-74f77bdac243",
+              "name": "The progress report",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "projects",
+                    ":project_id",
+                    "progress_report",
+                    ":progress_report_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "progress_report_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Bearer",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"entity_type\": \"string\",\n  \"entity_url\": \"string\",\n  \"last_modified_dt\": \"string\",\n  \"vendor_id\": \"9748dcf2-f4fc-d09d-496d-be0e6a9bf3da\",\n  \"external_object_id\": \"string\",\n  \"progress_report_id\": \"f2ae622f-ad95-1382-b8cb-5b5904109af0\",\n  \"progress_report_date\": \"string\",\n  \"progress_report_description\": \"string\",\n  \"progress_report_next_steps\": \"string\",\n  \"progress_report_project_status\": \"string\",\n  \"progress_report_reporter_email\": \"string\",\n  \"progress_report_reporter_full_name\": \"string\",\n  \"progress_report_user_id\": \"daaad01f-3f45-b54a-0dac-077fc9b61751\",\n  \"project_id\": \"ef915faa-2fc2-c25d-8e63-3b6d13f0c8e3\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0191a79a-4328-4c2e-b947-e0aa75e9a274",
+              "name": "Missing or invalid API key",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "projects",
+                    ":project_id",
+                    "progress_report",
+                    ":progress_report_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "progress_report_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Bearer",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "2d0ea26f-ef67-43c5-a5ff-271e3ea54c72",
+              "name": "Resource not found (often a plain-text body such as \"Project Not Found\")",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "projects",
+                    ":project_id",
+                    "progress_report",
+                    ":progress_report_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "progress_report_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Bearer",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://app.coordinatehq.com/api/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "Bearer"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "9136c83f-c83b-42b2-9b29-0276e0d863ef",
+    "name": "Coordinate REST Comments Progress Reports API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Coordinate REST API lets you add, update, and retrieve the entities that make up Coordinate's client project-execution platform: projects, project pages, tasks, task groups, stakeholders, goals, progress reports, discussion entries (comments), and organizations. All requests are scoped to the vendor that owns the API key; `vendor_id` is derived from the key and cannot be overridden. A companion webhook API lets external systems subscribe to create/update events. This description is captured by the API Evangelist enrichment pipeline from Coordinate's published agent-oriented API reference.\n\nContact Support:\n Name: Coordinate Support\n Email: support@coordinatehq.com",
+      "type": "text/plain"
+    }
+  }
+}

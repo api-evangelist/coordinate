@@ -1,0 +1,101 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Coordinate REST Comments Stakeholders API",
+    "version": "v1"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Bearer",
+      "value": "{{Bearer}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Stakeholders",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List stakeholders on a project",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.coordinatehq.com/api/v1/projects/:project_id/stakeholder",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "last_modified_dt",
+                "value": "",
+                "type": "query",
+                "description": "ISO 8601. Return only items modified at or after this timestamp. URL-encode `+` as `%2B`."
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sort by last_modified_dt."
+              }
+            ]
+          },
+          "docs": "List stakeholders on a project"
+        },
+        {
+          "info": {
+            "name": "Invite a stakeholder to a project",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.coordinatehq.com/api/v1/projects/:project_id/stakeholder",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "May return a Stakeholder object OR the string \"User added to project\" when the email belongs to an existing user. Returns 400 if the email is already a stakeholder on the project."
+        },
+        {
+          "info": {
+            "name": "Get one stakeholder",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.coordinatehq.com/api/v1/projects/:project_id/stakeholder/:stakeholder_id",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "stakeholder_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get one stakeholder"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

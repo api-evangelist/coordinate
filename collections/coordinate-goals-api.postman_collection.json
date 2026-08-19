@@ -1,0 +1,1197 @@
+{
+  "item": [
+    {
+      "id": "58a1cd49-9a72-42ce-a50d-cd5176276c73",
+      "name": "Goals",
+      "description": {
+        "content": "Project goals / milestones with target dates.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "b101af43-d42a-4779-91db-5e5b70e662d9",
+          "name": "List goals",
+          "request": {
+            "name": "List goals",
+            "description": {},
+            "url": {
+              "path": [
+                "projects",
+                ":project_id",
+                "goal"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "last_modified_dt",
+                  "value": "<string>",
+                  "description": "ISO 8601. Return only items modified at or after this timestamp. URL-encode `+` as `%2B`."
+                },
+                {
+                  "disabled": false,
+                  "key": "sort",
+                  "value": "asc",
+                  "description": "Sort by last_modified_dt."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "project_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "a7be50c5-f815-48cb-b4ec-71dfe8caa0d9",
+              "name": "Array of goals",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "projects",
+                    ":project_id",
+                    "goal"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "last_modified_dt",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "asc"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Bearer",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"entity_type\": \"string\",\n    \"entity_url\": \"string\",\n    \"last_modified_dt\": \"string\",\n    \"vendor_id\": \"332e330e-de02-c568-a282-36b33d414b4a\",\n    \"external_object_id\": \"string\",\n    \"goal_id\": \"df1a72ab-815f-4a7f-cb41-015511beb1a8\",\n    \"goal_title\": \"string\",\n    \"goal_description\": \"string\",\n    \"goal_target_date\": \"string\",\n    \"goal_completed_dt\": \"string\",\n    \"goal_completed_by_email\": \"string\",\n    \"goal_completed_by_name\": \"string\",\n    \"goal_sponsor_name\": \"string\",\n    \"project_id\": \"7f142fe9-771f-a622-4d30-fc5e8de9035f\",\n    \"project_name\": \"string\",\n    \"files\": [\n      {\n        \"file_uid\": \"string\",\n        \"file_name\": \"string\",\n        \"file_size\": 7729,\n        \"file_content_type\": \"string\",\n        \"file_dt\": \"string\",\n        \"download_url\": \"string\"\n      },\n      {\n        \"file_uid\": \"string\",\n        \"file_name\": \"string\",\n        \"file_size\": 9282,\n        \"file_content_type\": \"string\",\n        \"file_dt\": \"string\",\n        \"download_url\": \"string\"\n      }\n    ]\n  },\n  {\n    \"entity_type\": \"string\",\n    \"entity_url\": \"string\",\n    \"last_modified_dt\": \"string\",\n    \"vendor_id\": \"0211fa55-7bca-6bb6-f2ec-30bfc47eaf97\",\n    \"external_object_id\": \"string\",\n    \"goal_id\": \"df973640-ac5a-ac0d-af50-a8617579fa44\",\n    \"goal_title\": \"string\",\n    \"goal_description\": \"string\",\n    \"goal_target_date\": \"string\",\n    \"goal_completed_dt\": \"string\",\n    \"goal_completed_by_email\": \"string\",\n    \"goal_completed_by_name\": \"string\",\n    \"goal_sponsor_name\": \"string\",\n    \"project_id\": \"421c7d02-fee0-f35b-de07-ae4ce593d431\",\n    \"project_name\": \"string\",\n    \"files\": [\n      {\n        \"file_uid\": \"string\",\n        \"file_name\": \"string\",\n        \"file_size\": 7094,\n        \"file_content_type\": \"string\",\n        \"file_dt\": \"string\",\n        \"download_url\": \"string\"\n      },\n      {\n        \"file_uid\": \"string\",\n        \"file_name\": \"string\",\n        \"file_size\": 5776,\n        \"file_content_type\": \"string\",\n        \"file_dt\": \"string\",\n        \"download_url\": \"string\"\n      }\n    ]\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ccb4c35d-075b-470b-968a-3abb46bbfc31",
+              "name": "Missing or invalid API key",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "projects",
+                    ":project_id",
+                    "goal"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "last_modified_dt",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "asc"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Bearer",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "70ae1202-8d11-47c4-800e-d1726aae0411",
+          "name": "Create a goal",
+          "request": {
+            "name": "Create a goal",
+            "description": {},
+            "url": {
+              "path": [
+                "projects",
+                ":project_id",
+                "goal"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "project_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"goal_title\": \"<string>\",\n  \"goal_description\": \"<string>\",\n  \"goal_target_date\": \"<string>\",\n  \"goal_sponsor_name\": \"<string>\",\n  \"external_object_id\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "0cf37b88-07ee-44a0-88a7-f5223aa8432c",
+              "name": "The created goal",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "projects",
+                    ":project_id",
+                    "goal"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Bearer",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"goal_title\": \"<string>\",\n  \"goal_description\": \"<string>\",\n  \"goal_target_date\": \"<string>\",\n  \"goal_sponsor_name\": \"<string>\",\n  \"external_object_id\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"entity_type\": \"string\",\n  \"entity_url\": \"string\",\n  \"last_modified_dt\": \"string\",\n  \"vendor_id\": \"c564fd85-74f2-c558-6dc4-589c6894e11f\",\n  \"external_object_id\": \"string\",\n  \"goal_id\": \"a24bf483-5ebc-ae90-bded-b79e3789cbf8\",\n  \"goal_title\": \"string\",\n  \"goal_description\": \"string\",\n  \"goal_target_date\": \"string\",\n  \"goal_completed_dt\": \"string\",\n  \"goal_completed_by_email\": \"string\",\n  \"goal_completed_by_name\": \"string\",\n  \"goal_sponsor_name\": \"string\",\n  \"project_id\": \"10768274-9a08-da94-55c2-61f45d669756\",\n  \"project_name\": \"string\",\n  \"files\": [\n    {\n      \"file_uid\": \"string\",\n      \"file_name\": \"string\",\n      \"file_size\": 7940,\n      \"file_content_type\": \"string\",\n      \"file_dt\": \"string\",\n      \"download_url\": \"string\"\n    },\n    {\n      \"file_uid\": \"string\",\n      \"file_name\": \"string\",\n      \"file_size\": 9595,\n      \"file_content_type\": \"string\",\n      \"file_dt\": \"string\",\n      \"download_url\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "01f52100-d157-4087-be33-4c307b59bc91",
+              "name": "Validation failure",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "projects",
+                    ":project_id",
+                    "goal"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Bearer",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"goal_title\": \"<string>\",\n  \"goal_description\": \"<string>\",\n  \"goal_target_date\": \"<string>\",\n  \"goal_sponsor_name\": \"<string>\",\n  \"external_object_id\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"error\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3ec6f861-9ecb-4195-a576-b28ba9cce032",
+              "name": "Missing or invalid API key",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "projects",
+                    ":project_id",
+                    "goal"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Bearer",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"goal_title\": \"<string>\",\n  \"goal_description\": \"<string>\",\n  \"goal_target_date\": \"<string>\",\n  \"goal_sponsor_name\": \"<string>\",\n  \"external_object_id\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a366a179-d37f-495f-ac16-c8e6d472c662",
+          "name": "Get one goal",
+          "request": {
+            "name": "Get one goal",
+            "description": {},
+            "url": {
+              "path": [
+                "projects",
+                ":project_id",
+                "goal",
+                ":goal_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "project_id",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "goal_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "5d57fe9e-be1c-445f-ba2d-2c74016318f8",
+              "name": "The goal",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "projects",
+                    ":project_id",
+                    "goal",
+                    ":goal_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "goal_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Bearer",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"entity_type\": \"string\",\n  \"entity_url\": \"string\",\n  \"last_modified_dt\": \"string\",\n  \"vendor_id\": \"c564fd85-74f2-c558-6dc4-589c6894e11f\",\n  \"external_object_id\": \"string\",\n  \"goal_id\": \"a24bf483-5ebc-ae90-bded-b79e3789cbf8\",\n  \"goal_title\": \"string\",\n  \"goal_description\": \"string\",\n  \"goal_target_date\": \"string\",\n  \"goal_completed_dt\": \"string\",\n  \"goal_completed_by_email\": \"string\",\n  \"goal_completed_by_name\": \"string\",\n  \"goal_sponsor_name\": \"string\",\n  \"project_id\": \"10768274-9a08-da94-55c2-61f45d669756\",\n  \"project_name\": \"string\",\n  \"files\": [\n    {\n      \"file_uid\": \"string\",\n      \"file_name\": \"string\",\n      \"file_size\": 7940,\n      \"file_content_type\": \"string\",\n      \"file_dt\": \"string\",\n      \"download_url\": \"string\"\n    },\n    {\n      \"file_uid\": \"string\",\n      \"file_name\": \"string\",\n      \"file_size\": 9595,\n      \"file_content_type\": \"string\",\n      \"file_dt\": \"string\",\n      \"download_url\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "eaf2e7d4-9e55-4c84-8095-d6a884c449a9",
+              "name": "Missing or invalid API key",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "projects",
+                    ":project_id",
+                    "goal",
+                    ":goal_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "goal_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Bearer",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "196c503f-d2af-414a-a7e1-4b69202cbda2",
+              "name": "Resource not found (often a plain-text body such as \"Project Not Found\")",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "projects",
+                    ":project_id",
+                    "goal",
+                    ":goal_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "goal_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Bearer",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f41b3c8f-3882-40e2-b1ae-a6b4d0ed653a",
+          "name": "Update a goal",
+          "request": {
+            "name": "Update a goal",
+            "description": {},
+            "url": {
+              "path": [
+                "projects",
+                ":project_id",
+                "goal",
+                ":goal_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "project_id",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "goal_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"goal_title\": \"<string>\",\n  \"goal_description\": \"<string>\",\n  \"goal_target_date\": \"<string>\",\n  \"goal_sponsor_name\": \"<string>\",\n  \"external_object_id\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "33f8142f-5f28-47d7-b223-1a24bd150d3c",
+              "name": "The updated goal",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "projects",
+                    ":project_id",
+                    "goal",
+                    ":goal_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "goal_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Bearer",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"goal_title\": \"<string>\",\n  \"goal_description\": \"<string>\",\n  \"goal_target_date\": \"<string>\",\n  \"goal_sponsor_name\": \"<string>\",\n  \"external_object_id\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"entity_type\": \"string\",\n  \"entity_url\": \"string\",\n  \"last_modified_dt\": \"string\",\n  \"vendor_id\": \"c564fd85-74f2-c558-6dc4-589c6894e11f\",\n  \"external_object_id\": \"string\",\n  \"goal_id\": \"a24bf483-5ebc-ae90-bded-b79e3789cbf8\",\n  \"goal_title\": \"string\",\n  \"goal_description\": \"string\",\n  \"goal_target_date\": \"string\",\n  \"goal_completed_dt\": \"string\",\n  \"goal_completed_by_email\": \"string\",\n  \"goal_completed_by_name\": \"string\",\n  \"goal_sponsor_name\": \"string\",\n  \"project_id\": \"10768274-9a08-da94-55c2-61f45d669756\",\n  \"project_name\": \"string\",\n  \"files\": [\n    {\n      \"file_uid\": \"string\",\n      \"file_name\": \"string\",\n      \"file_size\": 7940,\n      \"file_content_type\": \"string\",\n      \"file_dt\": \"string\",\n      \"download_url\": \"string\"\n    },\n    {\n      \"file_uid\": \"string\",\n      \"file_name\": \"string\",\n      \"file_size\": 9595,\n      \"file_content_type\": \"string\",\n      \"file_dt\": \"string\",\n      \"download_url\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9fcba2ca-4406-4ec3-83da-dce42f4ebe97",
+              "name": "Missing or invalid API key",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "projects",
+                    ":project_id",
+                    "goal",
+                    ":goal_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "goal_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Bearer",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"goal_title\": \"<string>\",\n  \"goal_description\": \"<string>\",\n  \"goal_target_date\": \"<string>\",\n  \"goal_sponsor_name\": \"<string>\",\n  \"external_object_id\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f5502694-9e6f-488c-9c62-854dee31d5fa",
+          "name": "Download a goal file",
+          "request": {
+            "name": "Download a goal file",
+            "description": {},
+            "url": {
+              "path": [
+                "projects",
+                ":project_id",
+                "goal",
+                ":goal_id",
+                "file",
+                ":file_uid"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "project_id",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "goal_id",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "file_uid",
+                  "description": "(Required) File id. URL-encode a `#` as `%23`."
+                }
+              ]
+            },
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "84fc9108-ec48-4c08-a5de-384b39cad61c",
+              "name": "302 redirect to a fresh 5-minute S3 presigned URL (in the Location header)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "projects",
+                    ":project_id",
+                    "goal",
+                    ":goal_id",
+                    "file",
+                    ":file_uid"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "goal_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "file_uid",
+                      "description": "(Required) File id. URL-encode a `#` as `%23`."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Bearer",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Found",
+              "code": 302,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "f0fef3f4-85d3-4d57-a864-a012933a0bf8",
+              "name": "Missing or invalid API key",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "projects",
+                    ":project_id",
+                    "goal",
+                    ":goal_id",
+                    "file",
+                    ":file_uid"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "goal_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "file_uid",
+                      "description": "(Required) File id. URL-encode a `#` as `%23`."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Bearer",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "bcd54747-b973-4ee8-a892-24130e1abeed",
+              "name": "Files are disabled for this vendor",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "projects",
+                    ":project_id",
+                    "goal",
+                    ":goal_id",
+                    "file",
+                    ":file_uid"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "goal_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "file_uid",
+                      "description": "(Required) File id. URL-encode a `#` as `%23`."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Bearer",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "a8d83a05-2390-43fe-9912-d4e652bd2d5e",
+              "name": "Resource not found (often a plain-text body such as \"Project Not Found\")",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "projects",
+                    ":project_id",
+                    "goal",
+                    ":goal_id",
+                    "file",
+                    ":file_uid"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "goal_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "file_uid",
+                      "description": "(Required) File id. URL-encode a `#` as `%23`."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Bearer",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://app.coordinatehq.com/api/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "Bearer"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "57138eb3-24d5-493c-9853-cc8d7c939d8c",
+    "name": "Coordinate REST Comments Goals API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Coordinate REST API lets you add, update, and retrieve the entities that make up Coordinate's client project-execution platform: projects, project pages, tasks, task groups, stakeholders, goals, progress reports, discussion entries (comments), and organizations. All requests are scoped to the vendor that owns the API key; `vendor_id` is derived from the key and cannot be overridden. A companion webhook API lets external systems subscribe to create/update events. This description is captured by the API Evangelist enrichment pipeline from Coordinate's published agent-oriented API reference.\n\nContact Support:\n Name: Coordinate Support\n Email: support@coordinatehq.com",
+      "type": "text/plain"
+    }
+  }
+}

@@ -2,64 +2,68 @@ generated: '2026-07-18'
 method: derived
 status: candidate
 source: openapi/coordinate-openapi.yml
-note: >-
-  No official hosted/remote Coordinate MCP server was found (no entry in the MCP
-  registry, npm @modelcontextprotocol, or Coordinate docs). This is a candidate
-  tool list derived one-tool-per-operation from the Coordinate OpenAPI, to seed
-  an MCP server. Auth: the Bearer API-key header.
+note: 'No official hosted/remote Coordinate MCP server was found (no entry in the MCP registry, npm @modelcontextprotocol,
+  or Coordinate docs). This is a candidate tool list derived one-tool-per-operation from the Coordinate
+  OpenAPI, to seed an MCP server. Auth: the Bearer API-key header.'
 server:
   name: coordinate
   transport: http
   url: null
 tools:
-  - name: list_projects
-    description: List all projects in the vendor account.
-    source_operation: openapi/coordinate-openapi.yml#listProjects
-  - name: get_project
-    description: Get one project by id.
-    source_operation: openapi/coordinate-openapi.yml#getProject
-  - name: create_project
-    description: Create a project (optionally applying a playbook and inviting a stakeholder).
-    source_operation: openapi/coordinate-openapi.yml#createProject
-  - name: update_project
-    description: Update a project.
-    source_operation: openapi/coordinate-openapi.yml#updateProject
-  - name: apply_playbook
-    description: Apply a template (playbook) to an existing project.
-    source_operation: openapi/coordinate-openapi.yml#applyPlaybook
-  - name: list_tasks
-    description: List tasks in a project.
-    source_operation: openapi/coordinate-openapi.yml#listTasks
-  - name: create_task
-    description: Create a task in a project.
-    source_operation: openapi/coordinate-openapi.yml#createTask
-  - name: update_task
-    description: Update a task (e.g. set status to complete).
-    source_operation: openapi/coordinate-openapi.yml#updateTask
-  - name: list_groups
-    description: List task groups in a project.
-    source_operation: openapi/coordinate-openapi.yml#listGroups
-  - name: invite_stakeholder
-    description: Invite a stakeholder to a project.
-    source_operation: openapi/coordinate-openapi.yml#inviteStakeholder
-  - name: list_goals
-    description: List goals in a project.
-    source_operation: openapi/coordinate-openapi.yml#listGoals
-  - name: create_goal
-    description: Create a goal in a project.
-    source_operation: openapi/coordinate-openapi.yml#createGoal
-  - name: list_project_comments
-    description: List all comments across a project, its tasks, and its goals.
-    source_operation: openapi/coordinate-openapi.yml#listProjectComments
-  - name: create_task_comment
-    description: Add a comment to a task.
-    source_operation: openapi/coordinate-openapi.yml#createTaskDiscussionEntry
-  - name: list_organizations
-    description: List organizations.
-    source_operation: openapi/coordinate-openapi.yml#listOrganizations
-  - name: list_entities
-    description: Cross-entity export firehose with date-range and type filters.
-    source_operation: openapi/coordinate-openapi.yml#listEntities
-  - name: subscribe_webhook
-    description: Register an HTTPS endpoint to receive create/update events.
-    source_operation: openapi/coordinate-openapi.yml#subscribeWebhook
+- name: list_projects
+  description: List all projects in the vendor account.
+  source_operation: openapi/coordinate-openapi.yml#listProjects
+- name: get_project
+  description: Get one project by id.
+  source_operation: openapi/coordinate-openapi.yml#getProject
+- name: create_project
+  description: Create a project (optionally applying a playbook and inviting a stakeholder).
+  source_operation: openapi/coordinate-openapi.yml#createProject
+- name: update_project
+  description: Update a project.
+  source_operation: openapi/coordinate-openapi.yml#updateProject
+- name: apply_playbook
+  description: Apply a template (playbook) to an existing project.
+  source_operation: openapi/coordinate-openapi.yml#applyPlaybook
+- name: list_tasks
+  description: List tasks in a project.
+  source_operation: openapi/coordinate-openapi.yml#listTasks
+- name: create_task
+  description: Create a task in a project.
+  source_operation: openapi/coordinate-openapi.yml#createTask
+- name: update_task
+  description: Update a task (e.g. set status to complete).
+  source_operation: openapi/coordinate-openapi.yml#updateTask
+- name: list_groups
+  description: List task groups in a project.
+  source_operation: openapi/coordinate-openapi.yml#listGroups
+- name: invite_stakeholder
+  description: Invite a stakeholder to a project.
+  source_operation: openapi/coordinate-openapi.yml#inviteStakeholder
+- name: list_goals
+  description: List goals in a project.
+  source_operation: openapi/coordinate-openapi.yml#listGoals
+- name: create_goal
+  description: Create a goal in a project.
+  source_operation: openapi/coordinate-openapi.yml#createGoal
+- name: list_project_comments
+  description: List all comments across a project, its tasks, and its goals.
+  source_operation: openapi/coordinate-openapi.yml#listProjectComments
+- name: create_task_comment
+  description: Add a comment to a task.
+  source_operation: openapi/coordinate-openapi.yml#createTaskDiscussionEntry
+- name: list_organizations
+  description: List organizations.
+  source_operation: openapi/coordinate-openapi.yml#listOrganizations
+- name: list_entities
+  description: Cross-entity export firehose with date-range and type filters.
+  source_operation: openapi/coordinate-openapi.yml#listEntities
+- name: subscribe_webhook
+  description: Register an HTTPS endpoint to receive create/update events.
+  source_operation: openapi/coordinate-openapi.yml#subscribeWebhook
+deployment:
+  mode: none
+  verified: derived
+  tools: 17
+  checked: '2026-08-12'
+  source: catalog MCP census

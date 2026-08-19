@@ -1,0 +1,196 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Coordinate REST Comments Organizations API",
+    "version": "v1"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Bearer",
+      "value": "{{Bearer}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Organizations",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List organizations",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.coordinatehq.com/api/v1/organizations"
+          },
+          "docs": "List organizations"
+        },
+        {
+          "info": {
+            "name": "Create an organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.coordinatehq.com/api/v1/organizations",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create an organization"
+        },
+        {
+          "info": {
+            "name": "Get one organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.coordinatehq.com/api/v1/organizations/:org_id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get one organization"
+        },
+        {
+          "info": {
+            "name": "List stakeholders linked to an organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.coordinatehq.com/api/v1/organizations/:org_id/stakeholders",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "List stakeholders linked to an organization"
+        },
+        {
+          "info": {
+            "name": "Add a stakeholder to an organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.coordinatehq.com/api/v1/organizations/:org_id/stakeholders",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Propagates the stakeholder to all projects linked to the org."
+        },
+        {
+          "info": {
+            "name": "Remove a stakeholder from an organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.coordinatehq.com/api/v1/organizations/:org_id/stakeholders/:stakeholder_id/remove",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "stakeholder_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Remove a stakeholder from an organization"
+        },
+        {
+          "info": {
+            "name": "List projects linked to an organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.coordinatehq.com/api/v1/organizations/:org_id/projects",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "List projects linked to an organization"
+        },
+        {
+          "info": {
+            "name": "Link an existing project to an organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.coordinatehq.com/api/v1/organizations/:org_id/projects",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Link an existing project to an organization"
+        },
+        {
+          "info": {
+            "name": "Unlink a project from an organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.coordinatehq.com/api/v1/organizations/:org_id/projects/:project_id/remove",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Unlink a project from an organization"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

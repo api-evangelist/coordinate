@@ -1,0 +1,202 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Coordinate REST Comments Tasks API",
+    "version": "v1"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Bearer",
+      "value": "{{Bearer}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Tasks",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List tasks in a project",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.coordinatehq.com/api/v1/projects/:project_id/task",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "last_modified_dt",
+                "value": "",
+                "type": "query",
+                "description": "ISO 8601. Return only items modified at or after this timestamp. URL-encode `+` as `%2B`."
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sort by last_modified_dt."
+              }
+            ]
+          },
+          "docs": "List tasks in a project"
+        },
+        {
+          "info": {
+            "name": "Create a task",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.coordinatehq.com/api/v1/projects/:project_id/task",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a task"
+        },
+        {
+          "info": {
+            "name": "Get one task",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.coordinatehq.com/api/v1/projects/:project_id/task/:task_id",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "task_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get one task"
+        },
+        {
+          "info": {
+            "name": "Update a task",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.coordinatehq.com/api/v1/projects/:project_id/task/:task_id",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "task_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update a task"
+        },
+        {
+          "info": {
+            "name": "Lookup tasks by external object id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.coordinatehq.com/api/v1/task/external_object_id/:external_object_id",
+            "params": [
+              {
+                "name": "external_object_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Returns a list of matching tasks."
+        },
+        {
+          "info": {
+            "name": "Attach files to a task",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.coordinatehq.com/api/v1/projects/:project_id/task/:task_id/files/attach",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "task_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "multipart-form",
+              "data": []
+            }
+          },
+          "docs": "multipart/form-data with one or more `File` parts. 100MB hard limit per request."
+        },
+        {
+          "info": {
+            "name": "Download a task file",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.coordinatehq.com/api/v1/projects/:project_id/task/:task_id/file/:file_uid",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "task_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "file_uid",
+                "value": "",
+                "type": "path",
+                "description": "File id. URL-encode a `#` as `%23`."
+              }
+            ]
+          },
+          "docs": "Download a task file"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

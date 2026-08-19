@@ -1,0 +1,52 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Coordinate REST Comments Storage API",
+    "version": "v1"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Bearer",
+      "value": "{{Bearer}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Storage",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Retrieve the per-vendor JSON scratch blob",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.coordinatehq.com/api/v1/json_storage"
+          },
+          "docs": "Returns {} if never set."
+        },
+        {
+          "info": {
+            "name": "Overwrite the per-vendor JSON scratch blob",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.coordinatehq.com/api/v1/json_storage",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Body is arbitrary JSON. 300KB limit. Overwrites the previous value."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

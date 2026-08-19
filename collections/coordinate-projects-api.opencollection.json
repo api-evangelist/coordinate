@@ -1,0 +1,192 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Coordinate REST Comments Projects API",
+    "version": "v1"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Bearer",
+      "value": "{{Bearer}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Projects",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List all projects",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.coordinatehq.com/api/v1/projects",
+            "params": [
+              {
+                "name": "last_modified_dt",
+                "value": "",
+                "type": "query",
+                "description": "ISO 8601. Return only items modified at or after this timestamp. URL-encode `+` as `%2B`."
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sort by last_modified_dt."
+              }
+            ]
+          },
+          "docs": "List all projects in the vendor account. Supports last_modified_dt filtering and sort."
+        },
+        {
+          "info": {
+            "name": "Create a project",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.coordinatehq.com/api/v1/projects",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a project"
+        },
+        {
+          "info": {
+            "name": "Get one project",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.coordinatehq.com/api/v1/projects/:project_id",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get one project"
+        },
+        {
+          "info": {
+            "name": "Update a project",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.coordinatehq.com/api/v1/projects/:project_id",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Send any subset of project_* keys. Read-only fields are silently dropped. manager_email_address re-binds the project manager."
+        },
+        {
+          "info": {
+            "name": "Lookup projects by external object id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.coordinatehq.com/api/v1/projects/external_object_id/:external_object_id",
+            "params": [
+              {
+                "name": "external_object_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Returns a list — more than one project may share an external_object_id."
+        },
+        {
+          "info": {
+            "name": "Apply a playbook (template) to a project",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.coordinatehq.com/api/v1/projects/:project_id/apply_playbook",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Apply a playbook (template) to a project"
+        },
+        {
+          "info": {
+            "name": "Attach files to a project",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.coordinatehq.com/api/v1/projects/:project_id/files/attach",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "multipart-form",
+              "data": []
+            }
+          },
+          "docs": "multipart/form-data with one or more `File` parts (case-sensitive). 100MB hard limit per request."
+        },
+        {
+          "info": {
+            "name": "Download a project file",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.coordinatehq.com/api/v1/projects/:project_id/file/:file_uid",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "file_uid",
+                "value": "",
+                "type": "path",
+                "description": "File id. URL-encode a `#` as `%23`."
+              }
+            ]
+          },
+          "docs": "Returns a 302 redirect to a fresh 5-minute S3 presigned URL. Follow immediately; do not cache the target."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

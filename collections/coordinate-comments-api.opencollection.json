@@ -1,0 +1,183 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Coordinate REST Comments API",
+    "version": "v1"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Bearer",
+      "value": "{{Bearer}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Comments",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List project-level comments",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.coordinatehq.com/api/v1/projects/:project_id/discussion_entry",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "last_modified_dt",
+                "value": "",
+                "type": "query",
+                "description": "ISO 8601. Return only items modified at or after this timestamp. URL-encode `+` as `%2B`."
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sort by last_modified_dt."
+              }
+            ]
+          },
+          "docs": "List project-level comments"
+        },
+        {
+          "info": {
+            "name": "List task comments",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.coordinatehq.com/api/v1/projects/:project_id/task/:task_id/discussion_entry",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "task_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "last_modified_dt",
+                "value": "",
+                "type": "query",
+                "description": "ISO 8601. Return only items modified at or after this timestamp. URL-encode `+` as `%2B`."
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sort by last_modified_dt."
+              }
+            ]
+          },
+          "docs": "List task comments"
+        },
+        {
+          "info": {
+            "name": "Add a comment to a task",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.coordinatehq.com/api/v1/projects/:project_id/task/:task_id/discussion_entry",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "task_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Returns 200 \"DiscussionEntry Created\". Unknown sender email returns 404."
+        },
+        {
+          "info": {
+            "name": "List goal comments",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.coordinatehq.com/api/v1/projects/:project_id/goal/:goal_id/discussion_entry",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "goal_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "last_modified_dt",
+                "value": "",
+                "type": "query",
+                "description": "ISO 8601. Return only items modified at or after this timestamp. URL-encode `+` as `%2B`."
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sort by last_modified_dt."
+              }
+            ]
+          },
+          "docs": "List goal comments"
+        },
+        {
+          "info": {
+            "name": "List all comments on a project",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.coordinatehq.com/api/v1/projects/:project_id/comments",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "last_modified_dt",
+                "value": "",
+                "type": "query",
+                "description": "ISO 8601. Return only items modified at or after this timestamp. URL-encode `+` as `%2B`."
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sort by last_modified_dt."
+              }
+            ]
+          },
+          "docs": "All comments across the project, its tasks, and its goals."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

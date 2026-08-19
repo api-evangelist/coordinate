@@ -1,0 +1,157 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Coordinate REST Comments Goals API",
+    "version": "v1"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Bearer",
+      "value": "{{Bearer}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Goals",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List goals",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.coordinatehq.com/api/v1/projects/:project_id/goal",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "last_modified_dt",
+                "value": "",
+                "type": "query",
+                "description": "ISO 8601. Return only items modified at or after this timestamp. URL-encode `+` as `%2B`."
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sort by last_modified_dt."
+              }
+            ]
+          },
+          "docs": "List goals"
+        },
+        {
+          "info": {
+            "name": "Create a goal",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.coordinatehq.com/api/v1/projects/:project_id/goal",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a goal"
+        },
+        {
+          "info": {
+            "name": "Get one goal",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.coordinatehq.com/api/v1/projects/:project_id/goal/:goal_id",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "goal_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get one goal"
+        },
+        {
+          "info": {
+            "name": "Update a goal",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.coordinatehq.com/api/v1/projects/:project_id/goal/:goal_id",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "goal_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update a goal"
+        },
+        {
+          "info": {
+            "name": "Download a goal file",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.coordinatehq.com/api/v1/projects/:project_id/goal/:goal_id/file/:file_uid",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "goal_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "file_uid",
+                "value": "",
+                "type": "path",
+                "description": "File id. URL-encode a `#` as `%23`."
+              }
+            ]
+          },
+          "docs": "Download a goal file"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

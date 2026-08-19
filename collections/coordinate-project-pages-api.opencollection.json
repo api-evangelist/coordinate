@@ -1,0 +1,96 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Coordinate REST Comments Project Pages API",
+    "version": "v1"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Bearer",
+      "value": "{{Bearer}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Project Pages",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List project page names",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.coordinatehq.com/api/v1/projects/:project_id/pages",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "List project page names"
+        },
+        {
+          "info": {
+            "name": "Get a single project page",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.coordinatehq.com/api/v1/projects/:project_id/pages/:page_name",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "page_name",
+                "value": "",
+                "type": "path",
+                "description": "URL-encode spaces (e.g. Page%20Name)."
+              }
+            ]
+          },
+          "docs": "Get a single project page"
+        },
+        {
+          "info": {
+            "name": "Create or overwrite a project page",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.coordinatehq.com/api/v1/projects/:project_id/pages/:page_name",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "page_name",
+                "value": "",
+                "type": "path",
+                "description": "URL-encode spaces (e.g. Page%20Name)."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create or overwrite a project page"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
