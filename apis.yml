@@ -42,6 +42,16 @@ tags:
 - Client Portal
 - Client Onboarding
 - Professional Services
+- Workflow-Automation
+- Collaboration
+- Webhook
+tags_raw:
+- Company
+- Enterprise Saas
+- Project Management
+- Client Portal
+- Client Onboarding
+- Professional Services
 - Workflow Automation
 - Collaboration
 - Webhooks
@@ -94,6 +104,8 @@ apis:
   humanURL: https://app.coordinatehq.com/static/API_Documentation.html
   baseURL: https://app.coordinatehq.com/api/v1
   tags:
+  - Group
+  tags_raw:
   - Groups
   properties:
   - type: OpenAPI
@@ -108,6 +120,8 @@ apis:
   humanURL: https://app.coordinatehq.com/static/API_Documentation.html
   baseURL: https://app.coordinatehq.com/api/v1
   tags:
+  - Organization
+  tags_raw:
   - Organizations
   properties:
   - type: OpenAPI
@@ -150,6 +164,8 @@ apis:
   humanURL: https://app.coordinatehq.com/static/API_Documentation.html
   baseURL: https://app.coordinatehq.com/api/v1
   tags:
+  - Project
+  tags_raw:
   - Projects
   properties:
   - type: OpenAPI
@@ -192,6 +208,8 @@ apis:
   humanURL: https://app.coordinatehq.com/static/API_Documentation.html
   baseURL: https://app.coordinatehq.com/api/v1
   tags:
+  - Task
+  tags_raw:
   - Tasks
   properties:
   - type: OpenAPI
@@ -206,6 +224,8 @@ apis:
   humanURL: https://app.coordinatehq.com/static/API_Documentation.html
   baseURL: https://app.coordinatehq.com/api/v1
   tags:
+  - User
+  tags_raw:
   - Users
   properties:
   - type: OpenAPI
@@ -220,6 +240,8 @@ apis:
   humanURL: https://app.coordinatehq.com/static/API_Documentation.html
   baseURL: https://app.coordinatehq.com/api/v1
   tags:
+  - Webhook
+  tags_raw:
   - Webhooks
   properties:
   - type: OpenAPI
