@@ -278,6 +278,9 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: CapabilityMap
+  url: capabilities/coordinate-capability-edges.yml
+  name: Coordinate Business Capability Map
 - type: Website
   url: https://coordinatehq.com/
 - type: DeveloperPortal

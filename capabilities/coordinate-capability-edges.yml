@@ -1,0 +1,61 @@
+slug: coordinate
+provider: Coordinate
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Professional Services
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 5
+edges:
+- tag: Projects
+  spec_file: coordinate-projects-api-openapi.yml
+  capability_id: BC-900.30
+  capability_id_l1: BC-900
+  capability_name: Project Management
+  confidence: 0.85
+  evidence: POST /projects createProject; POST /projects/{project_id}/apply_playbook applyPlaybook — Apply
+    a playbook (template) to a project
+  reason: Core project lifecycle CRUD plus templated project instantiation in a client project-execution
+    platform — plainly project management.
+- tag: Tasks
+  spec_file: coordinate-tasks-api-openapi.yml
+  capability_id: BC-900.30
+  capability_id_l1: BC-900
+  capability_name: Project Management
+  confidence: 0.85
+  evidence: GET /projects/{project_id}/task listTasks — List tasks in a project; POST createTask
+  reason: Task CRUD and file attachment within projects is direct project execution and tracking.
+- tag: Groups
+  spec_file: coordinate-groups-api-openapi.yml
+  capability_id: BC-900.30
+  capability_id_l1: BC-900
+  capability_name: Project Management
+  confidence: 0.75
+  evidence: GET /projects/{project_id}/group listGroups — List task groups
+  reason: Task groups structure work within a project; this is project work breakdown/execution tracking.
+- tag: Comments
+  spec_file: coordinate-comments-api-openapi.yml
+  capability_id: BC-900.30
+  capability_id_l1: BC-900
+  capability_name: Project Management
+  confidence: 0.7
+  evidence: '"List task comments", "Add a comment to a task", "List all comments on a project" within
+    a "client project-execution platform"'
+  reason: Discussion entries scoped to projects, tasks and goals in a project-execution platform — collaboration
+    inside project tracking. Maps to project management; could alternatively be seen as client engagement
+    communication, hence moderate confidence.
+- tag: Goals
+  spec_file: coordinate-goals-api-openapi.yml
+  capability_id: BC-900.30
+  capability_id_l1: BC-900
+  capability_name: Project Management
+  confidence: 0.7
+  evidence: GET /projects/{project_id}/goal listGoals — List goals; POST createGoal
+  reason: Goals are scoped under a project in a client project-execution platform, i.e. project-level
+    objective tracking within project execution.
