@@ -1,6 +1,6 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Coordinate REST Comments Goals API
+  title: Coordinate REST Goals API
   version: v1
   description: 'The Coordinate REST API lets you add, update, and retrieve the entities that make up Coordinate''s client project-execution platform: projects, project pages, tasks, task groups, stakeholders, goals, progress reports, discussion entries (comments), and organizations. All requests are scoped to the vendor that owns the API key; `vendor_id` is derived from the key and cannot be overridden. A companion webhook API lets external systems subscribe to create/update events. This description is captured by the API Evangelist enrichment pipeline from Coordinate''s published agent-oriented API reference.'
   contact:
@@ -122,30 +122,76 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
+  responses:
+    FileRedirect:
+      description: 302 redirect to a fresh 5-minute S3 presigned URL (in the Location header)
+    ValidationError:
+      description: Validation failure
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Missing or invalid API key
+    NotFound:
+      description: Resource not found (often a plain-text body such as "Project Not Found")
+    FilesDisabled:
+      description: Files are disabled for this vendor
+  parameters:
+    Sort:
+      name: sort
+      in: query
+      required: false
+      description: Sort by last_modified_dt.
+      schema:
+        type: string
+        enum:
+        - asc
+        - desc
+        default: asc
+    FileUid:
+      name: file_uid
+      in: path
+      required: true
+      description: File id. URL-encode a `#` as `%23`.
+      schema:
+        type: string
+    ProjectId:
+      name: project_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    GoalId:
+      name: goal_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    LastModifiedDt:
+      name: last_modified_dt
+      in: query
+      required: false
+      description: ISO 8601. Return only items modified at or after this timestamp. URL-encode `+` as `%2B`.
+      schema:
+        type: string
   schemas:
-    FileRef:
+    CreateGoalRequest:
       type: object
+      required:
+      - goal_title
       properties:
-        file_uid:
+        goal_title:
           type: string
-        file_name:
+        goal_description:
           type: string
-        file_size:
-          type: integer
-        file_content_type:
+        goal_target_date:
           type: string
-        file_dt:
+        goal_sponsor_name:
           type: string
-        download_url:
-          type: string
-          description: Permanent API route; hit with Bearer header, follow the 302.
-    Error:
-      type: object
-      properties:
-        success:
-          type: boolean
-          example: false
-        error:
+        external_object_id:
           type: string
     Goal:
       allOf:
@@ -190,6 +236,22 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/FileRef'
+    FileRef:
+      type: object
+      properties:
+        file_uid:
+          type: string
+        file_name:
+          type: string
+        file_size:
+          type: integer
+        file_content_type:
+          type: string
+        file_dt:
+          type: string
+        download_url:
+          type: string
+          description: Permanent API route; hit with Bearer header, follow the 302.
     EntityBase:
       type: object
       properties:
@@ -206,76 +268,14 @@ components:
           type:
           - string
           - 'null'
-    CreateGoalRequest:
+    Error:
       type: object
-      required:
-      - goal_title
       properties:
-        goal_title:
+        success:
+          type: boolean
+          example: false
+        error:
           type: string
-        goal_description:
-          type: string
-        goal_target_date:
-          type: string
-        goal_sponsor_name:
-          type: string
-        external_object_id:
-          type: string
-  parameters:
-    FileUid:
-      name: file_uid
-      in: path
-      required: true
-      description: File id. URL-encode a `#` as `%23`.
-      schema:
-        type: string
-    GoalId:
-      name: goal_id
-      in: path
-      required: true
-      schema:
-        type: string
-        format: uuid
-    Sort:
-      name: sort
-      in: query
-      required: false
-      description: Sort by last_modified_dt.
-      schema:
-        type: string
-        enum:
-        - asc
-        - desc
-        default: asc
-    ProjectId:
-      name: project_id
-      in: path
-      required: true
-      schema:
-        type: string
-        format: uuid
-    LastModifiedDt:
-      name: last_modified_dt
-      in: query
-      required: false
-      description: ISO 8601. Return only items modified at or after this timestamp. URL-encode `+` as `%2B`.
-      schema:
-        type: string
-  responses:
-    ValidationError:
-      description: Validation failure
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    FileRedirect:
-      description: 302 redirect to a fresh 5-minute S3 presigned URL (in the Location header)
-    Unauthorized:
-      description: Missing or invalid API key
-    FilesDisabled:
-      description: Files are disabled for this vendor
-    NotFound:
-      description: Resource not found (often a plain-text body such as "Project Not Found")
   securitySchemes:
     BearerHeader:
       type: apiKey

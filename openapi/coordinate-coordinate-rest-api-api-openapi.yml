@@ -1,0 +1,143 @@
+openapi: 3.2.0
+info:
+  title: Coordinate REST API
+  version: v1
+  description: 'The Coordinate REST API lets you add, update, and retrieve the entities that make up Coordinate''s client project-execution platform: projects, project pages, tasks, task groups, stakeholders, goals, progress reports, discussion entries (comments), and organizations. All requests are scoped to the vendor that owns the API key; `vendor_id` is derived from the key and cannot be overridden. A companion webhook API lets external systems subscribe to create/update events. This description is captured by the API Evangelist enrichment pipeline from Coordinate''s published agent-oriented API reference.'
+  contact:
+    name: Coordinate Support
+    email: support@coordinatehq.com
+    url: https://www.coordinatehq.com/library/integrating-with-coordinate
+  termsOfService: https://coordinatehq.com/legal/terms-and-conditions
+  x-api-reference: https://app.coordinatehq.com/static/API_Documentation.html
+servers:
+- url: https://app.coordinatehq.com/api/v1
+  description: Production
+security:
+- BearerHeader: []
+tags:
+- name: Coordinate REST API
+paths: {}
+webhooks:
+  projectEvent:
+    post:
+      operationId: onProjectEvent
+      summary: Project created or updated
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebhookEvent'
+      responses:
+        '200':
+          description: Acknowledged
+      tags:
+      - Coordinate REST API
+  taskEvent:
+    post:
+      operationId: onTaskEvent
+      summary: Task created or updated
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebhookEvent'
+      responses:
+        '200':
+          description: Acknowledged
+      tags:
+      - Coordinate REST API
+  groupEvent:
+    post:
+      operationId: onGroupEvent
+      summary: Task group created or updated
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebhookEvent'
+      responses:
+        '200':
+          description: Acknowledged
+      tags:
+      - Coordinate REST API
+  goalEvent:
+    post:
+      operationId: onGoalEvent
+      summary: Goal created or updated
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebhookEvent'
+      responses:
+        '200':
+          description: Acknowledged
+      tags:
+      - Coordinate REST API
+  customerEvent:
+    post:
+      operationId: onCustomerEvent
+      summary: Customer organization created or updated
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebhookEvent'
+      responses:
+        '200':
+          description: Acknowledged
+      tags:
+      - Coordinate REST API
+  commentEvent:
+    post:
+      operationId: onCommentEvent
+      summary: Comment added (DiscussionEntry create only)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebhookEvent'
+      responses:
+        '200':
+          description: Acknowledged
+      tags:
+      - Coordinate REST API
+components:
+  schemas:
+    WebhookEvent:
+      type: object
+      description: Standard webhook payload. For entity_type "Customer" the entity is a customer organization linked to a project, not a project.
+      properties:
+        entity:
+          type: object
+          additionalProperties: true
+          description: Current property values of the entity.
+        entity_type:
+          type: string
+          enum:
+          - Project
+          - Task
+          - Group
+          - Goal
+          - Customer
+          - DiscussionEntry
+        entity_action:
+          type: string
+          enum:
+          - create
+          - update
+        entity_previous_values:
+          type: object
+          additionalProperties: true
+          description: (update only) values before the change.
+        entity_updated_values:
+          type: object
+          additionalProperties:
+            type: boolean
+          description: (update only) per-field boolean flags indicating which fields changed.
+  securitySchemes:
+    BearerHeader:
+      type: apiKey
+      in: header
+      name: Bearer
+      description: 'API key sent in a custom `Bearer:` header (note: this is a header named "Bearer", not the standard `Authorization: Bearer` scheme). Create keys in the Coordinate UI under Settings > Integrations > API Keys. The key scopes all requests to its owning vendor.'

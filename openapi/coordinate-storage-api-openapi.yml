@@ -1,6 +1,6 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Coordinate REST Comments Storage API
+  title: Coordinate REST Storage API
   version: v1
   description: 'The Coordinate REST API lets you add, update, and retrieve the entities that make up Coordinate''s client project-execution platform: projects, project pages, tasks, task groups, stakeholders, goals, progress reports, discussion entries (comments), and organizations. All requests are scoped to the vendor that owns the API key; `vendor_id` is derived from the key and cannot be overridden. A companion webhook API lets external systems subscribe to create/update events. This description is captured by the API Evangelist enrichment pipeline from Coordinate''s published agent-oriented API reference.'
   contact:
@@ -57,10 +57,10 @@ paths:
           $ref: '#/components/responses/PayloadTooLarge'
 components:
   responses:
-    PayloadTooLarge:
-      description: File upload exceeded 100MB (or JSON storage exceeded 300KB)
     Unauthorized:
       description: Missing or invalid API key
+    PayloadTooLarge:
+      description: File upload exceeded 100MB (or JSON storage exceeded 300KB)
   securitySchemes:
     BearerHeader:
       type: apiKey

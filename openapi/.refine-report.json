@@ -1,22 +1,11 @@
 {
   "provider": "coordinate",
   "sources": [
-    "coordinate-comments-api-openapi.yml",
-    "coordinate-entity-api-openapi.yml",
-    "coordinate-goals-api-openapi.yml",
-    "coordinate-groups-api-openapi.yml",
-    "coordinate-organizations-api-openapi.yml",
-    "coordinate-progress-reports-api-openapi.yml",
-    "coordinate-project-pages-api-openapi.yml",
-    "coordinate-projects-api-openapi.yml",
-    "coordinate-stakeholders-api-openapi.yml",
-    "coordinate-storage-api-openapi.yml",
-    "coordinate-tasks-api-openapi.yml",
-    "coordinate-users-api-openapi.yml",
-    "coordinate-webhooks-api-openapi.yml"
+    "_original/coordinate-openapi.yml"
   ],
   "outputs": [
     "coordinate-comments-api-openapi.yml",
+    "coordinate-coordinate-rest-api-api-openapi.yml",
     "coordinate-entity-api-openapi.yml",
     "coordinate-goals-api-openapi.yml",
     "coordinate-groups-api-openapi.yml",
@@ -33,6 +22,30 @@
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
-  "skipped": []
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "coordinate-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "coordinate-openapi.yml: tagged webhooks POST projectEvent -> Coordinate REST API",
+    "coordinate-openapi.yml: tagged webhooks POST taskEvent -> Coordinate REST API",
+    "coordinate-openapi.yml: tagged webhooks POST groupEvent -> Coordinate REST API",
+    "coordinate-openapi.yml: tagged webhooks POST goalEvent -> Coordinate REST API",
+    "coordinate-openapi.yml: tagged webhooks POST customerEvent -> Coordinate REST API",
+    "coordinate-openapi.yml: tagged webhooks POST commentEvent -> Coordinate REST API",
+    "coordinate-openapi.yml: declared missing tag: Coordinate REST API"
+  ],
+  "skipped": [
+    "coordinate-comments-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "coordinate-entity-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "coordinate-goals-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "coordinate-groups-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "coordinate-organizations-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "coordinate-progress-reports-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "coordinate-project-pages-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "coordinate-projects-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "coordinate-stakeholders-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "coordinate-storage-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "coordinate-tasks-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "coordinate-users-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "coordinate-webhooks-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }

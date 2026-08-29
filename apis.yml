@@ -262,6 +262,16 @@ apis:
     url: https://app.coordinatehq.com/static/API_Documentation.html
   - type: Webhooks
     url: asyncapi/coordinate-webhooks.yml
+- aid: coordinate:coordinate-coordinate-rest-api-api
+  name: Coordinate Coordinate REST API
+  description: The Coordinate REST API API from Coordinate — 0 operation(s) for coordinate rest api.
+  humanURL: https://app.coordinatehq.com/static/API_Documentation.html
+  baseURL: https://app.coordinatehq.com/api/v1
+  tags:
+  - Coordinate REST API
+  properties:
+  - type: OpenAPI
+    url: openapi/coordinate-coordinate-rest-api-api-openapi.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
