@@ -2,7 +2,7 @@ openapi: 3.2.0
 info:
   title: Coordinate REST Groups API
   version: v1
-  description: 'The Coordinate REST API lets you add, update, and retrieve the entities that make up Coordinate''s client project-execution platform: projects, project pages, tasks, task groups, stakeholders, goals, progress reports, discussion entries (comments), and organizations. All requests are scoped to the vendor that owns the API key; `vendor_id` is derived from the key and cannot be overridden. A companion webhook API lets external systems subscribe to create/update events. This description is captured by the API Evangelist enrichment pipeline from Coordinate''s published agent-oriented API reference.'
+  description: 'The Coordinate REST API lets you add, update, and retrieve the entities that make up Coordinate''s client project-execution platform: projects, project pages, tasks, task groups, stakeholders, goals, progress reports, discussion entries (comments), and organizations.'
   contact:
     name: Coordinate Support
     email: support@coordinatehq.com
@@ -103,50 +103,6 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 components:
-  parameters:
-    Sort:
-      name: sort
-      in: query
-      required: false
-      description: Sort by last_modified_dt.
-      schema:
-        type: string
-        enum:
-        - asc
-        - desc
-        default: asc
-    GroupId:
-      name: group_id
-      in: path
-      required: true
-      schema:
-        type: string
-        format: uuid
-    ProjectId:
-      name: project_id
-      in: path
-      required: true
-      schema:
-        type: string
-        format: uuid
-    LastModifiedDt:
-      name: last_modified_dt
-      in: query
-      required: false
-      description: ISO 8601. Return only items modified at or after this timestamp. URL-encode `+` as `%2B`.
-      schema:
-        type: string
-  responses:
-    ValidationError:
-      description: Validation failure
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Missing or invalid API key
-    NotFound:
-      description: Resource not found (often a plain-text body such as "Project Not Found")
   schemas:
     CreateGroupRequest:
       type: object
@@ -175,6 +131,14 @@ components:
           type:
           - string
           - 'null'
+    Error:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: string
     Group:
       allOf:
       - $ref: '#/components/schemas/EntityBase'
@@ -198,14 +162,50 @@ components:
             format: uuid
           project_name:
             type: string
-    Error:
-      type: object
-      properties:
-        success:
-          type: boolean
-          example: false
-        error:
-          type: string
+  parameters:
+    LastModifiedDt:
+      name: last_modified_dt
+      in: query
+      required: false
+      description: ISO 8601. Return only items modified at or after this timestamp. URL-encode `+` as `%2B`.
+      schema:
+        type: string
+    Sort:
+      name: sort
+      in: query
+      required: false
+      description: Sort by last_modified_dt.
+      schema:
+        type: string
+        enum:
+        - asc
+        - desc
+        default: asc
+    ProjectId:
+      name: project_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    GroupId:
+      name: group_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+  responses:
+    Unauthorized:
+      description: Missing or invalid API key
+    NotFound:
+      description: Resource not found (often a plain-text body such as "Project Not Found")
+    ValidationError:
+      description: Validation failure
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   securitySchemes:
     BearerHeader:
       type: apiKey

@@ -2,7 +2,7 @@ openapi: 3.2.0
 info:
   title: Coordinate REST Tasks API
   version: v1
-  description: 'The Coordinate REST API lets you add, update, and retrieve the entities that make up Coordinate''s client project-execution platform: projects, project pages, tasks, task groups, stakeholders, goals, progress reports, discussion entries (comments), and organizations. All requests are scoped to the vendor that owns the API key; `vendor_id` is derived from the key and cannot be overridden. A companion webhook API lets external systems subscribe to create/update events. This description is captured by the API Evangelist enrichment pipeline from Coordinate''s published agent-oriented API reference.'
+  description: 'The Coordinate REST API lets you add, update, and retrieve the entities that make up Coordinate''s client project-execution platform: projects, project pages, tasks, task groups, stakeholders, goals, progress reports, discussion entries (comments), and organizations.'
   contact:
     name: Coordinate Support
     email: support@coordinatehq.com
@@ -168,84 +168,6 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   schemas:
-    FileAttachRequest:
-      type: object
-      properties:
-        File:
-          type: array
-          items:
-            type: string
-            format: binary
-          description: One or more file parts named exactly "File".
-    Error:
-      type: object
-      properties:
-        success:
-          type: boolean
-          example: false
-        error:
-          type: string
-    EntityBase:
-      type: object
-      properties:
-        entity_type:
-          type: string
-        entity_url:
-          type: string
-        last_modified_dt:
-          type: string
-        vendor_id:
-          type: string
-          format: uuid
-        external_object_id:
-          type:
-          - string
-          - 'null'
-    CreateTaskRequest:
-      type: object
-      required:
-      - task_title
-      properties:
-        task_title:
-          type: string
-        task_description:
-          type: string
-          description: HTML
-        task_due_date:
-          type: string
-          description: YYYY-MM-DD
-        task_status_current:
-          type: string
-          enum:
-          - not_complete
-          - information
-          - in_progress
-          - dependency_wait
-          - blocked
-          - complete
-        task_internal:
-          type: boolean
-          default: false
-        task_tags:
-          type: array
-          items:
-            type: string
-        external_object_id:
-          type: string
-        group_title:
-          type: string
-          description: If it matches an existing group title
-          the task is placed in that group.: null
-        insert_top_of_group:
-          type: boolean
-          default: false
-        task_assignment_json:
-          type: string
-          description: Email of an existing user/stakeholder on the project.
-    UpdateTaskRequest:
-      type: object
-      description: Any subset of task_* keys. task_assignment_json on update is a plain email string.
-      additionalProperties: true
     Task:
       allOf:
       - $ref: '#/components/schemas/EntityBase'
@@ -335,6 +257,35 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/FileRef'
+    FileAttachRequest:
+      type: object
+      properties:
+        File:
+          type: array
+          items:
+            type: string
+            format: binary
+          description: One or more file parts named exactly "File".
+    EntityBase:
+      type: object
+      properties:
+        entity_type:
+          type: string
+        entity_url:
+          type: string
+        last_modified_dt:
+          type: string
+        vendor_id:
+          type: string
+          format: uuid
+        external_object_id:
+          type:
+          - string
+          - 'null'
+    UpdateTaskRequest:
+      type: object
+      description: Any subset of task_* keys. task_assignment_json on update is a plain email string.
+      additionalProperties: true
     FileRef:
       type: object
       properties:
@@ -351,52 +302,56 @@ components:
         download_url:
           type: string
           description: Permanent API route; hit with Bearer header, follow the 302.
-  responses:
-    PayloadTooLarge:
-      description: File upload exceeded 100MB (or JSON storage exceeded 300KB)
-    Unauthorized:
-      description: Missing or invalid API key
-    ValidationError:
-      description: Validation failure
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    FileRedirect:
-      description: 302 redirect to a fresh 5-minute S3 presigned URL (in the Location header)
-    FilesDisabled:
-      description: Files are disabled for this vendor
-    NotFound:
-      description: Resource not found (often a plain-text body such as "Project Not Found")
+    Error:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: string
+    CreateTaskRequest:
+      type: object
+      required:
+      - task_title
+      properties:
+        task_title:
+          type: string
+        task_description:
+          type: string
+          description: HTML
+        task_due_date:
+          type: string
+          description: YYYY-MM-DD
+        task_status_current:
+          type: string
+          enum:
+          - not_complete
+          - information
+          - in_progress
+          - dependency_wait
+          - blocked
+          - complete
+        task_internal:
+          type: boolean
+          default: false
+        task_tags:
+          type: array
+          items:
+            type: string
+        external_object_id:
+          type: string
+        group_title:
+          type: string
+          description: If it matches an existing group title
+          the task is placed in that group.: null
+        insert_top_of_group:
+          type: boolean
+          default: false
+        task_assignment_json:
+          type: string
+          description: Email of an existing user/stakeholder on the project.
   parameters:
-    ProjectId:
-      name: project_id
-      in: path
-      required: true
-      schema:
-        type: string
-        format: uuid
-    TaskId:
-      name: task_id
-      in: path
-      required: true
-      schema:
-        type: string
-        format: uuid
-    FileUid:
-      name: file_uid
-      in: path
-      required: true
-      description: File id. URL-encode a `#` as `%23`.
-      schema:
-        type: string
-    LastModifiedDt:
-      name: last_modified_dt
-      in: query
-      required: false
-      description: ISO 8601. Return only items modified at or after this timestamp. URL-encode `+` as `%2B`.
-      schema:
-        type: string
     Sort:
       name: sort
       in: query
@@ -408,12 +363,57 @@ components:
         - asc
         - desc
         default: asc
+    FileUid:
+      name: file_uid
+      in: path
+      required: true
+      description: File id. URL-encode a `#` as `%23`.
+      schema:
+        type: string
+    ProjectId:
+      name: project_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
     ExternalObjectId:
       name: external_object_id
       in: path
       required: true
       schema:
         type: string
+    TaskId:
+      name: task_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    LastModifiedDt:
+      name: last_modified_dt
+      in: query
+      required: false
+      description: ISO 8601. Return only items modified at or after this timestamp. URL-encode `+` as `%2B`.
+      schema:
+        type: string
+  responses:
+    Unauthorized:
+      description: Missing or invalid API key
+    PayloadTooLarge:
+      description: File upload exceeded 100MB (or JSON storage exceeded 300KB)
+    NotFound:
+      description: Resource not found (often a plain-text body such as "Project Not Found")
+    FilesDisabled:
+      description: Files are disabled for this vendor
+    FileRedirect:
+      description: 302 redirect to a fresh 5-minute S3 presigned URL (in the Location header)
+    ValidationError:
+      description: Validation failure
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   securitySchemes:
     BearerHeader:
       type: apiKey

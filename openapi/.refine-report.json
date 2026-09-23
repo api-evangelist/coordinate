@@ -31,10 +31,12 @@
     "coordinate-openapi.yml: tagged webhooks POST goalEvent -> Coordinate REST API",
     "coordinate-openapi.yml: tagged webhooks POST customerEvent -> Coordinate REST API",
     "coordinate-openapi.yml: tagged webhooks POST commentEvent -> Coordinate REST API",
-    "coordinate-openapi.yml: declared missing tag: Coordinate REST API"
+    "coordinate-openapi.yml: declared missing tag: Coordinate REST API",
+    "apis.yml register: already-registered"
   ],
   "skipped": [
     "coordinate-comments-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "coordinate-coordinate-rest-api-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "coordinate-entity-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "coordinate-goals-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "coordinate-groups-api-openapi.yml: previously refined output, superseded by openapi/_original/",

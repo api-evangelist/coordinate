@@ -2,7 +2,7 @@ openapi: 3.2.0
 info:
   title: Coordinate REST Project Pages API
   version: v1
-  description: 'The Coordinate REST API lets you add, update, and retrieve the entities that make up Coordinate''s client project-execution platform: projects, project pages, tasks, task groups, stakeholders, goals, progress reports, discussion entries (comments), and organizations. All requests are scoped to the vendor that owns the API key; `vendor_id` is derived from the key and cannot be overridden. A companion webhook API lets external systems subscribe to create/update events. This description is captured by the API Evangelist enrichment pipeline from Coordinate''s published agent-oriented API reference.'
+  description: 'The Coordinate REST API lets you add, update, and retrieve the entities that make up Coordinate''s client project-execution platform: projects, project pages, tasks, task groups, stakeholders, goals, progress reports, discussion entries (comments), and organizations.'
   contact:
     name: Coordinate Support
     email: support@coordinatehq.com
@@ -101,13 +101,6 @@ components:
           type: boolean
           default: false
   parameters:
-    PageName:
-      name: page_name
-      in: path
-      required: true
-      description: URL-encode spaces (e.g. Page%20Name).
-      schema:
-        type: string
     ProjectId:
       name: project_id
       in: path
@@ -115,6 +108,13 @@ components:
       schema:
         type: string
         format: uuid
+    PageName:
+      name: page_name
+      in: path
+      required: true
+      description: URL-encode spaces (e.g. Page%20Name).
+      schema:
+        type: string
   responses:
     Unauthorized:
       description: Missing or invalid API key

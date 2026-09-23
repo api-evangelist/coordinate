@@ -2,7 +2,7 @@ openapi: 3.2.0
 info:
   title: Coordinate REST Progress Reports API
   version: v1
-  description: 'The Coordinate REST API lets you add, update, and retrieve the entities that make up Coordinate''s client project-execution platform: projects, project pages, tasks, task groups, stakeholders, goals, progress reports, discussion entries (comments), and organizations. All requests are scoped to the vendor that owns the API key; `vendor_id` is derived from the key and cannot be overridden. A companion webhook API lets external systems subscribe to create/update events. This description is captured by the API Evangelist enrichment pipeline from Coordinate''s published agent-oriented API reference.'
+  description: 'The Coordinate REST API lets you add, update, and retrieve the entities that make up Coordinate''s client project-execution platform: projects, project pages, tasks, task groups, stakeholders, goals, progress reports, discussion entries (comments), and organizations.'
   contact:
     name: Coordinate Support
     email: support@coordinatehq.com
@@ -62,26 +62,8 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   parameters:
-    Sort:
-      name: sort
-      in: query
-      required: false
-      description: Sort by last_modified_dt.
-      schema:
-        type: string
-        enum:
-        - asc
-        - desc
-        default: asc
     ProgressReportId:
       name: progress_report_id
-      in: path
-      required: true
-      schema:
-        type: string
-        format: uuid
-    ProjectId:
-      name: project_id
       in: path
       required: true
       schema:
@@ -94,7 +76,41 @@ components:
       description: ISO 8601. Return only items modified at or after this timestamp. URL-encode `+` as `%2B`.
       schema:
         type: string
+    Sort:
+      name: sort
+      in: query
+      required: false
+      description: Sort by last_modified_dt.
+      schema:
+        type: string
+        enum:
+        - asc
+        - desc
+        default: asc
+    ProjectId:
+      name: project_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
   schemas:
+    EntityBase:
+      type: object
+      properties:
+        entity_type:
+          type: string
+        entity_url:
+          type: string
+        last_modified_dt:
+          type: string
+        vendor_id:
+          type: string
+          format: uuid
+        external_object_id:
+          type:
+          - string
+          - 'null'
     ProgressReport:
       allOf:
       - $ref: '#/components/schemas/EntityBase'
@@ -133,22 +149,6 @@ components:
           project_id:
             type: string
             format: uuid
-    EntityBase:
-      type: object
-      properties:
-        entity_type:
-          type: string
-        entity_url:
-          type: string
-        last_modified_dt:
-          type: string
-        vendor_id:
-          type: string
-          format: uuid
-        external_object_id:
-          type:
-          - string
-          - 'null'
   responses:
     Unauthorized:
       description: Missing or invalid API key

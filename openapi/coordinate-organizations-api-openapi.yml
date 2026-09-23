@@ -2,7 +2,7 @@ openapi: 3.2.0
 info:
   title: Coordinate REST Organizations API
   version: v1
-  description: 'The Coordinate REST API lets you add, update, and retrieve the entities that make up Coordinate''s client project-execution platform: projects, project pages, tasks, task groups, stakeholders, goals, progress reports, discussion entries (comments), and organizations. All requests are scoped to the vendor that owns the API key; `vendor_id` is derived from the key and cannot be overridden. A companion webhook API lets external systems subscribe to create/update events. This description is captured by the API Evangelist enrichment pipeline from Coordinate''s published agent-oriented API reference.'
+  description: 'The Coordinate REST API lets you add, update, and retrieve the entities that make up Coordinate''s client project-execution platform: projects, project pages, tasks, task groups, stakeholders, goals, progress reports, discussion entries (comments), and organizations.'
   contact:
     name: Coordinate Support
     email: support@coordinatehq.com
@@ -185,21 +185,6 @@ paths:
           $ref: '#/components/responses/Unauthorized'
 components:
   schemas:
-    SuccessResponse:
-      type: object
-      properties:
-        success:
-          type: boolean
-          example: true
-    CreateOrganizationRequest:
-      type: object
-      required:
-      - organization_name
-      properties:
-        organization_name:
-          type: string
-        external_object_id:
-          type: string
     LinkProjectRequest:
       type: object
       required:
@@ -208,6 +193,114 @@ components:
         project_id:
           type: string
           format: uuid
+    EntityBase:
+      type: object
+      properties:
+        entity_type:
+          type: string
+        entity_url:
+          type: string
+        last_modified_dt:
+          type: string
+        vendor_id:
+          type: string
+          format: uuid
+        external_object_id:
+          type:
+          - string
+          - 'null'
+    Error:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: string
+    AddOrgStakeholderRequest:
+      type: object
+      required:
+      - stakeholder_email_address
+      properties:
+        stakeholder_email_address:
+          type: string
+        stakeholder_full_name:
+          type: string
+        stakeholder_title:
+          type: string
+        stakeholder_phone:
+          type: string
+    Stakeholder:
+      allOf:
+      - $ref: '#/components/schemas/EntityBase'
+      - type: object
+        properties:
+          stakeholder_id:
+            type: string
+            format: uuid
+          stakeholder_email_address:
+            type: string
+          stakeholder_full_name:
+            type:
+            - string
+            - 'null'
+          stakeholder_title:
+            type:
+            - string
+            - 'null'
+          stakeholder_phone:
+            type:
+            - string
+            - 'null'
+          stakeholder_project_id:
+            type:
+            - string
+            - 'null'
+            format: uuid
+          stakeholder_related_org_id:
+            type:
+            - string
+            - 'null'
+          stakeholder_roles:
+            type: array
+            items:
+              type: string
+    FileRef:
+      type: object
+      properties:
+        file_uid:
+          type: string
+        file_name:
+          type: string
+        file_size:
+          type: integer
+        file_content_type:
+          type: string
+        file_dt:
+          type: string
+        download_url:
+          type: string
+          description: Permanent API route; hit with Bearer header, follow the 302.
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+    Organization:
+      allOf:
+      - $ref: '#/components/schemas/EntityBase'
+      - type: object
+        properties:
+          organization_id:
+            type: string
+            format: uuid
+          organization_name:
+            type: string
+          organization_description:
+            type:
+            - string
+            - 'null'
     Project:
       allOf:
       - $ref: '#/components/schemas/EntityBase'
@@ -267,116 +360,16 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/FileRef'
-    Organization:
-      allOf:
-      - $ref: '#/components/schemas/EntityBase'
-      - type: object
-        properties:
-          organization_id:
-            type: string
-            format: uuid
-          organization_name:
-            type: string
-          organization_description:
-            type:
-            - string
-            - 'null'
-    Stakeholder:
-      allOf:
-      - $ref: '#/components/schemas/EntityBase'
-      - type: object
-        properties:
-          stakeholder_id:
-            type: string
-            format: uuid
-          stakeholder_email_address:
-            type: string
-          stakeholder_full_name:
-            type:
-            - string
-            - 'null'
-          stakeholder_title:
-            type:
-            - string
-            - 'null'
-          stakeholder_phone:
-            type:
-            - string
-            - 'null'
-          stakeholder_project_id:
-            type:
-            - string
-            - 'null'
-            format: uuid
-          stakeholder_related_org_id:
-            type:
-            - string
-            - 'null'
-          stakeholder_roles:
-            type: array
-            items:
-              type: string
-    AddOrgStakeholderRequest:
+    CreateOrganizationRequest:
       type: object
       required:
-      - stakeholder_email_address
+      - organization_name
       properties:
-        stakeholder_email_address:
+        organization_name:
           type: string
-        stakeholder_full_name:
-          type: string
-        stakeholder_title:
-          type: string
-        stakeholder_phone:
-          type: string
-    FileRef:
-      type: object
-      properties:
-        file_uid:
-          type: string
-        file_name:
-          type: string
-        file_size:
-          type: integer
-        file_content_type:
-          type: string
-        file_dt:
-          type: string
-        download_url:
-          type: string
-          description: Permanent API route; hit with Bearer header, follow the 302.
-    EntityBase:
-      type: object
-      properties:
-        entity_type:
-          type: string
-        entity_url:
-          type: string
-        last_modified_dt:
-          type: string
-        vendor_id:
-          type: string
-          format: uuid
         external_object_id:
-          type:
-          - string
-          - 'null'
-    Error:
-      type: object
-      properties:
-        success:
-          type: boolean
-          example: false
-        error:
           type: string
   parameters:
-    StakeholderId:
-      name: stakeholder_id
-      in: path
-      required: true
-      schema:
-        type: string
-        format: uuid
     OrgId:
       name: org_id
       in: path
@@ -386,6 +379,13 @@ components:
         format: uuid
     ProjectId:
       name: project_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    StakeholderId:
+      name: stakeholder_id
       in: path
       required: true
       schema:
