@@ -167,7 +167,106 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
+  responses:
+    FilesDisabled:
+      description: Files are disabled for this vendor
+    Unauthorized:
+      description: Missing or invalid API key
+    ValidationError:
+      description: Validation failure
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    FileRedirect:
+      description: 302 redirect to a fresh 5-minute S3 presigned URL (in the Location header)
+    PayloadTooLarge:
+      description: File upload exceeded 100MB (or JSON storage exceeded 300KB)
+    NotFound:
+      description: Resource not found (often a plain-text body such as "Project Not Found")
   schemas:
+    FileAttachRequest:
+      type: object
+      properties:
+        File:
+          type: array
+          items:
+            type: string
+            format: binary
+          description: One or more file parts named exactly "File".
+    CreateTaskRequest:
+      type: object
+      required:
+      - task_title
+      properties:
+        task_title:
+          type: string
+        task_description:
+          type: string
+          description: HTML
+        task_due_date:
+          type: string
+          description: YYYY-MM-DD
+        task_status_current:
+          type: string
+          enum:
+          - not_complete
+          - information
+          - in_progress
+          - dependency_wait
+          - blocked
+          - complete
+        task_internal:
+          type: boolean
+          default: false
+        task_tags:
+          type: array
+          items:
+            type: string
+        external_object_id:
+          type: string
+        group_title:
+          type: string
+          description: If it matches an existing group title
+          the task is placed in that group.: null
+        insert_top_of_group:
+          type: boolean
+          default: false
+        task_assignment_json:
+          type: string
+          description: Email of an existing user/stakeholder on the project.
+    FileRef:
+      type: object
+      properties:
+        file_uid:
+          type: string
+        file_name:
+          type: string
+        file_size:
+          type: integer
+        file_content_type:
+          type: string
+        file_dt:
+          type: string
+        download_url:
+          type: string
+          description: Permanent API route; hit with Bearer header, follow the 302.
+    EntityBase:
+      type: object
+      properties:
+        entity_type:
+          type: string
+        entity_url:
+          type: string
+        last_modified_dt:
+          type: string
+        vendor_id:
+          type: string
+          format: uuid
+        external_object_id:
+          type:
+          - string
+          - 'null'
     Task:
       allOf:
       - $ref: '#/components/schemas/EntityBase'
@@ -257,51 +356,10 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/FileRef'
-    FileAttachRequest:
-      type: object
-      properties:
-        File:
-          type: array
-          items:
-            type: string
-            format: binary
-          description: One or more file parts named exactly "File".
-    EntityBase:
-      type: object
-      properties:
-        entity_type:
-          type: string
-        entity_url:
-          type: string
-        last_modified_dt:
-          type: string
-        vendor_id:
-          type: string
-          format: uuid
-        external_object_id:
-          type:
-          - string
-          - 'null'
     UpdateTaskRequest:
       type: object
       description: Any subset of task_* keys. task_assignment_json on update is a plain email string.
       additionalProperties: true
-    FileRef:
-      type: object
-      properties:
-        file_uid:
-          type: string
-        file_name:
-          type: string
-        file_size:
-          type: integer
-        file_content_type:
-          type: string
-        file_dt:
-          type: string
-        download_url:
-          type: string
-          description: Permanent API route; hit with Bearer header, follow the 302.
     Error:
       type: object
       properties:
@@ -310,59 +368,14 @@ components:
           example: false
         error:
           type: string
-    CreateTaskRequest:
-      type: object
-      required:
-      - task_title
-      properties:
-        task_title:
-          type: string
-        task_description:
-          type: string
-          description: HTML
-        task_due_date:
-          type: string
-          description: YYYY-MM-DD
-        task_status_current:
-          type: string
-          enum:
-          - not_complete
-          - information
-          - in_progress
-          - dependency_wait
-          - blocked
-          - complete
-        task_internal:
-          type: boolean
-          default: false
-        task_tags:
-          type: array
-          items:
-            type: string
-        external_object_id:
-          type: string
-        group_title:
-          type: string
-          description: If it matches an existing group title
-          the task is placed in that group.: null
-        insert_top_of_group:
-          type: boolean
-          default: false
-        task_assignment_json:
-          type: string
-          description: Email of an existing user/stakeholder on the project.
   parameters:
-    Sort:
-      name: sort
+    LastModifiedDt:
+      name: last_modified_dt
       in: query
       required: false
-      description: Sort by last_modified_dt.
+      description: ISO 8601. Return only items modified at or after this timestamp. URL-encode `+` as `%2B`.
       schema:
         type: string
-        enum:
-        - asc
-        - desc
-        default: asc
     FileUid:
       name: file_uid
       in: path
@@ -370,13 +383,6 @@ components:
       description: File id. URL-encode a `#` as `%23`.
       schema:
         type: string
-    ProjectId:
-      name: project_id
-      in: path
-      required: true
-      schema:
-        type: string
-        format: uuid
     ExternalObjectId:
       name: external_object_id
       in: path
@@ -390,30 +396,24 @@ components:
       schema:
         type: string
         format: uuid
-    LastModifiedDt:
-      name: last_modified_dt
+    Sort:
+      name: sort
       in: query
       required: false
-      description: ISO 8601. Return only items modified at or after this timestamp. URL-encode `+` as `%2B`.
+      description: Sort by last_modified_dt.
       schema:
         type: string
-  responses:
-    Unauthorized:
-      description: Missing or invalid API key
-    PayloadTooLarge:
-      description: File upload exceeded 100MB (or JSON storage exceeded 300KB)
-    NotFound:
-      description: Resource not found (often a plain-text body such as "Project Not Found")
-    FilesDisabled:
-      description: Files are disabled for this vendor
-    FileRedirect:
-      description: 302 redirect to a fresh 5-minute S3 presigned URL (in the Location header)
-    ValidationError:
-      description: Validation failure
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
+        enum:
+        - asc
+        - desc
+        default: asc
+    ProjectId:
+      name: project_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
   securitySchemes:
     BearerHeader:
       type: apiKey

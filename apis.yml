@@ -51,7 +51,7 @@ tags:
 - Client Portal
 - Client Onboarding
 - Professional Services
-- Workflow-Automation
+- Workflow Automation
 - Collaboration
 - Webhook
 tags_raw:
@@ -64,6 +64,7 @@ tags_raw:
 - Workflow Automation
 - Collaboration
 - Webhooks
+- Workflow-Automation
 apis:
 - aid: coordinate:coordinate-comments-api
   name: Coordinate Comments API

@@ -100,14 +100,12 @@ components:
         page_private:
           type: boolean
           default: false
+  responses:
+    NotFound:
+      description: Resource not found (often a plain-text body such as "Project Not Found")
+    Unauthorized:
+      description: Missing or invalid API key
   parameters:
-    ProjectId:
-      name: project_id
-      in: path
-      required: true
-      schema:
-        type: string
-        format: uuid
     PageName:
       name: page_name
       in: path
@@ -115,11 +113,13 @@ components:
       description: URL-encode spaces (e.g. Page%20Name).
       schema:
         type: string
-  responses:
-    Unauthorized:
-      description: Missing or invalid API key
-    NotFound:
-      description: Resource not found (often a plain-text body such as "Project Not Found")
+    ProjectId:
+      name: project_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
   securitySchemes:
     BearerHeader:
       type: apiKey

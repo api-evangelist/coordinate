@@ -193,43 +193,6 @@ components:
         project_id:
           type: string
           format: uuid
-    EntityBase:
-      type: object
-      properties:
-        entity_type:
-          type: string
-        entity_url:
-          type: string
-        last_modified_dt:
-          type: string
-        vendor_id:
-          type: string
-          format: uuid
-        external_object_id:
-          type:
-          - string
-          - 'null'
-    Error:
-      type: object
-      properties:
-        success:
-          type: boolean
-          example: false
-        error:
-          type: string
-    AddOrgStakeholderRequest:
-      type: object
-      required:
-      - stakeholder_email_address
-      properties:
-        stakeholder_email_address:
-          type: string
-        stakeholder_full_name:
-          type: string
-        stakeholder_title:
-          type: string
-        stakeholder_phone:
-          type: string
     Stakeholder:
       allOf:
       - $ref: '#/components/schemas/EntityBase'
@@ -281,26 +244,6 @@ components:
         download_url:
           type: string
           description: Permanent API route; hit with Bearer header, follow the 302.
-    SuccessResponse:
-      type: object
-      properties:
-        success:
-          type: boolean
-          example: true
-    Organization:
-      allOf:
-      - $ref: '#/components/schemas/EntityBase'
-      - type: object
-        properties:
-          organization_id:
-            type: string
-            format: uuid
-          organization_name:
-            type: string
-          organization_description:
-            type:
-            - string
-            - 'null'
     Project:
       allOf:
       - $ref: '#/components/schemas/EntityBase'
@@ -360,6 +303,22 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/FileRef'
+    EntityBase:
+      type: object
+      properties:
+        entity_type:
+          type: string
+        entity_url:
+          type: string
+        last_modified_dt:
+          type: string
+        vendor_id:
+          type: string
+          format: uuid
+        external_object_id:
+          type:
+          - string
+          - 'null'
     CreateOrganizationRequest:
       type: object
       required:
@@ -369,14 +328,59 @@ components:
           type: string
         external_object_id:
           type: string
+    Organization:
+      allOf:
+      - $ref: '#/components/schemas/EntityBase'
+      - type: object
+        properties:
+          organization_id:
+            type: string
+            format: uuid
+          organization_name:
+            type: string
+          organization_description:
+            type:
+            - string
+            - 'null'
+    AddOrgStakeholderRequest:
+      type: object
+      required:
+      - stakeholder_email_address
+      properties:
+        stakeholder_email_address:
+          type: string
+        stakeholder_full_name:
+          type: string
+        stakeholder_title:
+          type: string
+        stakeholder_phone:
+          type: string
+    Error:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: string
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+  responses:
+    NotFound:
+      description: Resource not found (often a plain-text body such as "Project Not Found")
+    Unauthorized:
+      description: Missing or invalid API key
+    ValidationError:
+      description: Validation failure
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   parameters:
-    OrgId:
-      name: org_id
-      in: path
-      required: true
-      schema:
-        type: string
-        format: uuid
     ProjectId:
       name: project_id
       in: path
@@ -391,17 +395,13 @@ components:
       schema:
         type: string
         format: uuid
-  responses:
-    Unauthorized:
-      description: Missing or invalid API key
-    NotFound:
-      description: Resource not found (often a plain-text body such as "Project Not Found")
-    ValidationError:
-      description: Validation failure
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
+    OrgId:
+      name: org_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
   securitySchemes:
     BearerHeader:
       type: apiKey

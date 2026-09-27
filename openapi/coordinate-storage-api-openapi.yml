@@ -57,10 +57,10 @@ paths:
           $ref: '#/components/responses/PayloadTooLarge'
 components:
   responses:
-    PayloadTooLarge:
-      description: File upload exceeded 100MB (or JSON storage exceeded 300KB)
     Unauthorized:
       description: Missing or invalid API key
+    PayloadTooLarge:
+      description: File upload exceeded 100MB (or JSON storage exceeded 300KB)
   securitySchemes:
     BearerHeader:
       type: apiKey
