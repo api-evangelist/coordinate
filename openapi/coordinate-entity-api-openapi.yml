@@ -77,6 +77,9 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 components:
+  responses:
+    Unauthorized:
+      description: Missing or invalid API key
   parameters:
     Sort:
       name: sort
@@ -89,9 +92,6 @@ components:
         - asc
         - desc
         default: asc
-  responses:
-    Unauthorized:
-      description: Missing or invalid API key
   securitySchemes:
     BearerHeader:
       type: apiKey

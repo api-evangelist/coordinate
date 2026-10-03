@@ -79,16 +79,6 @@ paths:
           $ref: '#/components/responses/Unauthorized'
 components:
   schemas:
-    Page:
-      type: object
-      properties:
-        page_name:
-          type: string
-        page_private:
-          type: boolean
-        page_content:
-          type: string
-          description: HTML
     UpsertPageRequest:
       type: object
       required:
@@ -100,19 +90,17 @@ components:
         page_private:
           type: boolean
           default: false
-  responses:
-    NotFound:
-      description: Resource not found (often a plain-text body such as "Project Not Found")
-    Unauthorized:
-      description: Missing or invalid API key
+    Page:
+      type: object
+      properties:
+        page_name:
+          type: string
+        page_private:
+          type: boolean
+        page_content:
+          type: string
+          description: HTML
   parameters:
-    PageName:
-      name: page_name
-      in: path
-      required: true
-      description: URL-encode spaces (e.g. Page%20Name).
-      schema:
-        type: string
     ProjectId:
       name: project_id
       in: path
@@ -120,6 +108,18 @@ components:
       schema:
         type: string
         format: uuid
+    PageName:
+      name: page_name
+      in: path
+      required: true
+      description: URL-encode spaces (e.g. Page%20Name).
+      schema:
+        type: string
+  responses:
+    NotFound:
+      description: Resource not found (often a plain-text body such as "Project Not Found")
+    Unauthorized:
+      description: Missing or invalid API key
   securitySchemes:
     BearerHeader:
       type: apiKey

@@ -61,44 +61,6 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
-  parameters:
-    Sort:
-      name: sort
-      in: query
-      required: false
-      description: Sort by last_modified_dt.
-      schema:
-        type: string
-        enum:
-        - asc
-        - desc
-        default: asc
-    ProgressReportId:
-      name: progress_report_id
-      in: path
-      required: true
-      schema:
-        type: string
-        format: uuid
-    ProjectId:
-      name: project_id
-      in: path
-      required: true
-      schema:
-        type: string
-        format: uuid
-    LastModifiedDt:
-      name: last_modified_dt
-      in: query
-      required: false
-      description: ISO 8601. Return only items modified at or after this timestamp. URL-encode `+` as `%2B`.
-      schema:
-        type: string
-  responses:
-    NotFound:
-      description: Resource not found (often a plain-text body such as "Project Not Found")
-    Unauthorized:
-      description: Missing or invalid API key
   schemas:
     EntityBase:
       type: object
@@ -154,6 +116,44 @@ components:
           project_id:
             type: string
             format: uuid
+  parameters:
+    ProjectId:
+      name: project_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    LastModifiedDt:
+      name: last_modified_dt
+      in: query
+      required: false
+      description: ISO 8601. Return only items modified at or after this timestamp. URL-encode `+` as `%2B`.
+      schema:
+        type: string
+    ProgressReportId:
+      name: progress_report_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    Sort:
+      name: sort
+      in: query
+      required: false
+      description: Sort by last_modified_dt.
+      schema:
+        type: string
+        enum:
+        - asc
+        - desc
+        default: asc
+  responses:
+    NotFound:
+      description: Resource not found (often a plain-text body such as "Project Not Found")
+    Unauthorized:
+      description: Missing or invalid API key
   securitySchemes:
     BearerHeader:
       type: apiKey

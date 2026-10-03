@@ -185,14 +185,44 @@ paths:
           $ref: '#/components/responses/Unauthorized'
 components:
   schemas:
-    LinkProjectRequest:
+    Organization:
+      allOf:
+      - $ref: '#/components/schemas/EntityBase'
+      - type: object
+        properties:
+          organization_id:
+            type: string
+            format: uuid
+          organization_name:
+            type: string
+          organization_description:
+            type:
+            - string
+            - 'null'
+    EntityBase:
       type: object
-      required:
-      - project_id
       properties:
-        project_id:
+        entity_type:
+          type: string
+        entity_url:
+          type: string
+        last_modified_dt:
+          type: string
+        vendor_id:
           type: string
           format: uuid
+        external_object_id:
+          type:
+          - string
+          - 'null'
+    Error:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: string
     Stakeholder:
       allOf:
       - $ref: '#/components/schemas/EntityBase'
@@ -228,6 +258,12 @@ components:
             type: array
             items:
               type: string
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
     FileRef:
       type: object
       properties:
@@ -244,6 +280,14 @@ components:
         download_url:
           type: string
           description: Permanent API route; hit with Bearer header, follow the 302.
+    LinkProjectRequest:
+      type: object
+      required:
+      - project_id
+      properties:
+        project_id:
+          type: string
+          format: uuid
     Project:
       allOf:
       - $ref: '#/components/schemas/EntityBase'
@@ -303,22 +347,6 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/FileRef'
-    EntityBase:
-      type: object
-      properties:
-        entity_type:
-          type: string
-        entity_url:
-          type: string
-        last_modified_dt:
-          type: string
-        vendor_id:
-          type: string
-          format: uuid
-        external_object_id:
-          type:
-          - string
-          - 'null'
     CreateOrganizationRequest:
       type: object
       required:
@@ -328,20 +356,6 @@ components:
           type: string
         external_object_id:
           type: string
-    Organization:
-      allOf:
-      - $ref: '#/components/schemas/EntityBase'
-      - type: object
-        properties:
-          organization_id:
-            type: string
-            format: uuid
-          organization_name:
-            type: string
-          organization_description:
-            type:
-            - string
-            - 'null'
     AddOrgStakeholderRequest:
       type: object
       required:
@@ -355,31 +369,6 @@ components:
           type: string
         stakeholder_phone:
           type: string
-    Error:
-      type: object
-      properties:
-        success:
-          type: boolean
-          example: false
-        error:
-          type: string
-    SuccessResponse:
-      type: object
-      properties:
-        success:
-          type: boolean
-          example: true
-  responses:
-    NotFound:
-      description: Resource not found (often a plain-text body such as "Project Not Found")
-    Unauthorized:
-      description: Missing or invalid API key
-    ValidationError:
-      description: Validation failure
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   parameters:
     ProjectId:
       name: project_id
@@ -402,6 +391,17 @@ components:
       schema:
         type: string
         format: uuid
+  responses:
+    NotFound:
+      description: Resource not found (often a plain-text body such as "Project Not Found")
+    Unauthorized:
+      description: Missing or invalid API key
+    ValidationError:
+      description: Validation failure
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   securitySchemes:
     BearerHeader:
       type: apiKey

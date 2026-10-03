@@ -103,51 +103,30 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 components:
-  parameters:
-    Sort:
-      name: sort
-      in: query
-      required: false
-      description: Sort by last_modified_dt.
-      schema:
-        type: string
-        enum:
-        - asc
-        - desc
-        default: asc
-    GroupId:
-      name: group_id
-      in: path
-      required: true
-      schema:
-        type: string
-        format: uuid
-    ProjectId:
-      name: project_id
-      in: path
-      required: true
-      schema:
-        type: string
-        format: uuid
-    LastModifiedDt:
-      name: last_modified_dt
-      in: query
-      required: false
-      description: ISO 8601. Return only items modified at or after this timestamp. URL-encode `+` as `%2B`.
-      schema:
-        type: string
-  responses:
-    NotFound:
-      description: Resource not found (often a plain-text body such as "Project Not Found")
-    Unauthorized:
-      description: Missing or invalid API key
-    ValidationError:
-      description: Validation failure
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   schemas:
+    Group:
+      allOf:
+      - $ref: '#/components/schemas/EntityBase'
+      - type: object
+        properties:
+          group_id:
+            type: string
+            format: uuid
+          group_title:
+            type: string
+          group_target_date:
+            type:
+            - string
+            - 'null'
+          group_completed_dt:
+            type:
+            - string
+            - 'null'
+          project_id:
+            type: string
+            format: uuid
+          project_name:
+            type: string
     EntityBase:
       type: object
       properties:
@@ -183,29 +162,50 @@ components:
           type: string
         group_completed_dt:
           type: string
-    Group:
-      allOf:
-      - $ref: '#/components/schemas/EntityBase'
-      - type: object
-        properties:
-          group_id:
-            type: string
-            format: uuid
-          group_title:
-            type: string
-          group_target_date:
-            type:
-            - string
-            - 'null'
-          group_completed_dt:
-            type:
-            - string
-            - 'null'
-          project_id:
-            type: string
-            format: uuid
-          project_name:
-            type: string
+  parameters:
+    ProjectId:
+      name: project_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    LastModifiedDt:
+      name: last_modified_dt
+      in: query
+      required: false
+      description: ISO 8601. Return only items modified at or after this timestamp. URL-encode `+` as `%2B`.
+      schema:
+        type: string
+    GroupId:
+      name: group_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    Sort:
+      name: sort
+      in: query
+      required: false
+      description: Sort by last_modified_dt.
+      schema:
+        type: string
+        enum:
+        - asc
+        - desc
+        default: asc
+  responses:
+    NotFound:
+      description: Resource not found (often a plain-text body such as "Project Not Found")
+    Unauthorized:
+      description: Missing or invalid API key
+    ValidationError:
+      description: Validation failure
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   securitySchemes:
     BearerHeader:
       type: apiKey

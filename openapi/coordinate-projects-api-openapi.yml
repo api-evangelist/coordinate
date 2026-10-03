@@ -201,78 +201,79 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   responses:
-    FilesDisabled:
-      description: Files are disabled for this vendor
+    FileRedirect:
+      description: 302 redirect to a fresh 5-minute S3 presigned URL (in the Location header)
+    PayloadTooLarge:
+      description: File upload exceeded 100MB (or JSON storage exceeded 300KB)
     Unauthorized:
       description: Missing or invalid API key
-    ValidationError:
-      description: Validation failure
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
     ServerError:
       description: Server error
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    FileRedirect:
-      description: 302 redirect to a fresh 5-minute S3 presigned URL (in the Location header)
-    PayloadTooLarge:
-      description: File upload exceeded 100MB (or JSON storage exceeded 300KB)
+    FilesDisabled:
+      description: Files are disabled for this vendor
+    ValidationError:
+      description: Validation failure
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
     NotFound:
       description: Resource not found (often a plain-text body such as "Project Not Found")
   schemas:
-    FileAttachRequest:
-      type: object
-      properties:
-        File:
-          type: array
-          items:
-            type: string
-            format: binary
-          description: One or more file parts named exactly "File".
-    ApplyPlaybookRequest:
+    CreateProjectRequest:
       type: object
       required:
-      - playbook_name
+      - manager_email_address
+      - project_name
       properties:
+        manager_email_address:
+          type: string
+          description: REQUIRED. Existing user in your vendor.
+        project_name:
+          type: string
+        external_object_id:
+          type: string
+        organization_id:
+          type: string
+          format: uuid
         playbook_name:
           type: string
         playbook_date:
           type: string
         playbook_date_title:
           type: string
-        stakeholder_id:
+        stakeholder_email:
           type: string
-          format: uuid
+        stakeholder_invite_message:
+          type: string
         stakeholder_task_assignment_list:
           type: array
           items:
             type: string
-    SuccessResponse:
-      type: object
-      properties:
-        success:
+        suppress_invite_email:
           type: boolean
-          example: true
-    FileRef:
-      type: object
-      properties:
-        file_uid:
+          default: false
+        send_manager_assignment_email:
+          type: boolean
+          default: false
+        custom_fields:
+          type: object
+          additionalProperties: true
+        project_storage_json:
+          type: object
+          additionalProperties: true
+        project_description:
           type: string
-        file_name:
+        project_status:
           type: string
-        file_size:
-          type: integer
-        file_content_type:
-          type: string
-        file_dt:
-          type: string
-        download_url:
-          type: string
-          description: Permanent API route; hit with Bearer header, follow the 302.
+        project_tags:
+          type: array
+          items:
+            type: string
     EntityBase:
       type: object
       properties:
@@ -289,6 +290,29 @@ components:
           type:
           - string
           - 'null'
+    Error:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: string
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+    FileAttachRequest:
+      type: object
+      properties:
+        File:
+          type: array
+          items:
+            type: string
+            format: binary
+          description: One or more file parts named exactly "File".
     Project:
       allOf:
       - $ref: '#/components/schemas/EntityBase'
@@ -348,87 +372,57 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/FileRef'
-    CreateProjectRequest:
+    UpdateProjectRequest:
+      type: object
+      description: Any subset of project_* keys. manager_email_address re-binds the manager.
+      additionalProperties: true
+    ApplyPlaybookRequest:
       type: object
       required:
-      - manager_email_address
-      - project_name
+      - playbook_name
       properties:
-        manager_email_address:
-          type: string
-          description: REQUIRED. Existing user in your vendor.
-        project_name:
-          type: string
-        external_object_id:
-          type: string
-        organization_id:
-          type: string
-          format: uuid
         playbook_name:
           type: string
         playbook_date:
           type: string
         playbook_date_title:
           type: string
-        stakeholder_email:
+        stakeholder_id:
           type: string
-        stakeholder_invite_message:
-          type: string
+          format: uuid
         stakeholder_task_assignment_list:
           type: array
           items:
             type: string
-        suppress_invite_email:
-          type: boolean
-          default: false
-        send_manager_assignment_email:
-          type: boolean
-          default: false
-        custom_fields:
-          type: object
-          additionalProperties: true
-        project_storage_json:
-          type: object
-          additionalProperties: true
-        project_description:
-          type: string
-        project_status:
-          type: string
-        project_tags:
-          type: array
-          items:
-            type: string
-    UpdateProjectRequest:
-      type: object
-      description: Any subset of project_* keys. manager_email_address re-binds the manager.
-      additionalProperties: true
-    Error:
+    FileRef:
       type: object
       properties:
-        success:
-          type: boolean
-          example: false
-        error:
+        file_uid:
           type: string
+        file_name:
+          type: string
+        file_size:
+          type: integer
+        file_content_type:
+          type: string
+        file_dt:
+          type: string
+        download_url:
+          type: string
+          description: Permanent API route; hit with Bearer header, follow the 302.
   parameters:
+    ProjectId:
+      name: project_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
     LastModifiedDt:
       name: last_modified_dt
       in: query
       required: false
       description: ISO 8601. Return only items modified at or after this timestamp. URL-encode `+` as `%2B`.
-      schema:
-        type: string
-    FileUid:
-      name: file_uid
-      in: path
-      required: true
-      description: File id. URL-encode a `#` as `%23`.
-      schema:
-        type: string
-    ExternalObjectId:
-      name: external_object_id
-      in: path
-      required: true
       schema:
         type: string
     Sort:
@@ -442,13 +436,19 @@ components:
         - asc
         - desc
         default: asc
-    ProjectId:
-      name: project_id
+    FileUid:
+      name: file_uid
+      in: path
+      required: true
+      description: File id. URL-encode a `#` as `%23`.
+      schema:
+        type: string
+    ExternalObjectId:
+      name: external_object_id
       in: path
       required: true
       schema:
         type: string
-        format: uuid
   securitySchemes:
     BearerHeader:
       type: apiKey
