@@ -122,7 +122,63 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
+  parameters:
+    FileUid:
+      name: file_uid
+      in: path
+      required: true
+      description: File id. URL-encode a `#` as `%23`.
+      schema:
+        type: string
+    LastModifiedDt:
+      name: last_modified_dt
+      in: query
+      required: false
+      description: ISO 8601. Return only items modified at or after this timestamp. URL-encode `+` as `%2B`.
+      schema:
+        type: string
+    Sort:
+      name: sort
+      in: query
+      required: false
+      description: Sort by last_modified_dt.
+      schema:
+        type: string
+        enum:
+        - asc
+        - desc
+        default: asc
+    ProjectId:
+      name: project_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    GoalId:
+      name: goal_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
   schemas:
+    EntityBase:
+      type: object
+      properties:
+        entity_type:
+          type: string
+        entity_url:
+          type: string
+        last_modified_dt:
+          type: string
+        vendor_id:
+          type: string
+          format: uuid
+        external_object_id:
+          type:
+          - string
+          - 'null'
     Goal:
       allOf:
       - $ref: '#/components/schemas/EntityBase'
@@ -166,30 +222,6 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/FileRef'
-    EntityBase:
-      type: object
-      properties:
-        entity_type:
-          type: string
-        entity_url:
-          type: string
-        last_modified_dt:
-          type: string
-        vendor_id:
-          type: string
-          format: uuid
-        external_object_id:
-          type:
-          - string
-          - 'null'
-    Error:
-      type: object
-      properties:
-        success:
-          type: boolean
-          example: false
-        error:
-          type: string
     FileRef:
       type: object
       properties:
@@ -206,6 +238,14 @@ components:
         download_url:
           type: string
           description: Permanent API route; hit with Bearer header, follow the 302.
+    Error:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: string
     CreateGoalRequest:
       type: object
       required:
@@ -224,58 +264,18 @@ components:
   responses:
     FileRedirect:
       description: 302 redirect to a fresh 5-minute S3 presigned URL (in the Location header)
+    Unauthorized:
+      description: Missing or invalid API key
     NotFound:
       description: Resource not found (often a plain-text body such as "Project Not Found")
     FilesDisabled:
       description: Files are disabled for this vendor
-    Unauthorized:
-      description: Missing or invalid API key
     ValidationError:
       description: Validation failure
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-  parameters:
-    LastModifiedDt:
-      name: last_modified_dt
-      in: query
-      required: false
-      description: ISO 8601. Return only items modified at or after this timestamp. URL-encode `+` as `%2B`.
-      schema:
-        type: string
-    ProjectId:
-      name: project_id
-      in: path
-      required: true
-      schema:
-        type: string
-        format: uuid
-    FileUid:
-      name: file_uid
-      in: path
-      required: true
-      description: File id. URL-encode a `#` as `%23`.
-      schema:
-        type: string
-    Sort:
-      name: sort
-      in: query
-      required: false
-      description: Sort by last_modified_dt.
-      schema:
-        type: string
-        enum:
-        - asc
-        - desc
-        default: asc
-    GoalId:
-      name: goal_id
-      in: path
-      required: true
-      schema:
-        type: string
-        format: uuid
   securitySchemes:
     BearerHeader:
       type: apiKey

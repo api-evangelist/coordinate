@@ -174,13 +174,6 @@ components:
         last_modified_dt:
           type: string
   parameters:
-    ProjectId:
-      name: project_id
-      in: path
-      required: true
-      schema:
-        type: string
-        format: uuid
     LastModifiedDt:
       name: last_modified_dt
       in: query
@@ -206,6 +199,13 @@ components:
       schema:
         type: string
         format: uuid
+    ProjectId:
+      name: project_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
     GoalId:
       name: goal_id
       in: path
@@ -214,10 +214,10 @@ components:
         type: string
         format: uuid
   responses:
-    NotFound:
-      description: Resource not found (often a plain-text body such as "Project Not Found")
     Unauthorized:
       description: Missing or invalid API key
+    NotFound:
+      description: Resource not found (often a plain-text body such as "Project Not Found")
   securitySchemes:
     BearerHeader:
       type: apiKey
