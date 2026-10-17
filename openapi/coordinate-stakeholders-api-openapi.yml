@@ -86,39 +86,6 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
-  parameters:
-    LastModifiedDt:
-      name: last_modified_dt
-      in: query
-      required: false
-      description: ISO 8601. Return only items modified at or after this timestamp. URL-encode `+` as `%2B`.
-      schema:
-        type: string
-    Sort:
-      name: sort
-      in: query
-      required: false
-      description: Sort by last_modified_dt.
-      schema:
-        type: string
-        enum:
-        - asc
-        - desc
-        default: asc
-    ProjectId:
-      name: project_id
-      in: path
-      required: true
-      schema:
-        type: string
-        format: uuid
-    StakeholderId:
-      name: stakeholder_id
-      in: path
-      required: true
-      schema:
-        type: string
-        format: uuid
   schemas:
     EntityBase:
       type: object
@@ -210,16 +177,49 @@ components:
             items:
               type: string
   responses:
-    Unauthorized:
-      description: Missing or invalid API key
-    NotFound:
-      description: Resource not found (often a plain-text body such as "Project Not Found")
     ValidationError:
       description: Validation failure
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Missing or invalid API key
+    NotFound:
+      description: Resource not found (often a plain-text body such as "Project Not Found")
+  parameters:
+    ProjectId:
+      name: project_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    LastModifiedDt:
+      name: last_modified_dt
+      in: query
+      required: false
+      description: ISO 8601. Return only items modified at or after this timestamp. URL-encode `+` as `%2B`.
+      schema:
+        type: string
+    Sort:
+      name: sort
+      in: query
+      required: false
+      description: Sort by last_modified_dt.
+      schema:
+        type: string
+        enum:
+        - asc
+        - desc
+        default: asc
+    StakeholderId:
+      name: stakeholder_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
   securitySchemes:
     BearerHeader:
       type: apiKey

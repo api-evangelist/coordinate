@@ -260,10 +260,32 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/FileRef'
-    UpdateProjectRequest:
+    ApplyPlaybookRequest:
       type: object
-      description: Any subset of project_* keys. manager_email_address re-binds the manager.
-      additionalProperties: true
+      required:
+      - playbook_name
+      properties:
+        playbook_name:
+          type: string
+        playbook_date:
+          type: string
+        playbook_date_title:
+          type: string
+        stakeholder_id:
+          type: string
+          format: uuid
+        stakeholder_task_assignment_list:
+          type: array
+          items:
+            type: string
+    Error:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: string
     SuccessResponse:
       type: object
       properties:
@@ -286,41 +308,6 @@ components:
         download_url:
           type: string
           description: Permanent API route; hit with Bearer header, follow the 302.
-    Error:
-      type: object
-      properties:
-        success:
-          type: boolean
-          example: false
-        error:
-          type: string
-    ApplyPlaybookRequest:
-      type: object
-      required:
-      - playbook_name
-      properties:
-        playbook_name:
-          type: string
-        playbook_date:
-          type: string
-        playbook_date_title:
-          type: string
-        stakeholder_id:
-          type: string
-          format: uuid
-        stakeholder_task_assignment_list:
-          type: array
-          items:
-            type: string
-    FileAttachRequest:
-      type: object
-      properties:
-        File:
-          type: array
-          items:
-            type: string
-            format: binary
-          description: One or more file parts named exactly "File".
     EntityBase:
       type: object
       properties:
@@ -337,6 +324,10 @@ components:
           type:
           - string
           - 'null'
+    UpdateProjectRequest:
+      type: object
+      description: Any subset of project_* keys. manager_email_address re-binds the manager.
+      additionalProperties: true
     CreateProjectRequest:
       type: object
       required:
@@ -387,18 +378,44 @@ components:
           type: array
           items:
             type: string
+    FileAttachRequest:
+      type: object
+      properties:
+        File:
+          type: array
+          items:
+            type: string
+            format: binary
+          description: One or more file parts named exactly "File".
+  responses:
+    ValidationError:
+      description: Validation failure
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    FilesDisabled:
+      description: Files are disabled for this vendor
+    Unauthorized:
+      description: Missing or invalid API key
+    NotFound:
+      description: Resource not found (often a plain-text body such as "Project Not Found")
+    PayloadTooLarge:
+      description: File upload exceeded 100MB (or JSON storage exceeded 300KB)
+    FileRedirect:
+      description: 302 redirect to a fresh 5-minute S3 presigned URL (in the Location header)
+    ServerError:
+      description: Server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   parameters:
-    ProjectId:
-      name: project_id
+    FileUid:
+      name: file_uid
       in: path
       required: true
-      schema:
-        type: string
-        format: uuid
-    ExternalObjectId:
-      name: external_object_id
-      in: path
-      required: true
+      description: File id. URL-encode a `#` as `%23`.
       schema:
         type: string
     LastModifiedDt:
@@ -408,13 +425,19 @@ components:
       description: ISO 8601. Return only items modified at or after this timestamp. URL-encode `+` as `%2B`.
       schema:
         type: string
-    FileUid:
-      name: file_uid
+    ExternalObjectId:
+      name: external_object_id
       in: path
       required: true
-      description: File id. URL-encode a `#` as `%23`.
       schema:
         type: string
+    ProjectId:
+      name: project_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
     Sort:
       name: sort
       in: query
@@ -426,29 +449,6 @@ components:
         - asc
         - desc
         default: asc
-  responses:
-    PayloadTooLarge:
-      description: File upload exceeded 100MB (or JSON storage exceeded 300KB)
-    Unauthorized:
-      description: Missing or invalid API key
-    FilesDisabled:
-      description: Files are disabled for this vendor
-    ServerError:
-      description: Server error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: Resource not found (often a plain-text body such as "Project Not Found")
-    FileRedirect:
-      description: 302 redirect to a fresh 5-minute S3 presigned URL (in the Location header)
-    ValidationError:
-      description: Validation failure
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   securitySchemes:
     BearerHeader:
       type: apiKey

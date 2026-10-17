@@ -122,6 +122,21 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
+  responses:
+    FilesDisabled:
+      description: Files are disabled for this vendor
+    FileRedirect:
+      description: 302 redirect to a fresh 5-minute S3 presigned URL (in the Location header)
+    ValidationError:
+      description: Validation failure
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Missing or invalid API key
+    NotFound:
+      description: Resource not found (often a plain-text body such as "Project Not Found")
   parameters:
     FileUid:
       name: file_uid
@@ -130,6 +145,13 @@ components:
       description: File id. URL-encode a `#` as `%23`.
       schema:
         type: string
+    ProjectId:
+      name: project_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
     LastModifiedDt:
       name: last_modified_dt
       in: query
@@ -148,13 +170,6 @@ components:
         - asc
         - desc
         default: asc
-    ProjectId:
-      name: project_id
-      in: path
-      required: true
-      schema:
-        type: string
-        format: uuid
     GoalId:
       name: goal_id
       in: path
@@ -222,6 +237,29 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/FileRef'
+    CreateGoalRequest:
+      type: object
+      required:
+      - goal_title
+      properties:
+        goal_title:
+          type: string
+        goal_description:
+          type: string
+        goal_target_date:
+          type: string
+        goal_sponsor_name:
+          type: string
+        external_object_id:
+          type: string
+    Error:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: string
     FileRef:
       type: object
       properties:
@@ -238,44 +276,6 @@ components:
         download_url:
           type: string
           description: Permanent API route; hit with Bearer header, follow the 302.
-    Error:
-      type: object
-      properties:
-        success:
-          type: boolean
-          example: false
-        error:
-          type: string
-    CreateGoalRequest:
-      type: object
-      required:
-      - goal_title
-      properties:
-        goal_title:
-          type: string
-        goal_description:
-          type: string
-        goal_target_date:
-          type: string
-        goal_sponsor_name:
-          type: string
-        external_object_id:
-          type: string
-  responses:
-    FileRedirect:
-      description: 302 redirect to a fresh 5-minute S3 presigned URL (in the Location header)
-    Unauthorized:
-      description: Missing or invalid API key
-    NotFound:
-      description: Resource not found (often a plain-text body such as "Project Not Found")
-    FilesDisabled:
-      description: Files are disabled for this vendor
-    ValidationError:
-      description: Validation failure
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   securitySchemes:
     BearerHeader:
       type: apiKey

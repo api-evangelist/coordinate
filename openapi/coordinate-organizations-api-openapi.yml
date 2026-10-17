@@ -185,32 +185,28 @@ paths:
           $ref: '#/components/responses/Unauthorized'
 components:
   schemas:
-    Organization:
-      allOf:
-      - $ref: '#/components/schemas/EntityBase'
-      - type: object
-        properties:
-          organization_id:
-            type: string
-            format: uuid
-          organization_name:
-            type: string
-          organization_description:
-            type:
-            - string
-            - 'null'
-    AddOrgStakeholderRequest:
+    LinkProjectRequest:
       type: object
       required:
-      - stakeholder_email_address
+      - project_id
       properties:
-        stakeholder_email_address:
+        project_id:
           type: string
-        stakeholder_full_name:
+          format: uuid
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+    CreateOrganizationRequest:
+      type: object
+      required:
+      - organization_name
+      properties:
+        organization_name:
           type: string
-        stakeholder_title:
-          type: string
-        stakeholder_phone:
+        external_object_id:
           type: string
     EntityBase:
       type: object
@@ -287,29 +283,27 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/FileRef'
-    SuccessResponse:
+    AddOrgStakeholderRequest:
+      type: object
+      required:
+      - stakeholder_email_address
+      properties:
+        stakeholder_email_address:
+          type: string
+        stakeholder_full_name:
+          type: string
+        stakeholder_title:
+          type: string
+        stakeholder_phone:
+          type: string
+    Error:
       type: object
       properties:
         success:
           type: boolean
-          example: true
-    CreateOrganizationRequest:
-      type: object
-      required:
-      - organization_name
-      properties:
-        organization_name:
+          example: false
+        error:
           type: string
-        external_object_id:
-          type: string
-    LinkProjectRequest:
-      type: object
-      required:
-      - project_id
-      properties:
-        project_id:
-          type: string
-          format: uuid
     FileRef:
       type: object
       properties:
@@ -326,14 +320,20 @@ components:
         download_url:
           type: string
           description: Permanent API route; hit with Bearer header, follow the 302.
-    Error:
-      type: object
-      properties:
-        success:
-          type: boolean
-          example: false
-        error:
-          type: string
+    Organization:
+      allOf:
+      - $ref: '#/components/schemas/EntityBase'
+      - type: object
+        properties:
+          organization_id:
+            type: string
+            format: uuid
+          organization_name:
+            type: string
+          organization_description:
+            type:
+            - string
+            - 'null'
     Stakeholder:
       allOf:
       - $ref: '#/components/schemas/EntityBase'
@@ -392,16 +392,16 @@ components:
         type: string
         format: uuid
   responses:
-    Unauthorized:
-      description: Missing or invalid API key
-    NotFound:
-      description: Resource not found (often a plain-text body such as "Project Not Found")
     ValidationError:
       description: Validation failure
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Missing or invalid API key
+    NotFound:
+      description: Resource not found (often a plain-text body such as "Project Not Found")
   securitySchemes:
     BearerHeader:
       type: apiKey

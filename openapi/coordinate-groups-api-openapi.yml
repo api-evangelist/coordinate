@@ -103,40 +103,18 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 components:
-  parameters:
-    LastModifiedDt:
-      name: last_modified_dt
-      in: query
-      required: false
-      description: ISO 8601. Return only items modified at or after this timestamp. URL-encode `+` as `%2B`.
-      schema:
-        type: string
-    Sort:
-      name: sort
-      in: query
-      required: false
-      description: Sort by last_modified_dt.
-      schema:
-        type: string
-        enum:
-        - asc
-        - desc
-        default: asc
-    ProjectId:
-      name: project_id
-      in: path
-      required: true
-      schema:
-        type: string
-        format: uuid
-    GroupId:
-      name: group_id
-      in: path
-      required: true
-      schema:
-        type: string
-        format: uuid
   schemas:
+    CreateGroupRequest:
+      type: object
+      required:
+      - group_title
+      properties:
+        group_title:
+          type: string
+        group_target_date:
+          type: string
+        group_completed_dt:
+          type: string
     EntityBase:
       type: object
       properties:
@@ -153,16 +131,13 @@ components:
           type:
           - string
           - 'null'
-    CreateGroupRequest:
+    Error:
       type: object
-      required:
-      - group_title
       properties:
-        group_title:
-          type: string
-        group_target_date:
-          type: string
-        group_completed_dt:
+        success:
+          type: boolean
+          example: false
+        error:
           type: string
     Group:
       allOf:
@@ -187,25 +162,50 @@ components:
             format: uuid
           project_name:
             type: string
-    Error:
-      type: object
-      properties:
-        success:
-          type: boolean
-          example: false
-        error:
-          type: string
   responses:
-    Unauthorized:
-      description: Missing or invalid API key
-    NotFound:
-      description: Resource not found (often a plain-text body such as "Project Not Found")
     ValidationError:
       description: Validation failure
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Missing or invalid API key
+    NotFound:
+      description: Resource not found (often a plain-text body such as "Project Not Found")
+  parameters:
+    ProjectId:
+      name: project_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    LastModifiedDt:
+      name: last_modified_dt
+      in: query
+      required: false
+      description: ISO 8601. Return only items modified at or after this timestamp. URL-encode `+` as `%2B`.
+      schema:
+        type: string
+    Sort:
+      name: sort
+      in: query
+      required: false
+      description: Sort by last_modified_dt.
+      schema:
+        type: string
+        enum:
+        - asc
+        - desc
+        default: asc
+    GroupId:
+      name: group_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
   securitySchemes:
     BearerHeader:
       type: apiKey
