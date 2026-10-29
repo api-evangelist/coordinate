@@ -64,6 +64,143 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Coordinate is a company surfaced as a portfolio company of initialized-capital and added to the API Evangelist network as a stub for enrichment. Sector: enterprise-saas. This profile is a lead awaiting the enrichment pipeline.
+Coordinate (CoordinateHQ) is a client project-execution platform and branded client portal for client-facing businesses — agencies, professional services, and B2B onboarding teams. It turns repeatable workflows into automated, interactive projects with tasks, task groups, goals, progress reports, forms, eSignatures, time tracking, and in-project chat, while giving each client a simple password-free portal. Coordinate exposes a REST API (base https://app.coordinatehq.com/api/v1) for creating and syncing projects, tasks, groups, stakeholders, goals, comments, and organizations, an /entity export firehose for bulk sync, and a webhook API for real-time create/update events, alongside bi-directional Zapier integrations. This profile was enriched by the API Evangelist pipeline from Coordinate's published API reference.
 
-Backed by: initialized-capital — https://coordinatehq.com/
+**Areas:** Company · Enterprise Saas · Project Management · Client Portal · Client Onboarding · Professional Services · Workflow Automation · Collaboration · Webhook
+
+## Coordinate on APIs.io
+
+Everything profiled for Coordinate is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/coordinate/](https://apis.io/providers/coordinate/)** — or go straight to one of the APIs or properties below.
+
+### APIs (14)
+
+- [Coordinate Comments API](https://apis.io/apis/coordinate/coordinate-comments-api/) — Discussion entries on projects, tasks, and goals.
+- [Coordinate Entity API](https://apis.io/apis/coordinate/coordinate-entity-api/) — Cross-entity bulk export firehose.
+- [Coordinate Goals API](https://apis.io/apis/coordinate/coordinate-goals-api/) — Project goals / milestones with target dates.
+- [Coordinate Groups API](https://apis.io/apis/coordinate/coordinate-groups-api/) — Task groups (internally "Milestone").
+- [Coordinate Organizations API](https://apis.io/apis/coordinate/coordinate-organizations-api/) — Customer organizations linking projects and stakeholders.
+- [Coordinate Progress Reports API](https://apis.io/apis/coordinate/coordinate-progress-reports-api/) — Read-only progress reports on a project.
+- [Coordinate Project Pages API](https://apis.io/apis/coordinate/coordinate-project-pages-api/) — Rich-text pages attached to a project.
+- [Coordinate Projects API](https://apis.io/apis/coordinate/coordinate-projects-api/) — Client projects (internally "Customer").
+- [Coordinate Stakeholders API](https://apis.io/apis/coordinate/coordinate-stakeholders-api/) — Client-side collaborators on a project.
+- [Coordinate Storage API](https://apis.io/apis/coordinate/coordinate-storage-api/) — Per-vendor JSON scratch storage.
+- [Coordinate Tasks API](https://apis.io/apis/coordinate/coordinate-tasks-api/) — Tasks within a project.
+- [Coordinate Users API](https://apis.io/apis/coordinate/coordinate-users-api/) — Vendor users.
+- [Coordinate Webhooks API](https://apis.io/apis/coordinate/coordinate-webhooks-api/) — Webhook subscription management.
+- [Coordinate REST API](https://apis.io/apis/coordinate/coordinate-coordinate-rest-api-api/) — The Coordinate REST API API from Coordinate — 0 operation(s) for coordinate rest api.
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### AsyncAPI (1)
+
+Event-driven and webhook contracts.
+
+- [Coordinate Webhooks](https://apis.io/asyncapis/coordinate/coordinate-webhooks/)
+
+#### MCP servers (1)
+
+Model Context Protocol servers that expose the API to agents.
+
+- [coordinate](https://apis.io/servers/coordinate/coordinate/)
+
+#### Collections (13)
+
+Postman and Open Collection request collections.
+
+- [Coordinate REST Comments API](https://apis.io/collections/coordinate/open-coordinate-comments-api/)
+- [Coordinate REST Comments Entity API](https://apis.io/collections/coordinate/open-coordinate-entity-api/)
+- [Coordinate REST Comments Goals API](https://apis.io/collections/coordinate/open-coordinate-goals-api/)
+- [Coordinate REST Comments Groups API](https://apis.io/collections/coordinate/open-coordinate-groups-api/)
+- [Coordinate REST Comments Organizations API](https://apis.io/collections/coordinate/open-coordinate-organizations-api/)
+- [Coordinate REST Comments Progress Reports API](https://apis.io/collections/coordinate/open-coordinate-progress-reports-api/)
+- [Coordinate REST Comments Project Pages API](https://apis.io/collections/coordinate/open-coordinate-project-pages-api/)
+- [Coordinate REST Comments Projects API](https://apis.io/collections/coordinate/open-coordinate-projects-api/)
+- [Coordinate REST Comments Stakeholders API](https://apis.io/collections/coordinate/open-coordinate-stakeholders-api/)
+- [Coordinate REST Comments Storage API](https://apis.io/collections/coordinate/open-coordinate-storage-api/)
+- [Coordinate REST Comments Tasks API](https://apis.io/collections/coordinate/open-coordinate-tasks-api/)
+- [Coordinate REST Comments Users API](https://apis.io/collections/coordinate/open-coordinate-users-api/)
+- [Coordinate REST Comments Webhooks API](https://apis.io/collections/coordinate/open-coordinate-webhooks-api/)
+
+#### Overlays (1)
+
+OpenAPI overlays, including conversational phrasing for each operation.
+
+- [Coordinate Openapi Overlay](https://apis.io/overlays/coordinate/coordinate-openapi-overlay/)
+
+#### Security (2)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Coordinate Authentication](https://apis.io/security/coordinate/coordinate-authentication/)
+- [Coordinate Domain Security](https://apis.io/security/coordinate/coordinate-domain-security/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://coordinatehq.com/)
+- [Documentation](https://www.coordinatehq.com/library/integrating-with-coordinate)
+- [API reference](https://app.coordinatehq.com/static/API_Documentation.html)
+- [Pricing](https://coordinatehq.com/pricing)
+- [Sign up](https://app.coordinatehq.com/signup)
+- [Support](https://coordinatehqhelp.zendesk.com/hc/en-us)
+- [Blog](https://www.coordinatehq.com/library)
+- [Terms of service](https://coordinatehq.com/legal/terms-and-conditions)
+- [Privacy policy](https://coordinatehq.com/legal/privacy-policy)
+
+## API Evangelist rating
+
+**Kin Score 41.9** — developing · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 73.2 |
+| Contract quality | 55.9 |
+| Contract governance | 4.5 |
+| Operational transparency | 7.9 |
+| Developer ergonomics | 47.0 |
+| Access clarity | 44.7 |
+
+**Agent readiness 24.3** — agent-aware
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | — |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | documented (partial credit) |
+| OpenAPI Examples | — |
+| Rate Limit Signal | — |
+| Event Surface Described | yes |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+| Pagination Ratio | — |
+| Operation Distinctiveness | distinct |
+
+**Regulatory alignment 24.5** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/coordinate/](https://apis.io/providers/coordinate/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Coordinate: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/coordinate/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
